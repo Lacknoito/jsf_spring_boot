@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+>
+    <!--<lifecycle>-->
+    <!--<phase-listener>com.liferay.faces.util.lifecycle.DebugPhaseListener</phase-listener>-->
+    <!--</lifecycle>-->
+    <application>
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+    </application>
+    
+    <navigation-rule>
+		<from-view-id>/index.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>dashboard</from-outcome>
+			<to-view-id>/dashboard.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+</faces-config>

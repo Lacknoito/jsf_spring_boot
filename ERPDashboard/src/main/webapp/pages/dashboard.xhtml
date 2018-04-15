@@ -1,0 +1,372 @@
+<?xml version="1.0"?>
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head>
+		  <meta charset="utf-8" />
+		  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		  <title>ERP Dashboard</title>
+		  <f:metadata>
+			    <f:viewAction action="#{dashboardAction.onload}" />
+			</f:metadata>
+		  <!-- Tell the browser to be responsive to screen width -->
+		  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/font-awesome/css/font-awesome.min.css" />
+		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/Ionicons/css/ionicons.min.css" />
+		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/jvectormap/jquery-jvectormap.css" />
+		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/AdminLTE.min.css" />
+		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/skins/_all-skins.min.css" />
+		   <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+		   
+		   <style>
+				.chartdiv {
+				  width: 100%;
+				  height: 400px;
+				}
+				
+				.amcharts-chart-div a {
+					display :none !important;
+				}
+				
+				.text-table-body {
+				    font-weight: normal;
+				    font-size: 12px;
+				}
+				
+				.ui-column-title {
+				    font-size: 12px;
+				}
+				
+				.ui-dialog {
+					position:absolute;
+				}
+				
+				.hasDatepicker{
+					font-size: 10px !important;
+				}
+			</style>
+			
+			<script>
+				function showModal() {
+					PF('dlg').show();
+				}
+				
+				function closeModal(){
+					PF('dlg').hide();
+				}
+			</script>
+	</h:head>
+    <h:body styleClass="skin-blue sidebar-mini sidebar-collapse">
+    	<h:form id="formId">
+			<div class="wrapper">
+			  <header class="main-header">
+			    <!-- Logo -->
+			    <a href="index2.html" class="logo" style="background-color:#f37020">
+			      <!-- mini logo for sidebar mini 50x50 pixels -->
+			      <span class="logo-mini">ERP</span>
+			      <!-- logo for regular state and mobile devices -->
+			      <span class="logo-lg"><b>ERP</b></span>
+			    </a>
+			
+			    <!-- Header Navbar: style can be found in header.less -->
+			    <nav class="navbar navbar-static-top" style="background-color:#f37020">
+			      <!-- Sidebar toggle button-->
+			      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+			        <span class="sr-only">Toggle navigation</span>
+			      </a>
+			      <!-- Navbar Right Menu -->
+			      <div class="navbar-custom-menu">
+			        <ul class="nav navbar-nav">
+			         
+			          <!-- User Account: style can be found in dropdown.less -->
+			          <li class="dropdown user user-menu">
+			            <ul class="dropdown-menu">
+			              <li class="user-footer">
+			                <div class="pull-left">
+			                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+			                </div>
+			                <div class="pull-right">
+			                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+			                </div>
+			              </li>
+			            </ul>
+			          </li>
+			          <!-- Control Sidebar Toggle Button -->
+			          <li>
+			            <h:commandLink styleClass="nav-link" value="Logout"
+			       			action="#{dashboardAction.onLogout}">
+			       			<i class="fa fa-fw fa-sign-out"></i>
+			       		</h:commandLink>
+			          </li>
+			        </ul>
+			      </div>
+			
+			    </nav>
+			  </header>
+			  <!-- Left side column. contains the logo and sidebar -->
+			  <aside class="main-sidebar">
+			    <!-- sidebar: style can be found in sidebar.less -->
+			    <section class="sidebar">
+			      
+			      <!-- sidebar menu: : style can be found in sidebar.less -->
+			      <ul class="sidebar-menu" data-widget="tree">
+			    
+			        <li class="active treeview menu-open">
+			          <a href="#">
+			            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+			            <span class="pull-right-container">
+			              <i class="fa fa-angle-left pull-right"></i>
+			            </span>
+			          </a>
+			          <ul class="treeview-menu">
+			            <li class="active"><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+			          </ul>
+			        </li>
+			      </ul>
+			    </section>
+			    <!-- /.sidebar -->
+			  </aside>
+			
+			  <!-- Content Wrapper. Contains page content -->
+			  <div class="content-wrapper">
+			    <!-- Content Header (Page header) -->
+			    <section class="content-header">
+			    	<p:messages id="messages" showDetail="true" closable="true">
+		   		 </p:messages>
+			      <h1>
+			        Dashboard
+			      </h1>
+			    </section>
+			
+			    <!-- Main content -->
+			    <section class="content">
+			
+			      <div class="row">
+			       <div class="col-md-12">
+			        <div class="box box-success">
+			            <div class="box-header with-border">
+			              <!-- <h3 class="box-title">ERP Dashboard</h3> -->
+			
+			              <div class="box-tools pull-right">
+			                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+			                </button>
+			              </div>
+			             
+			            </div>
+			            <div class="box-body" style="">
+			             	<div class="row">
+			             		<div class="col-sm-12" >
+			             			<h:outputLabel value="Receipt Date : " style="padding-right: 10px;"></h:outputLabel>
+			             			<p:calendar value="#{dashboardAction.date}" pattern="dd/MM/yyyy" style="padding-right: 10px;" mask="true" >
+			             			</p:calendar>
+			             			<p:commandButton value="Search" update="canvasGroup, canvasGroupJs, canvasGroupPSJs" actionListener="#{dashboardAction.updateReceiptTempChart}" />
+			             		</div>
+				           		<div class="col-sm-12 text-center">
+				           			<h:panelGroup id="canvasGroup">
+										<div id="chartdiv1" class="chartdiv"></div>             
+									</h:panelGroup>
+				           			<h:panelGroup id="canvasGroupPS">
+										<div id="chartdiv2" class="chartdiv" ></div>  
+									</h:panelGroup>
+				           		</div>
+				           	</div>
+			            </div>
+			          </div>
+			       </div>
+			      </div>
+			    </section>
+			  </div>
+			</div>
+			
+			<p:dialog widgetVar="dlg" dynamic="true" width="95%" height="90%"  >
+	        	<h:panelGroup id="tb_revenue">
+	          		<p:dataTable id="tableStateDT" var="receipt" value="#{dashboardAction.copReceiptTemps}"
+	          			rows="10"  multiViewState="true"
+	          			paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+	          			rowsPerPageTemplate="5,10,15">
+	          			
+						<p:column headerText="ERP ID" sortBy="#{receipt.shopCode}">
+							<h:outputLabel styleClass="text-table-body" value="#{receipt.shopCode}"></h:outputLabel>
+				        </p:column>
+				        <p:column headerText="Branch" sortBy="#{receipt.shopName}">
+				        	<h:outputLabel styleClass="text-table-body" value="#{receipt.shopName}"></h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Receipt Date" sortBy="#{receipt.arReceiptDate}" >
+							<p:calendar value="#{receipt.arReceiptDate}" pattern="dd/MM/yyyy" mask="true"
+								rendered="#{receipt.status == null || receipt.status == ''}">
+							</p:calendar>
+				            <h:outputLabel styleClass="text-table-body" value="#{receipt.arReceiptDate}" rendered="#{not (receipt.status == null || receipt.status == '')}">
+				            	
+				            </h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Amount Header" style="text-align: right" sortBy="#{receipt.amountHeader}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.amountHeader}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Cash" style="text-align: right" sortBy="#{receipt.cash}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.cash}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Rabbit" style="text-align: right" sortBy="#{receipt.rabit}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.rabit}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Card (BBL)" style="text-align: right" sortBy="#{receipt.creditBBL}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.creditBBL}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Card (SCB)" style="text-align: right" sortBy="#{receipt.creditSCB}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.creditSCB}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="LinePay" style="text-align: right" sortBy="#{receipt.linePay}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.linePay}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Bonus Commission" style="text-align: right" sortBy="#{receipt.bonus}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.bonus}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="AdjOther" style="text-align: right" sortBy="#{receipt.adjOther}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.adjOther}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Return Charge" style="text-align: right" sortBy="#{receipt.adjReturnCharge}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.adjReturnCharge}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Suspense" style="text-align: right" sortBy="#{receipt.suspense}">	
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.suspense}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="With Holding Tax" style="text-align: right" sortBy="#{receipt.withholdingTax}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.withholdingTax}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Promotion" style="text-align: right" sortBy="#{receipt.promotion}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.promotion}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Insurance" style="text-align: right" sortBy="#{receipt.insurance}">
+					 		<h:outputLabel styleClass="text-table-body" value="#{receipt.insurance}">
+					 			<f:convertNumber pattern="#0.00" />
+					 		</h:outputLabel>
+				        </p:column>
+					 	<p:column headerText="Status">
+					 		<p:selectOneMenu value="#{receipt.status}" style="font-size: 10px;" rendered="#{receipt.status == null || receipt.status == ''}">
+				                <f:selectItem itemLabel="Active" itemValue="" />
+				                <f:selectItem itemLabel="Inactive" itemValue="N" />
+				            </p:selectOneMenu>
+				            <h:outputLabel styleClass="text-table-body" value="Inactive" rendered="#{not (receipt.status == null || receipt.status == '')}">
+				            </h:outputLabel>
+				        </p:column>
+					</p:dataTable>
+	          	</h:panelGroup>
+	          	<f:facet name="footer">
+                    <p:commandButton value="Save" oncomplete="closeModal()"
+                    	update="canvasGroup, canvasGroupJs, canvasGroupPSJs" actionListener="#{dashboardAction.saveReceiptTemp}" />
+                    <p:commandButton value="Close" onclick="closeModal()" />
+                </f:facet>
+		   </p:dialog>
+			
+			<h:inputHidden id="x" value="#{dashboardAction.param}" />
+			<p:remoteCommand name="selectItemFromChart" update="tb_revenue"
+				 action="#{dashboardAction.updateRevenues}"
+				 oncomplete="showModal()" >
+		  	</p:remoteCommand>
+		  	<p:remoteCommand name="selectItemFromChartPS" update="canvasGroupPS canvasGroupPSJs"
+				 action="#{dashboardAction.updateChartPS}" >
+		  	</p:remoteCommand>
+		</h:form>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+		<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+		<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script src="https://www.amcharts.com/lib/3/pie.js"></script>
+		<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+		<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+		<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+		<script src="../AdminLTE-2.4.3/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="../AdminLTE-2.4.3/bower_components/fastclick/lib/fastclick.js"></script>
+		<script src="../AdminLTE-2.4.3/dist/js/adminlte.min.js"></script>
+		<script src="../AdminLTE-2.4.3/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+		<script src="../AdminLTE-2.4.3/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+		<script src="../AdminLTE-2.4.3/dist/js/demo.js"></script>
+		
+		<!-- Chart code -->
+		<h:panelGroup id="canvasGroupJs">
+			<h:outputScript>
+	    		AmCharts.makeChart("chartdiv1", {
+	    		  "type": "pie",
+				  "theme": "light",
+				  "dataProvider": #{dashboardAction.datas},
+				  "valueField": "count",
+				  "titleField": "branchType",
+				  "pullOutDuration": 0,
+  				   "pullOutRadius": 0,
+				   "balloon":{
+				   "fixedPosition":true
+				  },
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeader]]",
+				  "export": {
+				    "enabled": false
+				  },
+				  "listeners": [{
+					    "event": "clickSlice",
+					    "method": function(e) {
+						    	if(e.dataItem.title == 'BSD'
+						          		|| e.dataItem.title == 'DC'
+						          		|| e.dataItem.title == 'UPC'){
+							          	document.getElementById("formId:x").value = e.dataItem.title;
+							      		selectItemFromChart({param:e.dataItem.title});
+						          	}else{
+						          		selectItemFromChartPS({param:e.dataItem.title});
+						          	}
+					    }}]
+				} );
+			</h:outputScript>
+		</h:panelGroup>
+		<h:panelGroup id="canvasGroupPSJs">
+			<h:outputScript>
+				AmCharts.makeChart("chartdiv2", {
+	    		  "type": "pie",
+				  "theme": "light",
+				  "dataProvider": #{dashboardAction.chartPS},
+				  "valueField": "count",
+				  "titleField": "branchType",
+				  "pullOutDuration": 0,
+  				   "pullOutRadius": 0,
+				   "balloon":{
+				   "fixedPosition":true
+				  },
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeader]]",
+				  "export": {
+				    "enabled": false
+				  },
+				  "listeners": [{
+					    "event": "clickSlice",
+					    "method": function(e) {
+						    	document.getElementById("formId:x").value = e.dataItem.title;
+							    selectItemFromChart({param:e.dataItem.title});
+					    }}]
+				} );
+			</h:outputScript>
+		</h:panelGroup>
+    </h:body>
+</f:view>
