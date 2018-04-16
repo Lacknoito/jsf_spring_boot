@@ -2,13 +2,12 @@ package com.erp.dashboard.action;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,11 +27,10 @@ public class DashboardNewAction {
 	private User userLogin;
 	private List<InfCopReceiptTempChart> ratings;
 	private List<InfCopReceiptTemp> copReceiptTemps;
-	private String receiptJSON;
 	private String chartPS;
 	private String datas;
 	private String param;
-	private Date date;
+	private String dateStr;
 	
 	@Autowired
 	IERPService userService;
@@ -47,7 +45,7 @@ public class DashboardNewAction {
 				FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
 			
 			datas = "[]";
-			date = null;
+			dateStr = null;
 			chartPS = "[]";
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -66,11 +64,12 @@ public class DashboardNewAction {
 		List<InfCopReceiptTemp> receiptForSaves = new ArrayList<>();
 		if(!ERPUtils.collectionIsEmpty(copReceiptTemps)){
 			for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
-				if(!copReceiptTemp.getArReceiptDate().equals(copReceiptTemp.getOldArReceiptDate())
-						|| ("N".equalsIgnoreCase(copReceiptTemp.getStatus())
-								&& !StringUtils.equalsIgnoreCase(copReceiptTemp.getOldStatus(), copReceiptTemp.getStatus()))) {
+//				if(!copReceiptTemp.getArReceiptDate().equals(copReceiptTemp.getOldArReceiptDate())
+//						|| ("N".equalsIgnoreCase(copReceiptTemp.getStatus())
+//								&& !StringUtils.equalsIgnoreCase(copReceiptTemp.getOldStatus(), copReceiptTemp.getStatus()))) {
+					copReceiptTemp.setArReceiptDate(ERPUtils.convertStringToDateFormat(copReceiptTemp.getArReceiptDateStr(), ERPUtils.SIMPLE_DATE_FORMAT));
 					receiptForSaves.add(copReceiptTemp);
-				}
+//				}
 			}
 		}
 		return receiptForSaves;
@@ -93,23 +92,18 @@ public class DashboardNewAction {
 	public void updateRevenues() throws JsonProcessingException {
 		if(param != null
 				&& param != "") {
-			copReceiptTemps = userService.getReceiptTempDetail(param, date);
-			
-			ObjectMapper mapper = new ObjectMapper();
-			receiptJSON = mapper.writeValueAsString(copReceiptTemps);
+			copReceiptTemps = userService.getReceiptTempDetail(param, ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 			
 			for(InfCopReceiptTemp copReceiptTemp :  copReceiptTemps) {
-				System.out.println("ArReceiptDate :: " + copReceiptTemp.getArReceiptDate());
+				copReceiptTemp.setArReceiptDateStr(ERPUtils.convertDateToStringFormat(copReceiptTemp.getArReceiptDate(), ERPUtils.SIMPLE_DATE_FORMAT));
 			}
-			
-			System.out.println("receiptJSON :: " + receiptJSON);
 		}
 	}
 	
 	public void updateChartPS() throws JsonProcessingException {
 		if(param != null
 				&& param != "") {
-			ratings = userService.getReceiptTempParcelShop(date);
+			ratings = userService.getReceiptTempParcelShop(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 			
 			ObjectMapper mapper = new ObjectMapper();
 			chartPS = mapper.writeValueAsString(ratings);
@@ -117,7 +111,7 @@ public class DashboardNewAction {
 	}
 	
 	public void updateChart() throws JsonProcessingException {
-		ratings = userService.getReceiptTempByType(date);
+		ratings = userService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 		
 		ObjectMapper mapper = new ObjectMapper();
         datas = mapper.writeValueAsString(ratings);
@@ -157,14 +151,6 @@ public class DashboardNewAction {
 
 	public void setParam(String param) {
 		this.param = param;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 	public List<InfCopReceiptTempChart> getRatings() {
@@ -207,11 +193,11 @@ public class DashboardNewAction {
 		this.chartPS = chartPS;
 	}
 
-	public String getReceiptJSON() {
-		return receiptJSON;
+	public String getDateStr() {
+		return dateStr;
 	}
 
-	public void setReceiptJSON(String receiptJSON) {
-		this.receiptJSON = receiptJSON;
+	public void setDateStr(String dateStr) {
+		this.dateStr = dateStr;
 	}
 }

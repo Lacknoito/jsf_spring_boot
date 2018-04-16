@@ -1,6 +1,7 @@
 package com.erp.dashboard.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class ERPUtils {
 		public static final String T_BSD = "BSD";
 	}
 
-	public static String SIMPLE_DATE_FORMAT = "dd/MM/YYYY";
+	public static String SIMPLE_DATE_FORMAT = "dd/MM/yyyy";
 	
 	public static boolean collectionIsEmpty(@SuppressWarnings("rawtypes") List list) {
 		if(list == null
@@ -50,6 +51,18 @@ public class ERPUtils {
 			return true;
 		}
 		return false;
+	}
+	
+	public static Date convertStringToDateFormat(String dateStr, String format) {
+		SimpleDateFormat formatter = new SimpleDateFormat(format);
+		Date date = new Date();
+		try {
+			date = formatter.parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return date;
 	}
 	
 	public static String convertDateToStringFormat(Date date, String format) {

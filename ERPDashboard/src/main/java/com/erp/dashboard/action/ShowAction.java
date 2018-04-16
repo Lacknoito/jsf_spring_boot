@@ -1,55 +1,56 @@
 package com.erp.dashboard.action;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.erp.dashboard.model.Test2;
+import com.erp.dashboard.model.InfCopReceiptTemp;
+import com.erp.dashboard.service.IERPService;
+import com.erp.dashboard.utils.ERPUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 @ManagedBean
 @RequestScoped
 public class ShowAction {
-	private String datas;
-	List<Test2> data;
+	@Autowired
+	IERPService userService;
+	
+	private List<InfCopReceiptTemp> copReceiptTemps;
 	
 	public void onload() throws JsonProcessingException {
 		System.out.println("onload");
 		
-		data = new ArrayList<>();
-		data.add(new Test2("1", "2"));
-		data.add(new Test2("3", "4"));
-		ObjectMapper mapper = new ObjectMapper();
-        datas = mapper.writeValueAsString(data);
-        
-        System.out.println(datas);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, 9);
+		copReceiptTemps = userService.getReceiptTempDetail("BSD", calendar.getTime());
+		
+		for(InfCopReceiptTemp s : copReceiptTemps) {
+//			s.setArReceiptDate(new Date());
+			s.setArReceiptDateStr(ERPUtils.convertDateToStringFormat(s.getArReceiptDate(), ERPUtils.SIMPLE_DATE_FORMAT));
+		}
+		
+		System.out.println(copReceiptTemps.size());
 	}
 	
-	public void update() {
-		System.out.println("-update-");
-		data.add(new Test2("5", "5"));
+	public void saveReceiptTemp() {
+		try {
+			System.out.println("---saveReceiptTemp---");
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
-	public String getDatas() {
-		return datas;
+	public List<InfCopReceiptTemp> getCopReceiptTemps() {
+		return copReceiptTemps;
 	}
 
-	public void setDatas(String datas) {
-		this.datas = datas;
+	public void setCopReceiptTemps(List<InfCopReceiptTemp> copReceiptTemps) {
+		this.copReceiptTemps = copReceiptTemps;
 	}
-
-	public List<Test2> getData() {
-		return data;
-	}
-
-	public void setData(List<Test2> data) {
-		this.data = data;
-	}
-	
 }

@@ -9,6 +9,7 @@ public class InfCopReceiptTemp implements Serializable {
 
 	private String shopCode;
 	private String shopName;
+	private String arReceiptDateStr;
 	private Date arReceiptDate;
 	private Date oldArReceiptDate;
 	private BigDecimal amountHeader;
@@ -143,5 +144,11 @@ public class InfCopReceiptTemp implements Serializable {
 	}
 	public void setOldStatus(String oldStatus) {
 		this.oldStatus = oldStatus;
+	}
+	public String getArReceiptDateStr() {
+		return arReceiptDateStr;
+	}
+	public void setArReceiptDateStr(String arReceiptDateStr) {
+		this.arReceiptDateStr = arReceiptDateStr;
 	}
 }

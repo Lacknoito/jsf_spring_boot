@@ -7,37 +7,146 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:c="http://java.sun.com/jsp/jstl/core">
 	<h:head>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
-		<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"></link>
+			<f:metadata>
+			    <f:viewAction action="#{showAction.onload}" />
+			</f:metadata>
+			<meta charset="utf-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+			
+    		<link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+			<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+			
+
+			<!-- Include Date Range Picker -->
+			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	
+			<style>
+				th { font-size: 14px; }
+				td { font-size: 12px; }
+				
+				.datepicker{
+					 font-size:10px;
+				}
+			</style>
+	
+			<script>
+				function showModal() {
+					$('#myModal').modal();
+				}
+				
+				function closeModal(){
+					$('#myModal').modal('hide');
+				}
+			</script>
 	</h:head>
     <h:body >	
-    
-<h:form  class="form-horizontal">
-    	<div class="form-group">
-	        <label class="col-xs-3 control-label">Date</label>
-	        <div class="col-xs-5 date">
-	            <div class="input-group input-append date" id="datePicker">
-	                <input type="text" class="form-control" name="date" />
-	                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-	            </div>
-	        </div>
-	    </div>
-	    </h:form>
-	    <script>
-			$(document).ready(function() {
-			    $('#datePicker')
-			        .datepicker({
-			            format: 'mm/dd/yyyy'
-			        })
-			        .on('changeDate', function(e) {
-			            // Revalidate the date field
-			            $('#eventForm').formValidation('revalidateField', 'date');
-			        });
+		<h:form>
+			<div class="container">
+			  <h2>Modal Example</h2>
+			  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+			  
+			  
+			  <div class="modal fade" id="myModal" role="dialog">
+			    <div class="modal-dialog modal-lg " style="width: 100%; max-width: 1170px;">
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal"></button>
+			          <h4 class="modal-title">Modal Header</h4>
+			        </div>
+			        <div class="modal-body">
+			          <table id="example" class="display" style="width:100%">
+							<thead>
+							    <tr>
+							        <th>ERP ID</th>
+						            <th>Branch</th>
+						            <th>Receipt Date</th>
+						            <th>Amount Header</th>
+						            <th>Cash</th>
+						            <th>Rabbit</th>
+						            <th>Card (BBL)</th>
+						            <th>Card (SCB)</th>
+						            <th>LinePay</th>
+						            <th>Bonus Commission</th>
+						            <th>AdjOther</th>
+						            <th>Return Charge</th>
+						            <th>Suspense</th>
+						            <th>With Holding Tax</th>
+						            <th>Promotion</th>
+						            <th>Insurance</th>
+						            <th>Status</th>
+							    </tr>
+							</thead>
+							<tbody>
+								<c:forEach var="receipt" items="#{showAction.copReceiptTemps}">
+	            					<tr>
+	            						
+						                <td>#{receipt.shopCode}</td>
+							            <td>#{receipt.shopName}</td>
+							            <td>
+	            							<h:inputText 	
+	            								value="#{receipt.arReceiptDateStr}"
+	            								styleClass="form-control datepicker"></h:inputText>
+	            						</td>
+							            <td>#{receipt.amountHeader}</td>
+							            <td>#{receipt.cash}</td>
+							            <td>#{receipt.rabit}</td>
+							            <td>#{receipt.creditBBL}</td>
+							            <td>#{receipt.creditSCB}</td>
+							            <td>#{receipt.linePay}</td>
+							            <td>#{receipt.bonus}</td>
+							            <td>#{receipt.adjOther}</td>
+							            <td>#{receipt.adjReturnCharge}</td>
+							            <td>#{receipt.suspense}</td>
+							            <td>#{receipt.withholdingTax}</td>
+							            <td>#{receipt.promotion}</td>
+							            <td>#{receipt.insurance}</td>
+							            <td>
+							            	<h:panelGroup rendered="#{receipt.status == null || receipt.status == ''}">
+									            <select >
+													  <option value="">Active</option>
+													  <option value="N">Inactive</option>
+												</select>
+											</h:panelGroup>
+								            <h:outputLabel styleClass="text-table-body" value="Inactive" rendered="#{not (receipt.status == null || receipt.status == '')}">
+								            </h:outputLabel>
+										</td>
+	            					</tr>
+            					</c:forEach>
+            				</tbody>
+            			</table>
+			        </div>
+			        <div class="modal-footer">
+			        	<p:commandButton value="Save" oncomplete="closeModal()"
+                    		actionListener="#{showAction.saveReceiptTemp}" />
+			          	
+			          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 			
-			});
+			<script>
+				$(document).ready(function() {
+				    var table = $('#example').DataTable({
+				    	  "scrollX": true
+				    });
+				    
+					var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+					$( ".datepicker" ).datepicker({
+						format: 'dd/mm/yyyy',
+						container: container,
+						todayHighlight: true,
+						autoclose: true,
+					})
+					
+				    console.log('1');
+				} );
 			</script>
+	    </h:form>
     </h:body>
 </f:view>

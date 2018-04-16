@@ -12,7 +12,6 @@
 		  <title>ERP Dashboard</title>
 		  <f:metadata>
 			    <f:viewAction action="#{dashboardNewAction.onload}" />
-			    <f:viewAction action="#{showAction.onload}" />
 			</f:metadata>
 		  <!-- Tell the browser to be responsive to screen width -->
 		  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
@@ -23,9 +22,20 @@
 		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/AdminLTE.min.css" />
 		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/skins/_all-skins.min.css" />
 		   <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"></link>
+		   
+		   <!-- Include Date Range Picker -->
+			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 		   
 		   <style>
+		   @font-face {
+			    font-family: Kanit-Light;
+			    src: url(../fonts/Kanit-Light.ttf);
+			}
+			body{
+				font-family: 'Kanit-Light';
+			}
+
 				.chartdiv {
 				  width: 100%;
 				  height: 400px;
@@ -44,23 +54,30 @@
 				    font-size: 12px;
 				}
 				
-				.ui-dialog {
-					position:absolute;
+				.hasDatepicker{
+					font-size: 10px !important;
+				}
+				
+				th { font-size: 14px; }
+				td { font-size: 12px; }
+				
+				.datepicker{
+					 font-size:10px;
 				}
 			</style>
 			
 			<script>
 				function showModal() {
-					$("#myModal").modal();
+					$('#myModal').modal();
 				}
 				
 				function closeModal(){
-					PF('dlg').hide();
+					$('#myModal').modal('hide');
 				}
 			</script>
 	</h:head>
     <h:body styleClass="skin-blue sidebar-mini sidebar-collapse">
-    	<h:form id="formId" class="form-horizontal">
+    	<h:form id="formId">
 			<div class="wrapper">
 			  <header class="main-header">
 			    <!-- Logo -->
@@ -136,9 +153,7 @@
 			    <section class="content-header">
 			    	<p:messages id="messages" showDetail="true" closable="true">
 		   		 </p:messages>
-			      <h1>
-			        Dashboard
-			      </h1>
+			      <h:outputLabel style="font-size: 20px;" value="Dashboard"></h:outputLabel>
 			    </section>
 			
 			    <!-- Main content -->
@@ -158,12 +173,18 @@
 			            </div>
 			            <div class="box-body" style="">
 			             	<div class="row">
-			             		<div class="col-sm-12" >
-			             			<h:outputLabel value="Receipt Date : " style="padding-right: 10px;"></h:outputLabel>
-			             			<p:calendar value="#{dashboardNewAction.date}" pattern="dd/MM/yyyy" style="padding-right: 10px;" mask="true" >
-			             			</p:calendar>
+			             		<div class="col-sm-4" >
+			             		<div class="col-sm-4">	<h:outputLabel value="Receipt Date: " style="padding-right: 10px;"></h:outputLabel></div>
+			             		<div class="col-sm-6">
+			             			<h:inputText size="10"	
+		            								value="#{dashboardNewAction.dateStr}"
+		            								styleClass="form-control datepicker"></h:inputText>
+			             			
+			             		</div>
+			             		<div class="col-sm-2">
 			             			<p:commandButton value="Search" update="canvasGroup, canvasGroupJs, canvasGroupPSJs" actionListener="#{dashboardNewAction.updateReceiptTempChart}" />
 			             		</div>
+			             						             		</div>
 				           		<div class="col-sm-12 text-center">
 				           			<h:panelGroup id="canvasGroup">
 										<div id="chartdiv1" class="chartdiv"></div>             
@@ -181,80 +202,86 @@
 			  </div>
 			</div>
 			
-		   <div class="modal fade" id="myModal" role="dialog">
-		    <div class="modal-dialog modal-lg " style="width: 100%; max-width: 1170px;">
-		      <!-- Modal content-->
-		      <div class="modal-content">
-		        <div class="modal-body">
-		        	<h:panelGroup id="tb_revenue">
-		          		<table id="example" class="display" style="width:100%">
-			    			<thead>
-						        <tr>
-						            <th>ERP ID</th>
-						            <th>Branch</th>
-						            <th>Receipt Date</th>
-						            <th>Amount Header</th>
-						            <th>Cash</th>
-						            <th>Rabbit</th>
-						            <th>Card (BBL)</th>
-						            <th>Card (SCB)</th>
-						            <th>LinePay</th>
-						            <th>Bonus Commission</th>
-						            <th>AdjOther</th>
-						            <th>Return Charge</th>
-						            <th>Suspense</th>
-						            <th>With Holding Tax</th>
-						            <th>Promotion</th>
-						            <th>Insurance</th>
-						            <th>Status</th>
-						        </tr>
-						    </thead>
-						    <tbody>
-						    	<c:forEach var="receipt" items="#{dashboardNewAction.copReceiptTemps}">
-							        <tr>
-							            <td>#{receipt.shopCode}</td>
-							            <td>#{receipt.shopName}</td>
-							            <td>
-							            	<p:calendar value="#{receipt.arReceiptDate}" style="width: 150px;"></p:calendar>
-										</td>
-							            <td>#{receipt.amountHeader}</td>
-							            <td>#{receipt.cash}</td>
-							            <td>#{receipt.rabit}</td>
-							            <td>#{receipt.creditBBL}</td>
-							            <td>#{receipt.creditSCB}</td>
-							            <td>#{receipt.linePay}</td>
-							            <td>#{receipt.bonus}</td>
-							            <td>#{receipt.adjOther}</td>
-							            <td>#{receipt.adjReturnCharge}</td>
-							            <td>#{receipt.suspense}</td>
-							            <td>#{receipt.withholdingTax}</td>
-							            <td>#{receipt.promotion}</td>
-							            <td>#{receipt.insurance}</td>
-							            <td>
-							            	<h:panelGroup rendered="#{receipt.status == null || receipt.status == ''}">
-									            <select >
-													  <option value="">Active</option>
-													  <option value="N">Inactive</option>
-												</select>
-											</h:panelGroup>
-								            <h:outputLabel styleClass="text-table-body" value="Inactive" rendered="#{not (receipt.status == null || receipt.status == '')}">
-								            </h:outputLabel>
-										</td>
-							        </tr>
-						        </c:forEach>
-						    </tbody>
-			    		</table>
-		          	</h:panelGroup>
-		        </div>
-		        <div class="modal-footer">
-		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
+			<div class="modal fade" id="myModal" role="dialog">
+			    <div class="modal-dialog modal-lg " style="width: 100%; max-width: 1170px;">
+			      <div class="modal-content">
+			        <div class="modal-body">
+			        	<h:panelGroup id="tb_revenue">
+				          <table id="example" class="display" style="width:100%">
+								<thead>
+								    <tr>
+								        <th>ERP ID</th>
+							            <th>Branch</th>
+							            <th>Receipt Date</th>
+							            <th>Amount Header</th>
+							            <th>Cash</th>
+							            <th>Rabbit</th>
+							            <th>Card (BBL)</th>
+							            <th>Card (SCB)</th>
+							            <th>LinePay</th>
+							            <th>Bonus Commission</th>
+							            <th>AdjOther</th>
+							            <th>Return Charge</th>
+							            <th>Suspense</th>
+							            <th>With Holding Tax</th>
+							            <th>Promotion</th>
+							            <th>Insurance</th>
+							            <th>Status</th>
+								    </tr>
+								</thead>
+								<tbody>
+									<c:forEach var="receipt" items="#{dashboardNewAction.copReceiptTemps}">
+		            					<tr>
+		            						
+							                <td>#{receipt.shopCode}</td>
+								            <td>#{receipt.shopName}</td>
+								            <td>
+		            							<h:inputText 	
+		            								value="#{receipt.arReceiptDateStr}"
+		            								styleClass="form-control datepicker"></h:inputText>
+		            						</td>
+								            <td>#{receipt.amountHeader}</td>
+								            <td>#{receipt.cash}</td>
+								            <td>#{receipt.rabit}</td>
+								            <td>#{receipt.creditBBL}</td>
+								            <td>#{receipt.creditSCB}</td>
+								            <td>#{receipt.linePay}</td>
+								            <td>#{receipt.bonus}</td>
+								            <td>#{receipt.adjOther}</td>
+								            <td>#{receipt.adjReturnCharge}</td>
+								            <td>#{receipt.suspense}</td>
+								            <td>#{receipt.withholdingTax}</td>
+								            <td>#{receipt.promotion}</td>
+								            <td>#{receipt.insurance}</td>
+								            <td>
+								            	<h:panelGroup rendered="#{receipt.status == null || receipt.status == ''}">
+										            <select >
+														  <option value="">Active</option>
+														  <option value="N">Inactive</option>
+													</select>
+												</h:panelGroup>
+									            <h:outputLabel styleClass="text-table-body" value="Inactive" rendered="#{not (receipt.status == null || receipt.status == '')}">
+									            </h:outputLabel>
+											</td>
+		            					</tr>
+	            					</c:forEach>
+	            				</tbody>
+	            			</table>
+	            		</h:panelGroup>
+			        </div>
+			        <div class="modal-footer">
+			        	<p:commandButton value="Save" oncomplete="closeModal()"
+			        		update="canvasGroup, canvasGroupJs, canvasGroupPSJs"
+                    		actionListener="#{dashboardNewAction.saveReceiptTemp}" />
+			          	
+			          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
 			
 			<h:inputHidden id="x" value="#{dashboardNewAction.param}" />
-			<p:remoteCommand name="selectItemFromChart" update="tb_revenue, revenueJs"
+			<p:remoteCommand name="selectItemFromChart" update="tb_revenue, tb_revenueJS"
 				 action="#{dashboardNewAction.updateRevenues}"
 				 oncomplete="showModal()" >
 		  	</p:remoteCommand>
@@ -263,7 +290,6 @@
 		  	</p:remoteCommand>
 		</h:form>
 		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 		<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 		<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
@@ -337,12 +363,20 @@
 				} );
 			</h:outputScript>
 		</h:panelGroup>
-		<h:panelGroup id="revenueJs">
+		<h:panelGroup id="tb_revenueJS">
 			<h:outputScript>
 				var table = $('#example').DataTable({
-				  "scrollX": true
-				});
+				    	  "scrollX": true
+				    });
+				    
+				var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+					$( ".datepicker" ).datepicker({
+						format: 'dd/mm/yyyy',
+						container: container,
+						todayHighlight: true,
+						autoclose: true,
+					})
 			</h:outputScript>
-		</h:panelGroup> 
+		</h:panelGroup>
     </h:body>
 </f:view>
