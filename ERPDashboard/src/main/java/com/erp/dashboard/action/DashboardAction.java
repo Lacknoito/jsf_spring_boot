@@ -36,9 +36,11 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 
+@SuppressWarnings("deprecation")
 @Component
 @ManagedBean
 @SessionScoped
@@ -243,7 +245,7 @@ public class DashboardAction {
 		response.setHeader("Content-disposition", "attachment; filename=" + "test" + ".xlsx");
 		OutputStream out = response.getOutputStream();
 		
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, genConnection());
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(copReceiptTemps));
 		JRXlsxExporter exporter = new JRXlsxExporter();
         exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
         exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, out);
