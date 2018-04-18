@@ -7,6 +7,7 @@ import java.util.Date;
 public class InfCopReceiptTemp implements Serializable {
 	private static final long serialVersionUID = 21251235234L;
 
+	private Integer rownum;
 	private String shopCode;
 	private String shopName;
 	private String arReceiptDateStr;
@@ -28,6 +29,12 @@ public class InfCopReceiptTemp implements Serializable {
 	private String oldStatus;
 	private BigDecimal insurance;
 	
+	public Integer getRownum() {
+		return rownum;
+	}
+	public void setRownum(Integer rownum) {
+		this.rownum = rownum;
+	}
 	public String getShopCode() {
 		return shopCode;
 	}
