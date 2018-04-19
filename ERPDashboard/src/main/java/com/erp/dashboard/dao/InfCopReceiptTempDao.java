@@ -39,6 +39,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 		and b.FLEX_VALUE_SET_ID = :valueSetId ");
 		str.append(" 	inner join FND_FLEX_VALUES_TL t on b.FLEX_VALUE_ID = t.FLEX_VALUE_ID ");
 		str.append(" 	where trunc(r.ar_receipt_date) = to_date(:date,'MM/DD/YYYY') ");
+		str.append(" 		and r.ar_amount_dis <> 0 ");
 		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.ar_amount_header, r.record_status ");
 		str.append(" ) receiptTemp ");
 		str.append(" group by receiptTemp.Branchtype ");
@@ -90,6 +91,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 		and r.ar_shop_name <> '181002' ");
 		str.append(" 		and r.ar_shop_name not like '182%' ");
 		str.append(" 		and r.ar_shop_name not like '19%' ");
+		str.append(" 		and r.ar_amount_dis <> 0 ");
 		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.ar_amount_header, r.record_status ");
 		str.append(" ) receiptTemp  ");
 		str.append(" group by receiptTemp.Branchtype ");
@@ -149,6 +151,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 	and b.FLEX_VALUE_SET_ID = :valueSetId ");
 		str.append(" inner join FND_FLEX_VALUES_TL t on b.FLEX_VALUE_ID = t.FLEX_VALUE_ID  ");
 		str.append(" where trunc(r.ar_receipt_date) = to_date(:date,'MM/DD/YYYY')  ");
+		str.append(" 	and r.ar_amount_dis <> 0 ");
 		
 		param.put("valueSetId", ERPUtils.FIX_FLEX_VALUE_SET_ID);
 		param.put("date", ERPUtils.convertDateToStringFormat(date, "MM/dd/YYYY"));

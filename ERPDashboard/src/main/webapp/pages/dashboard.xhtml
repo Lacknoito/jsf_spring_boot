@@ -24,85 +24,21 @@
 		   <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
 		   
 		   <!-- Include Date Range Picker -->
-			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+			<script type="text/javascript" src="../js/bootstrap-datepicker.min.js"></script>
+			<link rel="stylesheet" href="../css/bootstrap-datepicker3.css"/>
 		   
-		   <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" />
-			<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+		   <link href="../css/bootstrap-toggle.min.css" rel="stylesheet" />
+			<script src="../js/bootstrap-toggle.min.js"></script>
 			
-		   <style>
-		   @font-face {
-			    font-family: Kanit-Light;
-			    src: url(../fonts/Kanit-Light.ttf);
-			}
-			body{
-				font-family: 'Kanit-Light';
-			}
-
-				.chartdiv {
-				  width: 100%;
-				  height: 400px;
-				}
-				
-				.amcharts-chart-div a {
-					display :none !important;
-				}
-				
-				.text-table-body {
-				    font-weight: normal;
-				    font-size: 12px;
-				}
-				
-				.ui-column-title {
-				    font-size: 12px;
-				}
-				
-				.hasDatepicker{
-					font-size: 10px !important;
-				}
-				
-				th { font-size: 14px; }
-				td { font-size: 12px; }
-				
-				.datepicker{
-					 font-size:10px;
-				}
-				
-				.toggle-on, .toggle-off{
-					font-size:8px;
-				}
-			</style>
-			
-			<script>
-				function showModal() {
-					$('#myModal').modal();
-				}
-				
-				function closeModal(){
-					$('#myModal').modal('hide');
-					
-					$('html, body').animate({
-				        scrollTop: $("#chartdiv1").offset().top
-				    }, 800);
-				}
-				
-				function statusChange(obj, param){
-					document.getElementById("formId:x").value = param;
-					document.getElementById("formId:y").value = $(obj).prop("checked");
-					
-					updateStatus();
-				}
-				function showModalPDF() {
-					$('#myModalPDF').modal();
-				}
-			</script>
+			<link rel="stylesheet" href="../css/erp.css" />
+			<script type="text/javascript" src="../js/erp.js"></script>
 	</h:head>
     <h:body styleClass="skin-blue sidebar-mini sidebar-collapse">
     	<h:form id="formId">
 			<div class="wrapper">
 			  <header class="main-header">
 			    <!-- Logo -->
-			    <a href="index2.html" class="logo" style="background-color:#f37020">
+			    <a href="index2.html" class="logo" style="background-color:#356582">
 			      <!-- mini logo for sidebar mini 50x50 pixels -->
 			      <span class="logo-mini">ERP</span>
 			      <!-- logo for regular state and mobile devices -->
@@ -110,7 +46,7 @@
 			    </a>
 			
 			    <!-- Header Navbar: style can be found in header.less -->
-			    <nav class="navbar navbar-static-top" style="background-color:#f37020">
+			    <nav class="navbar navbar-static-top" style="background-color:#356582">
 			      <!-- Sidebar toggle button-->
 			      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
 			        <span class="sr-only">Toggle navigation</span>
@@ -169,55 +105,63 @@
 			  </aside>
 			
 			  <!-- Content Wrapper. Contains page content -->
-			  <div class="content-wrapper">
+			  <div class="content-wrapper row-padding">
 			    <!-- Content Header (Page header) -->
 			    <section class="content-header">
 			    	<p:messages id="messages" showDetail="true" closable="true">
-		   		 </p:messages>
-			      <h:outputLabel style="font-size: 20px;" value="Dashboard"></h:outputLabel>
+		   		 	</p:messages>
+			      	<h:outputLabel style="font-size: 24px;" value="Dashboard"></h:outputLabel>
 			    </section>
 			
 			    <!-- Main content -->
 			    <section class="content">
-			
 			      <div class="row">
-			       <div class="col-md-12">
-			        <div class="box box-success">
-			            <div class="box-header with-border">
-			              <!-- <h3 class="box-title">ERP Dashboard</h3> -->
-			
-			              <div class="box-tools pull-right">
-			                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-			                </button>
-			              </div>
-			             
-			            </div>
-			            <div class="box-body" style="">
-			             	<div class="row">
-			             		<div class="col-sm-4" >
-				             		<div class="col-sm-4">	<h:outputLabel value="Receipt Date: " style="padding-right: 10px;"></h:outputLabel></div>
-				             		<div class="col-sm-6">
+			      	<div class="col-md-3">
+			      		<div class="box box-default row-padding-min">
+			      			
+				            <div class="box-body" style="">
+				            	<div class="row">
+				             		<div class="col-sm-12" >
+					             		<h:outputLabel value="Receipt Date: " style="padding-right: 10px;"></h:outputLabel>
+				             		</div>
+				             	</div>
+				             	<div class="row">
+				             		<div class="col-sm-12" >
 				             			<h:inputText size="10"	
-			            								value="#{dashboardAction.dateStr}"
-			            								styleClass="form-control datepicker"></h:inputText>
-				             			
+	            								value="#{dashboardAction.dateStr}"
+	            								styleClass="form-control datepicker"></h:inputText>
 				             		</div>
-				             		<div class="col-sm-2">
-				             			<p:commandButton value="Search" update="canvasGroup, canvasGroupJs, canvasGroupPSJs" actionListener="#{dashboardAction.updateReceiptTempChart}" />
+				             	</div>
+				             	<div class="row">
+				             		<div class="col-sm-12" style="padding-top: 10px;">
+					             		<p:commandButton styleClass="btn btn-primary" style="width:100%" value="View Graph" 
+					             			update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
+					             			actionListener="#{dashboardAction.updateReceiptTempChart}"
+					             			oncomplete="clearDivChart()" />
 				             		</div>
-			             		</div>
-			             	</div>
+				             	</div>
+				             	<div class="row">
+				             		<div class="col-sm-12" style="padding-top: 10px;">
+					             		<p:commandButton styleClass="btn btn-info" style="width:100%" value="View Accounting" actionListener="#{dashboardAction.showPDF}"
+				  							update="pdfId" oncomplete="showModalPDF()" />
+				             		</div>
+				             	</div>
+				            </div>
+			      		</div>
+			      	</div>
+			       <div class="col-md-9">
+			        <div class="box box-default row-padding-min">
+			            
+			            <div class="box-body" style="">
+			            	<div class="row pull-right">Last Update: 18/04/2018</div>
 			             	<div class="row">
-			             		<div class="col-sm-4" style="padding-top: 10px">
-			             			<p:commandButton value="View Accounting" actionListener="#{dashboardAction.showPDF}"
-			  								update="pdfId" oncomplete="showModalPDF()" />
-			             		</div>
-			             	</div>
-			             	<div class="row">
-				           		<div class="col-sm-12 text-center">
+				           		<div class="col-sm-11 text-center" id="divChart1">
 				           			<h:panelGroup id="canvasGroup">
 										<div id="chartdiv1" class="chartdiv"></div>             
 									</h:panelGroup>
+				           			
+				           		</div>
+				           		<div class="col-sm-1 text-center" id="divChart2">
 				           			<h:panelGroup id="canvasGroupPS">
 										<div id="chartdiv2" class="chartdiv" ></div>  
 									</h:panelGroup>
@@ -295,13 +239,12 @@
 	            		</h:panelGroup>
 			        </div>
 			        <div class="modal-footer">
-			        	<p:commandButton value="Save" oncomplete="closeModal()"
-			        		update="canvasGroup, canvasGroupJs, canvasGroupPSJs"
-			        		styleClass="btn btn-primary"
-                    		actionListener="#{dashboardAction.saveReceiptTemp}" />
+                    	<button type="button" class="btn btn-primary" onclick="saveReceiptTempJs()">Save</button>
+                    		
 			          	<h:commandButton value="export excel" 
-			          			 styleClass="btn btn-primary"
-			           			 action="#{dashboardAction.exportTransactionExcel}" /> 
+			          			 styleClass="btn btn-info"
+			           			 action="#{dashboardAction.exportTransactionExcel}" />
+			           			  
 			          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			        </div>
 			      </div>
@@ -320,8 +263,7 @@
 					 	</h:panelGroup>
 					 </div>
 			        <div class="modal-footer">
-			           <h:commandButton value="export excel" styleClass="btn btn-primary"
-			           			 action="#{dashboardAction.exportExcel}" /> 
+			           <h:commandButton value="export excel" styleClass="btn btn-info" action="#{dashboardAction.exportExcel}" /> 
 			        </div>
 			      </div>
 			      
@@ -331,6 +273,9 @@
 			<h:inputHidden id="x" value="#{dashboardAction.param}" />
 			<h:inputHidden id="y" value="#{dashboardAction.param2}" />
 			
+			<p:remoteCommand name="saveReceiptTempJs" update="canvasGroup, canvasGroupJs, canvasGroupPSJs"
+				 action="#{dashboardAction.saveReceiptTemp}"
+				 oncomplete="closeModal()" ></p:remoteCommand>
 			<p:remoteCommand name="selectItemFromChart" update="tb_revenue, tb_revenueJS"
 				 action="#{dashboardAction.updateReceiptTemp}"
 				 oncomplete="showModal()" ></p:remoteCommand>
@@ -340,13 +285,13 @@
 			<p:remoteCommand name="updateStatus" action="#{dashboardAction.updateStatus}"></p:remoteCommand>
 		</h:form>
 		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+		<script src="../js/Chart.min.js"></script>
 		<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-		<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
-		<script src="https://www.amcharts.com/lib/3/pie.js"></script>
-		<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
-		<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
-		<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+		<script src="../js/amcharts.js"></script>
+		<script src="../js/pie.js"></script>
+		<script src="../js/export.min.js"></script>
+		<link rel="stylesheet" href="../css/export.css" type="text/css" media="all" />
+		<script src="../js/light.js"></script>
 		<script src="../AdminLTE-2.4.3/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="../AdminLTE-2.4.3/bower_components/fastclick/lib/fastclick.js"></script>
 		<script src="../AdminLTE-2.4.3/dist/js/adminlte.min.js"></script>
@@ -383,9 +328,11 @@
 						          	}else{
 						          		selectItemFromChartPS();
 						          		
-						          		$('html, body').animate({
-									        scrollTop: $("#chartdiv2").offset().top
-									    }, 800);
+						          		$("#divChart1").removeClass("col-sm-11");
+						          		$("#divChart1").addClass("col-sm-6");
+						          		
+						          		$("#divChart2").removeClass("col-sm-1");
+						          		$("#divChart2").addClass("col-sm-6");
 						          	}
 					    }}]
 				} );
@@ -426,6 +373,10 @@
 				$('#example').on( 'page.dt', function () {
 						tableNextPage();
 					} );
+					
+				$('#example').on( 'search.dt', function () {
+				    tableNextPage();
+				} );
 			</h:outputScript>
 			
 			<h:panelGroup id="datepickerJs">

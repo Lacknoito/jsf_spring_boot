@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05939485-0e68-478a-943c-2bde5aaf3735">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05939485-0e68-478a-943c-2bde5aaf3735">
 	<property name="ireport.zoom" value="1.3636363636363635"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -96,35 +96,52 @@ order by r.ar_receipt_number, account_code]]>
 	</subDataset>
 	<parameter name="RECEIPT_DATE" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select
-       r.ar_receipt_number as receipt_number
-       , case when r.ar_pos_type = 'COD' then '401201'
-              when r.ar_pos_type = 'OTHER' then '409104'
-              when r.ar_pos_type = 'LINEPAY' then '112171'
-              when r.ar_pos_type = 'CREDIT BBL' then '112150'
-              when r.ar_pos_type = 'CREDIT SCB' then '112151'
-              when r.ar_pos_type = 'RABBIT' then '112150'
-              when r.ar_pos_type = 'TOPUP' then '213602'
-              when r.ar_pos_type = 'DISC' then '710100'
-              when r.ar_pos_type = 'INSUR' then '401202'
-              when r.ar_pos_type = 'ADJ1' then '770120'
-              when r.ar_pos_type = 'ADJ2' then '760230'
-              when r.ar_pos_type = 'ADJ3' then '401101'
-              when r.ar_pos_type = 'ADJ4' then '112190'
-              when r.ar_pos_type = 'ADJ5' then '113401'
-              when r.ar_pos_type = 'ADJ6' then '710100'
-              when r.ar_pos_type = 'ADJ7' then '770100'
-              when r.ar_pos_type = 'ADJ8' then '112150'
-              when r.ar_pos_type = 'ADJ9' then '112171'
-              when r.ar_pos_type = 'VAT' then '213401'
-         else '' end as account_code
-       , '' as account_name
-       , r.ar_amount_dis as  accounted_dr
-       , r.ar_amount_dis as  accounted_cr
-from XXINF_COP_RECEIPT_TEMP r
-where r.ar_receipt_date = to_date($P{RECEIPT_DATE},'DD/MM/YYYY')
-      and r.ar_amount_dis <> 0
-order by r.ar_receipt_number, account_code]]>
+		<![CDATA[select datas.receipt_number, datas.account_code, des.description as account_name
+       , sum(datas.accounted_dr) as accounted_dr, sum(datas.accounted_cr) as accounted_cr
+from (
+    select
+           r.ar_receipt_number as receipt_number
+           , case when r.ar_pos_type = 'COD' then '401201'
+                  when r.ar_pos_type = 'OTHER' then '409104'
+                  when r.ar_pos_type = 'LINEPAY' then '112171'
+                  when r.ar_pos_type = 'CREDIT BBL' then '112150'
+                  when r.ar_pos_type = 'CREDIT SCB' then '112151'
+                  when r.ar_pos_type = 'RABBIT' then '112150'
+                  when r.ar_pos_type = 'TOPUP' or r.ar_pos_type = 'TUD' then '213602'
+                  when r.ar_pos_type = 'DISC' then '710100'
+                  when r.ar_pos_type = 'INSUR' then '401202'
+                  when r.ar_pos_type = 'ADJ1' then '770120'
+                  when r.ar_pos_type = 'ADJ2' then '760230'
+                  when r.ar_pos_type = 'ADJ3' then '401101'
+                  when r.ar_pos_type = 'ADJ4' then '112190'
+                  when r.ar_pos_type = 'ADJ5' then '113401'
+                  when r.ar_pos_type = 'ADJ6' then '710100'
+                  when r.ar_pos_type = 'ADJ7' then '770100'
+                  when r.ar_pos_type = 'ADJ8' then '112150'
+                  when r.ar_pos_type = 'ADJ9' then '112171'
+                  when r.ar_pos_type = 'VAT' then '213401'
+                  when r.ar_pos_type = 'TRAN' and (s.id is null or s.dcsp_flag = 'N') then '401101'
+                  when r.ar_pos_type = 'TRAN' and (s.id is not null and s.dcsp_flag = 'Y') then '401103'
+             else '401101' end as account_code
+           , r.ar_amount_dis as  accounted_dr
+           , r.ar_amount_dis as  accounted_cr
+    from XXINF_COP_RECEIPT_TEMP r
+    left join XXINF_COP_KE_SHOP s on r.ar_shop_name = s.id
+    where r.ar_receipt_date = to_date($P{RECEIPT_DATE},'DD/MM/YYYY')
+          and r.ar_amount_dis <> 0
+)datas
+left join (
+      SELECT distinct ffv.flex_value,ffvt.description
+      FROM fnd_flex_value_sets ffvs ,
+              fnd_flex_values ffv ,
+              fnd_flex_values_tl ffvt
+      WHERE ffvs.flex_value_set_id = ffv.flex_value_set_id
+      and ffv.flex_value_id      = ffvt.flex_value_id
+      and ffvs.flex_value_set_name = 'KETH_ACCOUNT'
+      and ffv.enabled_flag = 'Y'
+)des on des.flex_value = datas.account_code
+group by datas.receipt_number, datas.account_code, des.description
+order by datas.receipt_number, datas.account_code]]>
 	</queryString>
 	<field name="RECEIPT_NUMBER" class="java.lang.String"/>
 	<field name="ACCOUNT_CODE" class="java.lang.String"/>
@@ -151,7 +168,7 @@ order by r.ar_receipt_number, account_code]]>
 		<groupExpression><![CDATA[$F{RECEIPT_NUMBER}]]></groupExpression>
 		<groupFooter>
 			<band height="20">
-				<textField pattern="#,##0.00">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement x="340" y="0" width="94" height="20" uuid="25d13d4c-f0c2-4775-942d-eed47fb13b6f"/>
 					<box>
 						<pen lineWidth="0.5"/>
@@ -166,7 +183,7 @@ order by r.ar_receipt_number, account_code]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SUM_DR}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement x="434" y="0" width="100" height="20" uuid="ccf63bb5-bc91-4ad3-8c92-924e9be936d1"/>
 					<box>
 						<pen lineWidth="0.5"/>
@@ -194,7 +211,7 @@ order by r.ar_receipt_number, account_code]]>
 						<font size="8" isBold="true"/>
 						<paragraph rightIndent="5"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{RECREIPT_NUMBER} + " Total "]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{RECREIPT_NUMBER} != null ? $V{RECREIPT_NUMBER} + " Total " : "Total "]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -202,24 +219,24 @@ order by r.ar_receipt_number, account_code]]>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<pageHeader>
-		<band height="30">
+	<title>
+		<band height="29">
 			<textField>
-				<reportElement x="59" y="5" width="166" height="15" uuid="79cf9650-f29e-4a6a-ab32-8e67636b6605"/>
+				<reportElement x="56" y="5" width="166" height="15" uuid="79cf9650-f29e-4a6a-ab32-8e67636b6605"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Receipt Date: " + $P{RECEIPT_DATE}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="398" y="5" width="136" height="15" uuid="cc42d542-84dc-4f50-bfef-e2ed02c52858"/>
+			<textField evaluationTime="Report" pattern="#,##0.00">
+				<reportElement x="340" y="5" width="194" height="15" uuid="90e9190f-02cb-40e5-9b2c-ddfcbbab775f"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Sum Batch Amt : 467,761.19" ]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_REPORT} != null ? "Total Amount : " + new java.text.DecimalFormat("#,##0.00").format($V{SUM_REPORT}) : "Total Amount : 0"]]></textFieldExpression>
 			</textField>
 		</band>
-	</pageHeader>
+	</title>
 	<columnHeader>
 		<band height="19">
 			<staticText>
@@ -268,7 +285,7 @@ order by r.ar_receipt_number, account_code]]>
 				<text><![CDATA[Accounted Cr]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="18" y="0" width="90" height="19" backcolor="#FFFFFF" uuid="02aced0c-f925-4f5f-b921-65e3eacb13a0"/>
+				<reportElement mode="Transparent" x="18" y="0" width="90" height="19" backcolor="#FFFFFF" uuid="02aced0c-f925-4f5f-b921-65e3eacb13a0"/>
 				<box>
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
@@ -343,7 +360,7 @@ order by r.ar_receipt_number, account_code]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ACCOUNT_NAME}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="340" y="0" width="94" height="20" uuid="ef797528-54b0-4e68-96d3-2c718e43a321"/>
 				<box>
 					<topPen lineWidth="0.5"/>
@@ -357,7 +374,7 @@ order by r.ar_receipt_number, account_code]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ACCOUNTED_DR}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="434" y="0" width="100" height="20" uuid="fa996193-a5c7-4b8d-9f7f-48743162179b"/>
 				<box>
 					<topPen lineWidth="0.5"/>
@@ -390,7 +407,7 @@ order by r.ar_receipt_number, account_code]]>
 				</textElement>
 				<textFieldExpression><![CDATA["Grand Total"]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="340" y="0" width="94" height="20" uuid="864785bf-68c2-4039-82bb-1326f5827b5b"/>
 				<box>
 					<pen lineWidth="0.5"/>
@@ -405,7 +422,7 @@ order by r.ar_receipt_number, account_code]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{SUM_REPORT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="434" y="0" width="100" height="20" uuid="6ccc3ae1-2e95-4bb2-bfb7-86a4c0a2ce0d"/>
 				<box>
 					<pen lineWidth="0.5"/>

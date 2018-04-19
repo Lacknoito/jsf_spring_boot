@@ -5,51 +5,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	  
-		<script>
-			function showModal() {
-				$('#myModal').modal();
-			}
-			
-			function closeModal(){
-				$('#myModal').modal('hide');
-			}
-		</script>
-	  
+
 </h:head>
 <h:body>
-
-	<div class="container">
-	  <h2>Modal Example</h2>
-	  <!-- Trigger the modal with a button -->
-	  <h:form>
-		  	<h:commandButton value="export" 
-						 action="#{formView.showPDF}" /> 
-	</h:form>
 	
-	  <!-- Modal -->
-	  <div class="modal fade" id="myModal" role="dialog">
-	    <div class="modal-dialog modal-lg " style="width: 100%; max-width: 1170px;">
-	    
-	      <!-- Modal content-->
-	      <div class="modal-content">
-	        <div class="modal-body">
-	        	<h:panelGroup id="pdfId">
-			          <p:media value="#{formView.streamedContent}" player="pdf" width="100%" height="550px">
-							<f:param name="id" value="#{formView.generateRandomIdForNotCaching()}" />
-						</p:media>
-			 	</h:panelGroup>
-			 </div>
-	       <!--  <div class="modal-footer">
-	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        </div> -->
-	      </div>
-	      
-	    </div>
-	  </div>
-	</div>
 </h:body>
 </html>
