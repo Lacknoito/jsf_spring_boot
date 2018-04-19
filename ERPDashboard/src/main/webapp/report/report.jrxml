@@ -43,64 +43,17 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="recript_detail" uuid="b30b4362-a8ed-4f76-a9b3-53da65e7db94">
-		<parameter name="RECEIPT_DATE" class="java.lang.String">
-			<defaultValueExpression><![CDATA[$P{RECEIPT_DATE}]]></defaultValueExpression>
-		</parameter>
-		<queryString>
-			<![CDATA[select
-       r.ar_receipt_number as receipt_number
-       , case when r.ar_pos_type = 'COD' then '401201'
-              when r.ar_pos_type = 'OTHER' then '409104'
-              when r.ar_pos_type = 'LINEPAY' then '213401'
-              when r.ar_pos_type = 'CREDIT BBL' then '112150'
-              when r.ar_pos_type = 'CREDIT SCB' then '112151'
-              when r.ar_pos_type = 'RABBIT' then '112150'
-              when r.ar_pos_type = 'TOPUP' then '213602'
-              when r.ar_pos_type = 'DISC' then '710100'
-              when r.ar_pos_type = 'INSUR' then '401202'
-              when r.ar_pos_type = 'ADJ1' then '770120'
-              when r.ar_pos_type = 'ADJ2' then '760230'
-              when r.ar_pos_type = 'ADJ3' then '401101'
-              when r.ar_pos_type = 'ADJ4' then '112190'
-              when r.ar_pos_type = 'ADJ5' then '113401'
-              when r.ar_pos_type = 'ADJ6' then '710100'
-              when r.ar_pos_type = 'ADJ7' then '770100'
-              when r.ar_pos_type = 'ADJ8' then '112150'
-              when r.ar_pos_type = 'ADJ9' then '112171'
-              when r.ar_pos_type = 'VAT' then '213401'
-         else '' end as account_code
-       , '' as account_name
-       , r.ar_amount_dis as  accounted_dr
-       , r.ar_amount_dis as  accounted_cr
-from XXINF_COP_RECEIPT_TEMP r
-where r.ar_receipt_date = to_date($P{RECEIPT_DATE},'DD/MM/YYYY')
-      and r.ar_amount_dis <> 0
-order by r.ar_receipt_number, account_code]]>
-		</queryString>
-		<field name="RECEIPT_NUMBER" class="java.lang.String"/>
-		<field name="ACCOUNT_CODE" class="java.lang.String"/>
-		<field name="ACCOUNT_NAME" class="java.lang.String"/>
-		<field name="ACCOUNTED_DR" class="java.math.BigDecimal"/>
-		<field name="ACCOUNTED_CR" class="java.math.BigDecimal"/>
-		<variable name="SumDr" class="java.math.BigDecimal" resetType="Group" resetGroup="RECEIPT_NUMBER" calculation="Sum">
-			<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
-		</variable>
-		<variable name="SumCr" class="java.math.BigDecimal" resetType="Group" resetGroup="RECEIPT_NUMBER" calculation="Sum">
-			<variableExpression><![CDATA[$F{ACCOUNTED_CR}]]></variableExpression>
-		</variable>
-		<variable name="SumAmtTotal" class="java.math.BigDecimal" calculation="Sum"/>
-		<group name="RECEIPT_NUMBER">
-			<groupExpression><![CDATA[$F{RECEIPT_NUMBER}]]></groupExpression>
-		</group>
-	</subDataset>
 	<parameter name="RECEIPT_DATE" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select datas.receipt_number, datas.account_code, des.description as account_name
        , sum(datas.accounted_dr) as accounted_dr, sum(datas.accounted_cr) as accounted_cr
+       , case when datas.account_code = '401103'
+                   or datas.account_code = '401201' then datas.ar_shop_name
+         else '000000' end as cost_center
 from (
     select
            r.ar_receipt_number as receipt_number
+           , r.ar_shop_name as ar_shop_name
            , case when r.ar_pos_type = 'COD' then '401201'
                   when r.ar_pos_type = 'OTHER' then '409104'
                   when r.ar_pos_type = 'LINEPAY' then '112171'
@@ -140,7 +93,7 @@ left join (
       and ffvs.flex_value_set_name = 'KETH_ACCOUNT'
       and ffv.enabled_flag = 'Y'
 )des on des.flex_value = datas.account_code
-group by datas.receipt_number, datas.account_code, des.description
+group by datas.receipt_number, datas.account_code, des.description, datas.ar_shop_name
 order by datas.receipt_number, datas.account_code]]>
 	</queryString>
 	<field name="RECEIPT_NUMBER" class="java.lang.String"/>
@@ -148,20 +101,21 @@ order by datas.receipt_number, datas.account_code]]>
 	<field name="ACCOUNT_NAME" class="java.lang.String"/>
 	<field name="ACCOUNTED_DR" class="java.math.BigDecimal"/>
 	<field name="ACCOUNTED_CR" class="java.math.BigDecimal"/>
+	<field name="COST_CENTER" class="java.lang.String"/>
 	<variable name="SUM_DR" class="java.math.BigDecimal" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="Sum">
 		<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
 	</variable>
 	<variable name="SUM_CR" class="java.math.BigDecimal" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="Sum">
 		<variableExpression><![CDATA[$F{ACCOUNTED_CR}]]></variableExpression>
 	</variable>
-	<variable name="RECREIPT_NUMBER" class="java.lang.String" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="First">
+	<variable name="RECEIPT_NUMBER" class="java.lang.String" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="First">
 		<variableExpression><![CDATA[$F{RECEIPT_NUMBER}]]></variableExpression>
 	</variable>
 	<variable name="SUM_REPORT" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
-	<variable name="RECREIPT_GROUP_COUNT" class="java.lang.Integer" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="Count">
+	<variable name="RECEIPT_GROUP_COUNT" class="java.lang.Integer" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="Count">
 		<variableExpression><![CDATA[1]]></variableExpression>
 	</variable>
 	<group name="RECREIPT_NUMBER">
@@ -211,7 +165,7 @@ order by datas.receipt_number, datas.account_code]]>
 						<font size="8" isBold="true"/>
 						<paragraph rightIndent="5"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{RECREIPT_NUMBER} != null ? $V{RECREIPT_NUMBER} + " Total " : "Total "]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{RECEIPT_NUMBER} != null ? $V{RECEIPT_NUMBER} + " Total " : "Total "]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -330,7 +284,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<font size="8"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{RECREIPT_GROUP_COUNT} == 1 ? $F{RECEIPT_NUMBER} : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{RECEIPT_GROUP_COUNT} == 1 ? $F{RECEIPT_NUMBER} : ""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="108" y="0" width="90" height="20" uuid="acc9345a-4c58-4f71-8f50-ebea3613d7a1"/>
@@ -344,7 +298,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<font size="8" isStrikeThrough="false"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ACCOUNT_CODE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ACCOUNT_CODE} + "." + $F{COST_CENTER}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="198" y="0" width="142" height="20" uuid="6a52cb79-7797-4811-8cee-f6de603204c8"/>

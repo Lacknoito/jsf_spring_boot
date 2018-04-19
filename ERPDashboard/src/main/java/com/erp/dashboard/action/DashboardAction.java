@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -156,7 +157,17 @@ public class DashboardAction {
 	}
 	
 	public void updateChart() throws JsonProcessingException {
+		if(StringUtils.isBlank(dateStr)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
+			
+			return;
+		}
+		
 		ratings = userService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+		
+		if(ERPUtils.collectionIsEmpty(ratings)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", "Data not available."));
+		}
 		
 		ObjectMapper mapper = new ObjectMapper();
         datas = mapper.writeValueAsString(ratings);

@@ -21,7 +21,7 @@
 		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/jvectormap/jquery-jvectormap.css" />
 		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/AdminLTE.min.css" />
 		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/skins/_all-skins.min.css" />
-		   <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+		   <link href="../css/jquery.dataTables.min.css" rel="stylesheet" />
 		   
 		   <!-- Include Date Range Picker -->
 			<script type="text/javascript" src="../js/bootstrap-datepicker.min.js"></script>
@@ -108,8 +108,6 @@
 			  <div class="content-wrapper row-padding">
 			    <!-- Content Header (Page header) -->
 			    <section class="content-header">
-			    	<p:messages id="messages" showDetail="true" closable="true">
-		   		 	</p:messages>
 			      	<h:outputLabel style="font-size: 24px;" value="Dashboard"></h:outputLabel>
 			    </section>
 			
@@ -151,9 +149,10 @@
 			      	</div>
 			       <div class="col-md-9">
 			        <div class="box box-default row-padding-min">
-			            
 			            <div class="box-body" style="">
-			            	<div class="row pull-right">Last Update: 18/04/2018</div>
+			            	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true">
+		   		 			</p:messages>
+			            	<div class="row pull-right"></div>
 			             	<div class="row">
 				           		<div class="col-sm-11 text-center" id="divChart1">
 				           			<h:panelGroup id="canvasGroup">
@@ -286,7 +285,7 @@
 		</h:form>
 		
 		<script src="../js/Chart.min.js"></script>
-		<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+		<script src="../js/jquery.dataTables.min.js"></script>
 		<script src="../js/amcharts.js"></script>
 		<script src="../js/pie.js"></script>
 		<script src="../js/export.min.js"></script>
@@ -306,6 +305,7 @@
 	    		  "type": "pie",
 				  "theme": "light",
 				  "dataProvider": #{dashboardAction.datas},
+				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",
 				  "pullOutDuration": 0,
@@ -344,6 +344,7 @@
 	    		  "type": "pie",
 				  "theme": "light",
 				  "dataProvider": #{dashboardAction.chartPS},
+				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",
 				  "pullOutDuration": 0,
