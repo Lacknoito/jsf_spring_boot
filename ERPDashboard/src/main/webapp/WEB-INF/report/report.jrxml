@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="05939485-0e68-478a-943c-2bde5aaf3735">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05939485-0e68-478a-943c-2bde5aaf3735">
 	<property name="ireport.zoom" value="1.3636363636363635"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -108,7 +108,7 @@ order by datas.receipt_number, datas.account_code]]>
 	<variable name="SUM_CR" class="java.math.BigDecimal" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="Sum">
 		<variableExpression><![CDATA[$F{ACCOUNTED_CR}]]></variableExpression>
 	</variable>
-	<variable name="RECREIPT_NUMBER" class="java.lang.String" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="First">
+	<variable name="RECEIPT_NUMBER" class="java.lang.String" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="First">
 		<variableExpression><![CDATA[$F{RECEIPT_NUMBER}]]></variableExpression>
 	</variable>
 	<variable name="SUM_REPORT" class="java.math.BigDecimal" calculation="Sum">
@@ -153,7 +153,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<textFieldExpression><![CDATA[$V{SUM_CR}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="0" y="0" width="340" height="20" uuid="784de9e5-263e-42a5-a4d8-6092a6753c78"/>
+					<reportElement x="18" y="0" width="322" height="20" uuid="784de9e5-263e-42a5-a4d8-6092a6753c78"/>
 					<box>
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
@@ -165,7 +165,7 @@ order by datas.receipt_number, datas.account_code]]>
 						<font size="8" isBold="true"/>
 						<paragraph rightIndent="5"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{RECREIPT_NUMBER} != null ? $V{RECREIPT_NUMBER} + " Total " : "Total "]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{RECEIPT_NUMBER} != null ? $V{RECEIPT_NUMBER} + " Total " : "Total "]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -174,16 +174,16 @@ order by datas.receipt_number, datas.account_code]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="33" splitType="Stretch">
+		<band height="29">
 			<textField>
-				<reportElement x="0" y="5" width="180" height="15" uuid="79cf9650-f29e-4a6a-ab32-8e67636b6605"/>
+				<reportElement x="56" y="5" width="166" height="15" uuid="79cf9650-f29e-4a6a-ab32-8e67636b6605"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Receipt Date: " + $P{RECEIPT_DATE}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" pattern="#,##0.00">
-				<reportElement x="340" y="5" width="194" height="15" uuid="cc42d542-84dc-4f50-bfef-e2ed02c52858"/>
+				<reportElement x="340" y="5" width="194" height="15" uuid="90e9190f-02cb-40e5-9b2c-ddfcbbab775f"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -239,7 +239,7 @@ order by datas.receipt_number, datas.account_code]]>
 				<text><![CDATA[Accounted Cr]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="108" height="19" backcolor="#FFFFFF" uuid="02aced0c-f925-4f5f-b921-65e3eacb13a0"/>
+				<reportElement mode="Transparent" x="18" y="0" width="90" height="19" backcolor="#FFFFFF" uuid="02aced0c-f925-4f5f-b921-65e3eacb13a0"/>
 				<box>
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
@@ -273,7 +273,7 @@ order by datas.receipt_number, datas.account_code]]>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="108" height="20" printWhenGroupChanges="RECREIPT_NUMBER" uuid="82156466-b0f7-4318-a6b8-1079f51d5ae0"/>
+				<reportElement x="18" y="0" width="90" height="20" printWhenGroupChanges="RECREIPT_NUMBER" uuid="82156466-b0f7-4318-a6b8-1079f51d5ae0"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -347,7 +347,7 @@ order by datas.receipt_number, datas.account_code]]>
 	<summary>
 		<band height="42" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="340" height="20" uuid="98b6b0c7-1bbd-46d8-ab87-3da95d013929"/>
+				<reportElement x="18" y="0" width="322" height="20" uuid="98b6b0c7-1bbd-46d8-ab87-3da95d013929"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>

@@ -50,3 +50,7 @@ td { font-size: 12px; }
 .modal-footer{
 	padding-top: 0px;
 }
+
+.dateintable{
+	height: 25px;
+}

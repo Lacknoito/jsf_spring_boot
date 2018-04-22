@@ -140,7 +140,8 @@
 				             	</div>
 				             	<div class="row">
 				             		<div class="col-sm-12" style="padding-top: 10px;">
-					             		<p:commandButton styleClass="btn btn-info" style="width:100%" value="View Accounting" actionListener="#{dashboardAction.showPDF}"
+					             		<p:commandButton styleClass="btn btn-info" style="width:100%" 
+					             			value="View Accounting" actionListener="#{dashboardAction.showPDF}"
 				  							update="pdfId" oncomplete="showModalPDF()" />
 				             		</div>
 				             	</div>
@@ -210,7 +211,7 @@
 								            <td>
 		            							<h:inputText 	
 		            								value="#{receipt.arReceiptDateStr}"
-		            								styleClass="form-control datepicker"></h:inputText>
+		            								styleClass="form-control datepicker dateintable"></h:inputText>
 		            						</td>
 								            <td>#{receipt.amountHeader}</td>
 								            <td>#{receipt.cash}</td>
@@ -268,7 +269,7 @@
 			      
 			    </div>
 			  </div>
-			
+			  
 			<h:inputHidden id="x" value="#{dashboardAction.param}" />
 			<h:inputHidden id="y" value="#{dashboardAction.param2}" />
 			

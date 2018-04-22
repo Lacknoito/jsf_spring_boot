@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Query;
 import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
+import com.erp.dashboard.model.api.InfCopReceiptTempAPI;
 import com.erp.dashboard.utils.ERPUtils;
 
 @Transactional
@@ -257,6 +258,51 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 			ERPUtils.setParameterByMap(param, query);
 			
 			query.executeUpdate();
+		}
+	}
+	
+	public void insertInfCOPReceiptTemp(List<InfCopReceiptTempAPI> copReceiptTemps) {
+		StringBuilder str = new StringBuilder();
+		str.append(" insert into XXINF_COP_RECEIPT_TEMP( ");
+		str.append(" 	ar_receipt_batch ");
+		str.append(" 	,ar_receipt_number ");
+		str.append(" 	,ar_receipt_date ");
+		str.append(" 	,ar_gl_date ");
+		str.append(" 	,ar_amount_header ");
+		str.append(" 	,ar_comments_header ");
+		str.append(" 	,ar_pos_type ");
+		str.append(" 	,ar_amount_dis ");
+		str.append(" 	,ar_comments_line ");
+		str.append(" 	,ar_shop_name ");
+		str.append(" 	,ar_source ");
+		str.append(" )values( ");
+		str.append(" 	:ar_receipt_batch ");
+		str.append(" 	, :ar_receipt_number ");
+		str.append(" 	, to_date(:ar_receipt_date, 'DD-MON-YY') ");
+		str.append(" 	, to_date(:ar_gl_date, 'DD-MON-YY') ");
+		str.append(" 	, :ar_amount_header ");
+		str.append(" 	, :ar_comments_header ");
+		str.append(" 	, :ar_pos_type ");
+		str.append(" 	, :ar_amount_dis ");
+		str.append(" 	, :ar_comments_line ");
+		str.append(" 	, :ar_shop_name ");
+		str.append(" 	, :ar_source ");
+		str.append(" ) ");
+		
+		for(InfCopReceiptTempAPI copReceiptTemp : copReceiptTemps) {
+			entityManager.createNativeQuery(str.toString())
+	                .setParameter("ar_receipt_batch", copReceiptTemp.getAr_receipt_batch())
+	                .setParameter("ar_receipt_number", copReceiptTemp.getAr_receipt_number())
+	                .setParameter("ar_receipt_date", copReceiptTemp.getAr_receipt_date())
+	                .setParameter("ar_gl_date", copReceiptTemp.getAr_gl_date())
+	                .setParameter("ar_amount_header", copReceiptTemp.getAr_amount_header())
+	                .setParameter("ar_comments_header", copReceiptTemp.getAr_comments_header())
+	                .setParameter("ar_pos_type", copReceiptTemp.getAr_pos_type())
+	                .setParameter("ar_amount_dis", copReceiptTemp.getAr_amount_dis())
+	                .setParameter("ar_comments_line", copReceiptTemp.getAr_comments_line())
+	                .setParameter("ar_shop_name", copReceiptTemp.getAr_shop_name())
+	                .setParameter("ar_source", copReceiptTemp.getAr_source())
+	                .executeUpdate();
 		}
 	}
 }

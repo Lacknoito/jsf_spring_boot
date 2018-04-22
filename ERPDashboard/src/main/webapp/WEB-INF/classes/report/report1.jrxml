@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3079e243-0cfd-4fa9-a6fc-8220d36007bd">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="96"/>
+	<parameter name="RECREIPT_DATE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+       r.ar_receipt_number as receipt_number
+       , case when r.ar_pos_type = 'COD' then '401201'
+              when r.ar_pos_type = 'OTHER' then '409104'
+              when r.ar_pos_type = 'LINEPAY' then '213401'
+              when r.ar_pos_type = 'CREDIT BBL' then '112150'
+              when r.ar_pos_type = 'CREDIT SCB' then '112151'
+              when r.ar_pos_type = 'RABBIT' then '112150'
+              when r.ar_pos_type = 'TOPUP' then '213602'
+              when r.ar_pos_type = 'DISC' then '710100'
+              when r.ar_pos_type = 'INSUR' then '401202'
+              when r.ar_pos_type = 'ADJ1' then '770120'
+              when r.ar_pos_type = 'ADJ2' then '760230'
+              when r.ar_pos_type = 'ADJ3' then '401101'
+              when r.ar_pos_type = 'ADJ4' then '112190'
+              when r.ar_pos_type = 'ADJ5' then '113401'
+              when r.ar_pos_type = 'ADJ6' then '710100'
+              when r.ar_pos_type = 'ADJ7' then '770100'
+              when r.ar_pos_type = 'ADJ8' then '112150'
+              when r.ar_pos_type = 'ADJ9' then '112171'
+              when r.ar_pos_type = 'VAT' then '213401'
+         else '' end as account_code
+       , '' as account_name
+       , r.ar_amount_dis as  accounted_dr
+       , r.ar_amount_dis as  accounted_cr
+from XXINF_COP_RECEIPT_TEMP r
+where r.ar_receipt_date = to_date($P{RECREIPT_DATE},'DD/MM/YYYY')
+      and r.ar_amount_dis <> 0
+order by r.ar_receipt_number, account_code]]>
+	</queryString>
+	<field name="RECEIPT_NUMBER" class="java.lang.String"/>
+	<field name="ACCOUNT_CODE" class="java.lang.String"/>
+	<field name="ACCOUNT_NAME" class="java.lang.String"/>
+	<field name="ACCOUNTED_DR" class="java.math.BigDecimal"/>
+	<field name="ACCOUNTED_CR" class="java.math.BigDecimal"/>
+	<variable name="SUM_DR" class="java.math.BigDecimal" resetType="Group" resetGroup="recreipt" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
+	</variable>
+	<variable name="SUM_CR" class="java.math.BigDecimal" resetType="Group" resetGroup="recreipt" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACCOUNTED_CR}]]></variableExpression>
+	</variable>
+	<variable name="RECREIPT_NUMBER" class="java.lang.String" resetType="Group" resetGroup="recreipt" calculation="First">
+		<variableExpression><![CDATA[$F{RECEIPT_NUMBER}]]></variableExpression>
+	</variable>
+	<variable name="SUM_REPORT" class="java.math.BigDecimal" incrementType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
+	</variable>
+	<group name="recreipt">
+		<groupExpression><![CDATA[$F{RECEIPT_NUMBER}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField>
+					<reportElement x="336" y="0" width="94" height="20" uuid="8d516acc-d941-4f10-8145-f5ce74676dbd"/>
+					<box>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+						<topPen lineWidth="0.5" lineStyle="Solid"/>
+						<leftPen lineWidth="0.5" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						<rightPen lineWidth="0.5" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+						<paragraph rightIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_DR}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="430" y="0" width="100" height="20" uuid="07b3ab43-dc8d-41f4-b1d5-a5a647edf8fa"/>
+					<box>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+						<topPen lineWidth="0.5" lineStyle="Solid"/>
+						<leftPen lineWidth="0.5" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						<rightPen lineWidth="0.5" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+						<paragraph rightIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_DR}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="14" y="0" width="322" height="20" uuid="48c1720d-61dd-41e6-ba85-bfb2efb9d44e"/>
+					<box>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+						<topPen lineWidth="0.5" lineStyle="Solid"/>
+						<leftPen lineWidth="0.5" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						<rightPen lineWidth="0.5" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{RECREIPT_NUMBER} + " Total "]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="39" y="5" width="189" height="20" uuid="937d164b-9a7f-4a80-b490-605eab40f711"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Receipt Date: " + $P{RECREIPT_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="372" y="5" width="110" height="20" uuid="ebb36afa-3798-4798-b3a9-6f101cfe7d00"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sum Batch Amt : " + $V{SUM_REPORT} ]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement x="14" y="0" width="90" height="19" uuid="1a4428a9-28f4-4a30-a2c7-bae43cf82f26"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Receipt Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="104" y="0" width="90" height="19" uuid="521251d7-0434-4009-a7fe-bdd68dcb5d77"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Account Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="194" y="0" width="142" height="19" uuid="08fbfcd4-986b-42f6-b159-e99c172968fa"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Account Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="336" y="0" width="94" height="19" uuid="608e982a-789d-4716-9433-27d16f0ec619"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Accounted Dr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="430" y="0" width="100" height="19" uuid="a9a8ef91-a95d-4762-92c2-3e32b00b5f47"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Accounted Cr]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="14" y="0" width="90" height="20" printWhenGroupChanges="recreipt" uuid="8ce417a4-28fb-4cf4-a5fa-71cee4a4f952"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RECEIPT_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="104" y="0" width="90" height="20" uuid="6c441e2a-4916-4580-9ded-284067af4ad3"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNT_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="194" y="0" width="142" height="20" uuid="140e47e1-c38c-404e-ae01-2e12aae92a66"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNT_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="336" y="0" width="94" height="20" uuid="b84ddbb2-4f76-4895-abba-a8cda0336789"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_DR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="0" width="100" height="20" uuid="8f9c64b1-e6e6-4c0d-8287-b70679021481"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_CR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

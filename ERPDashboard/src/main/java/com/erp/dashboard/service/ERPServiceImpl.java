@@ -11,6 +11,7 @@ import com.erp.dashboard.dao.IUserDao;
 import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
 import com.erp.dashboard.model.User;
+import com.erp.dashboard.model.api.InfCopReceiptTempAPI;
 
 @Service
 public class ERPServiceImpl implements IERPService {
@@ -48,5 +49,10 @@ public class ERPServiceImpl implements IERPService {
 	@Override
 	public List<InfCopReceiptTempChart> getReceiptTempParcelShop(Date date){
 		return copReceiptTempDao.getReceiptTempParcelShop(date);
+	}
+	
+	@Override
+	public void insertInfCOPReceiptTemp(List<InfCopReceiptTempAPI> copReceiptTemps) {
+		copReceiptTempDao.insertInfCOPReceiptTemp(copReceiptTemps);
 	}
 }

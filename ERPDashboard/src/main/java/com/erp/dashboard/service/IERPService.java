@@ -6,6 +6,7 @@ import java.util.List;
 import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
 import com.erp.dashboard.model.User;
+import com.erp.dashboard.model.api.InfCopReceiptTempAPI;
 
 
 public interface IERPService {
@@ -15,4 +16,5 @@ public interface IERPService {
 	public List<InfCopReceiptTemp> getReceiptTempDetail(String type, Date date);
 	public void saveReceiptTempDetails(List<InfCopReceiptTemp> copReceiptTemps);
 	public List<InfCopReceiptTempChart> getReceiptTempParcelShop(Date date);
+	public void insertInfCOPReceiptTemp(List<InfCopReceiptTempAPI> copReceiptTemps);
 }

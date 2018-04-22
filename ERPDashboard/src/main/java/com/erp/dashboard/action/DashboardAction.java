@@ -3,8 +3,6 @@ package com.erp.dashboard.action;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.internal.BinaryStreamImpl;
@@ -54,12 +53,14 @@ public class DashboardAction {
 	private String dateStr;
 	private StreamedContent streamedContent;
 	
+	@Autowired
+	DataSource dataSource;
 
 	private String param;
 	private String param2;
 	
 	@Autowired
-	IERPService userService;
+	IERPService erpService;
 	
 	@Autowired
 	ERPSession erpSession;
@@ -82,7 +83,7 @@ public class DashboardAction {
 		try {
 			updateChart();
 		}catch (Exception e) {
-			System.out.println(e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", ""));
 		}
 	}
 	
@@ -122,7 +123,7 @@ public class DashboardAction {
 			System.out.println(receiptForSaves.size());
 			
 			if(!ERPUtils.collectionIsEmpty(receiptForSaves)){
-				userService.saveReceiptTempDetails(receiptForSaves);
+				erpService.saveReceiptTempDetails(receiptForSaves);
 			}
 			
 			updateChart();
@@ -134,7 +135,7 @@ public class DashboardAction {
 	public void updateReceiptTemp() throws JsonProcessingException {
 		if(param != null
 				&& param != "") {
-			copReceiptTemps = userService.getReceiptTempDetail(param, ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+			copReceiptTemps = erpService.getReceiptTempDetail(param, ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 			
 			int index = 1;
 			for(InfCopReceiptTemp copReceiptTemp :  copReceiptTemps) {
@@ -147,7 +148,7 @@ public class DashboardAction {
 	public void updateChartPS() throws JsonProcessingException {
 		if(param != null
 				&& param != "") {
-			ratings = userService.getReceiptTempParcelShop(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+			ratings = erpService.getReceiptTempParcelShop(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 			
 			ObjectMapper mapper = new ObjectMapper();
 			chartPS = mapper.writeValueAsString(ratings);
@@ -163,7 +164,7 @@ public class DashboardAction {
 			return;
 		}
 		
-		ratings = userService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+		ratings = erpService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 		
 		if(ERPUtils.collectionIsEmpty(ratings)) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", "Data not available."));
@@ -197,12 +198,12 @@ public class DashboardAction {
 	}
 	
 	public InputStream genJasper() throws Exception {
-		JasperReport jasperReport = JasperCompileManager.compileReport("src/main/webapp/report/report.jrxml");
-		
+		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/report.jrxml");
+		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("RECEIPT_DATE", dateStr);
 		
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, genConnection());
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
 		byte[] bytes = JasperExportManager.exportReportToPdf(jasperPrint);
 		
 		InputStream stream = new BinaryStreamImpl(bytes);
@@ -211,7 +212,8 @@ public class DashboardAction {
 	}
 	
 	public void exportExcel() throws Exception {
-		JasperReport jasperReport = JasperCompileManager.compileReport("src/main/webapp/report/report_excel.jrxml");
+		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/report_excel.jrxml");
+		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("RECEIPT_DATE", dateStr);
@@ -221,7 +223,7 @@ public class DashboardAction {
 		response.setHeader("Content-disposition", "attachment; filename=" + "test" + ".xlsx");
 		OutputStream out = response.getOutputStream();
 		
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, genConnection());
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
 		JRXlsxExporter exporter = new JRXlsxExporter();
         exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
         exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, out);
@@ -234,19 +236,20 @@ public class DashboardAction {
         FacesContext.getCurrentInstance().responseComplete();
 	}
 	
-	public Connection genConnection() throws Exception {
-		String dbUrl = "jdbc:oracle:thin:@//THBKK01ITSN127.kerrylogistics.com:1521/XE";
-		String dbDriver = "org.hibernate.dialect.Oracle10gDialect";
-		String dbUname = "SYSTEM";
-		String dbPwd = "password";
-		Class.forName(dbDriver);
-		Connection conn = DriverManager.getConnection(dbUrl, dbUname, dbPwd);
-		
-		return conn;
-	}
+//	public Connection genConnection() throws Exception {
+//		String dbUrl = "jdbc:oracle:thin:@//THBKK01ITSN127.kerrylogistics.com:1521/XE";
+//		String dbDriver = "org.hibernate.dialect.Oracle10gDialect";
+//		String dbUname = "SYSTEM";
+//		String dbPwd = "password";
+//		Class.forName(dbDriver);
+//		Connection conn = DriverManager.getConnection(dbUrl, dbUname, dbPwd);
+//		
+//		return conn;
+//	}
 	
 	public void exportTransactionExcel() throws Exception {
-		JasperReport jasperReport = JasperCompileManager.compileReport("src/main/webapp/report/transaction_excel.jrxml");
+		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/transaction_excel.jrxml");
+		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("RECEIPT_DATE", dateStr);
@@ -301,14 +304,6 @@ public class DashboardAction {
 		this.ratings = ratings;
 	}
 
-	public IERPService getUserService() {
-		return userService;
-	}
-
-	public void setUserService(IERPService userService) {
-		this.userService = userService;
-	}
-
 	public ERPSession getErpSession() {
 		return erpSession;
 	}
@@ -354,5 +349,21 @@ public class DashboardAction {
 
 	public void setStreamedContent(StreamedContent streamedContent) {
 		this.streamedContent = streamedContent;
+	}
+
+	public DataSource getDataSource() {
+		return dataSource;
+	}
+
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
+	public IERPService getErpService() {
+		return erpService;
+	}
+
+	public void setErpService(IERPService erpService) {
+		this.erpService = erpService;
 	}
 }
