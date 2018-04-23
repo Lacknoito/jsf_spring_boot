@@ -29,4 +29,10 @@ public class SessionUtils {
 		else
 			return null;
 	}
+	
+	public static void setUserName(String userName) {
+		HttpSession session = getSession();
+		if (session != null)
+			session.setAttribute("userid", userName);
+	}
 }

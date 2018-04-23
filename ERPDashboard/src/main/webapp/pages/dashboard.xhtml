@@ -11,7 +11,7 @@
 		  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		  <title>ERP Dashboard</title>
 		  <f:metadata>
-			    <f:viewAction action="#{dashboardAction.onload}" />
+			    <f:viewAction action="#{dashboardController.onload}" />
 			</f:metadata>
 		  <!-- Tell the browser to be responsive to screen width -->
 		  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
@@ -71,7 +71,7 @@
 			          <!-- Control Sidebar Toggle Button -->
 			          <li>
 			            <h:commandLink styleClass="nav-link" value="Logout"
-			       			action="#{dashboardAction.onLogout}">
+			       			action="#{dashboardController.onLogout}">
 			       			<i class="fa fa-fw fa-sign-out"></i>
 			       		</h:commandLink>
 			          </li>
@@ -126,7 +126,7 @@
 				             	<div class="row">
 				             		<div class="col-sm-12" >
 				             			<h:inputText size="10"	
-	            								value="#{dashboardAction.dateStr}"
+	            								value="#{dashboardController.dateStr}"
 	            								styleClass="form-control datepicker"></h:inputText>
 				             		</div>
 				             	</div>
@@ -134,14 +134,14 @@
 				             		<div class="col-sm-12" style="padding-top: 10px;">
 					             		<p:commandButton styleClass="btn btn-primary" style="width:100%" value="View Graph" 
 					             			update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
-					             			actionListener="#{dashboardAction.updateReceiptTempChart}"
+					             			actionListener="#{dashboardController.updateReceiptTempChart}"
 					             			oncomplete="clearDivChart()" />
 				             		</div>
 				             	</div>
 				             	<div class="row">
 				             		<div class="col-sm-12" style="padding-top: 10px;">
 					             		<p:commandButton styleClass="btn btn-info" style="width:100%" 
-					             			value="View Accounting" actionListener="#{dashboardAction.showPDF}"
+					             			value="View Accounting" actionListener="#{dashboardController.showPDF}"
 				  							update="pdfId" oncomplete="showModalPDF()" />
 				             		</div>
 				             	</div>
@@ -203,7 +203,7 @@
 								    </tr>
 								</thead>
 								<tbody>
-									<c:forEach var="receipt" items="#{dashboardAction.copReceiptTemps}">
+									<c:forEach var="receipt" items="#{dashboardController.copReceiptTemps}">
 		            					<tr>
 		            						
 							                <td>#{receipt.shopCode}</td>
@@ -243,7 +243,7 @@
                     		
 			          	<h:commandButton value="export excel" 
 			          			 styleClass="btn btn-info"
-			           			 action="#{dashboardAction.exportTransactionExcel}" />
+			           			 action="#{dashboardController.exportTransactionExcel}" />
 			           			  
 			          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			        </div>
@@ -258,31 +258,31 @@
 			      <div class="modal-content">
 			        <div class="modal-body">
 			        	<h:panelGroup id="pdfId">
-					          <p:media value="#{dashboardAction.streamedContent}" player="pdf" width="100%" height="550px">
-								</p:media>
+					          <p:media value="#{dashboardController.streamedContent}" player="pdf" width="100%" height="550px">
+							  </p:media>
 					 	</h:panelGroup>
 					 </div>
 			        <div class="modal-footer">
-			           <h:commandButton value="export excel" styleClass="btn btn-info" action="#{dashboardAction.exportExcel}" /> 
+			           <h:commandButton value="export excel" styleClass="btn btn-info" action="#{dashboardController.exportExcel}" /> 
 			        </div>
 			      </div>
 			      
 			    </div>
 			  </div>
 			  
-			<h:inputHidden id="x" value="#{dashboardAction.param}" />
-			<h:inputHidden id="y" value="#{dashboardAction.param2}" />
+			<h:inputHidden id="x" value="#{dashboardController.param}" />
+			<h:inputHidden id="y" value="#{dashboardController.param2}" />
 			
 			<p:remoteCommand name="saveReceiptTempJs" update="canvasGroup, canvasGroupJs, canvasGroupPSJs"
-				 action="#{dashboardAction.saveReceiptTemp}"
+				 action="#{dashboardController.saveReceiptTemp}"
 				 oncomplete="closeModal()" ></p:remoteCommand>
 			<p:remoteCommand name="selectItemFromChart" update="tb_revenue, tb_revenueJS"
-				 action="#{dashboardAction.updateReceiptTemp}"
+				 action="#{dashboardController.updateReceiptTemp}"
 				 oncomplete="showModal()" ></p:remoteCommand>
 			<p:remoteCommand name="tableNextPage" update="datepickerJs"></p:remoteCommand>
 		  	<p:remoteCommand name="selectItemFromChartPS" update="canvasGroupPS canvasGroupPSJs"
-				 action="#{dashboardAction.updateChartPS}" ></p:remoteCommand>
-			<p:remoteCommand name="updateStatus" action="#{dashboardAction.updateStatus}"></p:remoteCommand>
+				 action="#{dashboardController.updateChartPS}" ></p:remoteCommand>
+			<p:remoteCommand name="updateStatus" action="#{dashboardController.updateStatus}"></p:remoteCommand>
 		</h:form>
 		
 		<script src="../js/Chart.min.js"></script>
@@ -305,7 +305,7 @@
 	    		AmCharts.makeChart("chartdiv1", {
 	    		  "type": "pie",
 				  "theme": "light",
-				  "dataProvider": #{dashboardAction.datas},
+				  "dataProvider": #{dashboardController.datas},
 				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",
@@ -344,7 +344,7 @@
 				AmCharts.makeChart("chartdiv2", {
 	    		  "type": "pie",
 				  "theme": "light",
-				  "dataProvider": #{dashboardAction.chartPS},
+				  "dataProvider": #{dashboardController.chartPS},
 				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",

@@ -1,16 +1,28 @@
 package com.erp.dashboard.dao;
 
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.hibernate.Query;
+
+import com.erp.dashboard.entity.Accounting;
 import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
 import com.erp.dashboard.model.api.InfCopReceiptTempAPI;
@@ -19,6 +31,8 @@ import com.erp.dashboard.utils.ERPUtils;
 @Transactional
 @Repository
 public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
+	private static Logger logger = LogManager.getLogger(InfCopReceiptTempDao.class);
+	
 	@PersistenceContext	
 	private EntityManager entityManager;	
 	
@@ -45,7 +59,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" ) receiptTemp ");
 		str.append(" group by receiptTemp.Branchtype ");
 
-		Query query =  entityManager.unwrap(org.hibernate.Session.class)
+		Query query =  entityManager.unwrap(Session.class)
 					.createSQLQuery(str.toString())
 					.addScalar("branchType")
 					.addScalar("count")
@@ -97,7 +111,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" ) receiptTemp  ");
 		str.append(" group by receiptTemp.Branchtype ");
 
-		Query query =  entityManager.unwrap(org.hibernate.Session.class)
+		Query query =  entityManager.unwrap(Session.class)
 					.createSQLQuery(str.toString())
 					.addScalar("branchType")
 					.addScalar("count")
@@ -201,7 +215,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" group by r.ar_shop_name, t.description, r.ar_receipt_date, r.ar_amount_header, r.record_status ");
 		str.append(" order by r.ar_shop_name, r.ar_receipt_date, r.record_status ");
 		
-		Query query =  entityManager.unwrap(org.hibernate.Session.class)
+		Query query =  entityManager.unwrap(Session.class)
 				.createSQLQuery(str.toString())
 				.addScalar("shopCode")
 				.addScalar("amountHeader")
@@ -253,7 +267,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 			param.put("oldDate", ERPUtils.convertDateToStringFormat(copReceiptTemp.getOldArReceiptDate(), "MM/dd/YYYY"));
 			param.put("arAmountHeader", copReceiptTemp.getAmountHeader());
 			
-			Query query =  entityManager.unwrap(org.hibernate.Session.class).createSQLQuery(str.toString());
+			Query query =  entityManager.unwrap(Session.class).createSQLQuery(str.toString());
 			
 			ERPUtils.setParameterByMap(param, query);
 			
@@ -304,5 +318,60 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 	                .setParameter("ar_source", copReceiptTemp.getAr_source())
 	                .executeUpdate();
 		}
+	}
+	
+	public List<String> queryCostCenterByName(String name) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		StringBuilder str = new StringBuilder();
+		str.append(" SELECT distinct ffv.flex_value as cost_center ");
+		str.append(" FROM fnd_flex_value_sets ffvs , fnd_flex_values ffv , fnd_flex_values_tl ffvt ");
+		str.append(" WHERE ffvs.flex_value_set_id = ffv.flex_value_set_id ");
+		str.append(" 	and ffv.flex_value_id      = ffvt.flex_value_id ");
+		str.append(" 	and ffvs.flex_value_set_name = :typeCostCenter ");
+		str.append(" 	and ffv.enabled_flag = :flag ");
+		str.append(" 	and ffvt.description is not null ");
+		str.append(" 	and upper(:name) LIKE upper(CONCAT('%', ffvt.description)) ");
+		
+		param.put("typeCostCenter", ERPUtils.TYPE_COST_CENTER);
+		param.put("flag", "Y");
+		param.put("name", name);
+		
+		Query query =  entityManager.unwrap(Session.class).createSQLQuery(str.toString());
+		
+		ERPUtils.setParameterByMap(param, query);
+		
+		@SuppressWarnings("unchecked")
+		List<String> cost_centers = query.list();
+		
+		return cost_centers;
+	}
+	
+	public List<Accounting> queryAccountingByDate(String date){
+		List<Accounting> accountings = new ArrayList<>();
+		StoredProcedureQuery query = entityManager
+			    .createStoredProcedureQuery("GET_ACCOUNTING")
+			    .registerStoredProcedureParameter(1, String.class, 
+			        ParameterMode.IN)
+			    .registerStoredProcedureParameter(2, Class.class, 
+			        ParameterMode.REF_CURSOR)
+			    .setParameter(1, date);
+			 
+		query.execute();
+			
+		List<Object[]> postComments = query.getResultList();
+		
+		for(Object[] postComment : postComments) {
+			Accounting accounting = new Accounting();
+			accounting.setRECEIPT_NUMBER((String) postComment[0]);
+			accounting.setACCOUNT_CODE((String) postComment[1]);
+			accounting.setACCOUNT_NAME((String) postComment[2]);
+			accounting.setACCOUNTED_DR((BigDecimal) postComment[3]);
+			accounting.setACCOUNTED_CR((BigDecimal) postComment[4]);
+			accounting.setCOST_CENTER((String) postComment[5]);
+			accountings.add(accounting);
+		}
+		
+		return accountings;
 	}
 }

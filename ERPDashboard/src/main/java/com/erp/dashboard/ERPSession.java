@@ -5,7 +5,7 @@ import javax.faces.bean.SessionScoped;
 
 import org.springframework.stereotype.Component;
 
-import com.erp.dashboard.model.User;
+import com.erp.dashboard.entity.User;
 
 @Component
 @ManagedBean

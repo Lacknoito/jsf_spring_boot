@@ -19,6 +19,7 @@ public class ERPUtils {
 
 	public static String FIX_FLEX_VALUE_SET_ID = "1014995";
 	public static String BANGKOK_SAME_DAY_CODE = "181002";
+	public static String TYPE_COST_CENTER = "KETH_COST_CENTER";
 	
 	public static interface REGION {
 		public static final String V_BKK = "101";

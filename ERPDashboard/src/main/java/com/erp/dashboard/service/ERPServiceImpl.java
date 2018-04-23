@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.erp.dashboard.dao.IInfCopReceiptTempDao;
 import com.erp.dashboard.dao.IUserDao;
+import com.erp.dashboard.entity.Accounting;
+import com.erp.dashboard.entity.User;
 import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
-import com.erp.dashboard.model.User;
 import com.erp.dashboard.model.api.InfCopReceiptTempAPI;
 
 @Service
@@ -20,11 +21,6 @@ public class ERPServiceImpl implements IERPService {
 	
 	@Autowired
 	private IInfCopReceiptTempDao copReceiptTempDao;
-	
-	@Override
-	public List<User> getAllUsers() {
-		return userDao.getAllUsers();
-	}
 	
 	@Override
 	public User checkUserLogin(User user){
@@ -54,5 +50,15 @@ public class ERPServiceImpl implements IERPService {
 	@Override
 	public void insertInfCOPReceiptTemp(List<InfCopReceiptTempAPI> copReceiptTemps) {
 		copReceiptTempDao.insertInfCOPReceiptTemp(copReceiptTemps);
+	}
+	
+	@Override
+	public List<String> queryCostCenterByName(String name) {
+		return copReceiptTempDao.queryCostCenterByName(name);
+	}
+	
+	@Override
+	public List<Accounting> queryAccountingByDate(String date) {
+		return copReceiptTempDao.queryAccountingByDate(date);
 	}
 }

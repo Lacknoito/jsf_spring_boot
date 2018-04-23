@@ -45,56 +45,7 @@
 	</style>
 	<parameter name="RECEIPT_DATE" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select datas.receipt_number, datas.account_code, des.description as account_name
-       , sum(datas.accounted_dr) as accounted_dr, sum(datas.accounted_cr) as accounted_cr
-       , case when datas.account_code = '401103'
-                   or datas.account_code = '401201' then datas.ar_shop_name
-         else '000000' end as cost_center
-from (
-    select
-           r.ar_receipt_number as receipt_number
-           , r.ar_shop_name as ar_shop_name
-           , case when r.ar_pos_type = 'COD' then '401201'
-                  when r.ar_pos_type = 'OTHER' then '409104'
-                  when r.ar_pos_type = 'LINEPAY' then '112171'
-                  when r.ar_pos_type = 'CREDIT BBL' then '112150'
-                  when r.ar_pos_type = 'CREDIT SCB' then '112151'
-                  when r.ar_pos_type = 'RABBIT' then '112150'
-                  when r.ar_pos_type = 'TOPUP' or r.ar_pos_type = 'TUD' then '213602'
-                  when r.ar_pos_type = 'DISC' then '710100'
-                  when r.ar_pos_type = 'INSUR' then '401202'
-                  when r.ar_pos_type = 'ADJ1' then '770120'
-                  when r.ar_pos_type = 'ADJ2' then '760230'
-                  when r.ar_pos_type = 'ADJ3' then '401101'
-                  when r.ar_pos_type = 'ADJ4' then '112190'
-                  when r.ar_pos_type = 'ADJ5' then '113401'
-                  when r.ar_pos_type = 'ADJ6' then '710100'
-                  when r.ar_pos_type = 'ADJ7' then '770100'
-                  when r.ar_pos_type = 'ADJ8' then '112150'
-                  when r.ar_pos_type = 'ADJ9' then '112171'
-                  when r.ar_pos_type = 'VAT' then '213401'
-                  when r.ar_pos_type = 'TRAN' and (s.id is null or s.dcsp_flag = 'N') then '401101'
-                  when r.ar_pos_type = 'TRAN' and (s.id is not null and s.dcsp_flag = 'Y') then '401103'
-             else '401101' end as account_code
-           , r.ar_amount_dis as  accounted_dr
-           , r.ar_amount_dis as  accounted_cr
-    from XXINF_COP_RECEIPT_TEMP r
-    left join XXINF_COP_KE_SHOP s on r.ar_shop_name = s.id
-    where r.ar_receipt_date = to_date($P{RECEIPT_DATE},'DD/MM/YYYY')
-          and r.ar_amount_dis <> 0
-)datas
-left join (
-      SELECT distinct ffv.flex_value,ffvt.description
-      FROM fnd_flex_value_sets ffvs ,
-              fnd_flex_values ffv ,
-              fnd_flex_values_tl ffvt
-      WHERE ffvs.flex_value_set_id = ffv.flex_value_set_id
-      and ffv.flex_value_id      = ffvt.flex_value_id
-      and ffvs.flex_value_set_name = 'KETH_ACCOUNT'
-      and ffv.enabled_flag = 'Y'
-)des on des.flex_value = datas.account_code
-group by datas.receipt_number, datas.account_code, des.description, datas.ar_shop_name
-order by datas.receipt_number, datas.account_code]]>
+		<![CDATA[]]>
 	</queryString>
 	<field name="RECEIPT_NUMBER" class="java.lang.String"/>
 	<field name="ACCOUNT_CODE" class="java.lang.String"/>

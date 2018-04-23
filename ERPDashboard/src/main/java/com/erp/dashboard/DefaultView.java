@@ -9,9 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class DefaultView extends WebMvcConfigurerAdapter {
 	@Override
 	  public void addViewControllers(ViewControllerRegistry registry) {
-	    registry.addViewController("/")
-	        .setViewName("forward:/pages/index.jsf");
-	    registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		registry.addRedirectViewController("/", "/pages/index.jsf");
 
 	    super.addViewControllers(registry);
 	  }
