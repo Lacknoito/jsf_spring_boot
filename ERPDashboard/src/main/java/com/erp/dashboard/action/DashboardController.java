@@ -35,6 +35,8 @@ import com.erp.dashboard.utils.SessionUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -194,11 +196,17 @@ public class DashboardController {
 	}
 	
 	public void showPDF() throws Exception {
+		logger.info("---showPDF---");
+		
 		accountings = erpService.queryAccountingByDate(dateStr);
+		
+		logger.info("---queryAccountingByDate---");
 		
 		if(StringUtils.isNotBlank(dateStr)) {
 			streamedContent = new DefaultStreamedContent(genJasper(), "application/pdf", "downloaded_report.pdf");
 		}
+		
+		logger.info("---DefaultStreamedContent---");
 	}
 	
 	public InputStream genJasper() throws Exception {
@@ -206,6 +214,10 @@ public class DashboardController {
 		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("RECEIPT_DATE", dateStr);
+		
+		DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
+		JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.xpath.executer.factory",
+		    "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
 		
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(accountings));
 		byte[] bytes = JasperExportManager.exportReportToPdf(jasperPrint);

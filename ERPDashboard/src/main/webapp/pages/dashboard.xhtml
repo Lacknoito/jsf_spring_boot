@@ -114,41 +114,34 @@
 			    <!-- Main content -->
 			    <section class="content">
 			      <div class="row">
-			      	<div class="col-md-3">
+			      	<div class="col-md-12">
 			      		<div class="box box-default row-padding-min">
-			      			
 				            <div class="box-body" style="">
-				            	<div class="row">
-				             		<div class="col-sm-12" >
-					             		<h:outputLabel value="Receipt Date: " style="padding-right: 10px;"></h:outputLabel>
-				             		</div>
-				             	</div>
 				             	<div class="row">
-				             		<div class="col-sm-12" >
-				             			<h:inputText size="10"	
-	            								value="#{dashboardController.dateStr}"
+				             		<div class="col-md-1">
+										<h:outputLabel value="Receipt Date: " style="padding-right: 10px;"></h:outputLabel>
+				             		</div>
+				             		<div class="col-md-2">
+				             			<h:inputText value="#{dashboardController.dateStr}"
 	            								styleClass="form-control datepicker"></h:inputText>
 				             		</div>
-				             	</div>
-				             	<div class="row">
-				             		<div class="col-sm-12" style="padding-top: 10px;">
-					             		<p:commandButton styleClass="btn btn-primary" style="width:100%" value="View Graph" 
-					             			update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
-					             			actionListener="#{dashboardController.updateReceiptTempChart}"
-					             			oncomplete="clearDivChart()" />
-				             		</div>
-				             	</div>
-				             	<div class="row">
-				             		<div class="col-sm-12" style="padding-top: 10px;">
-					             		<p:commandButton styleClass="btn btn-info" style="width:100%" 
-					             			value="View Accounting" actionListener="#{dashboardController.showPDF}"
-				  							update="pdfId" oncomplete="showModalPDF()" />
-				             		</div>
+				             		<div class="col-md-5">
+					             		<p:commandButton styleClass="btn btn-primary" value="View Graph" 
+						             			update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
+						             			actionListener="#{dashboardController.updateReceiptTempChart}"
+						             			oncomplete="clearDivChart()" />
+						             			
+						             	<p:commandButton styleClass="btn btn-info"
+						             			value="View Accounting" actionListener="#{dashboardController.showPDF}"
+					  							update="pdfId" oncomplete="showModalPDF()" />
+				  					</div>
 				             	</div>
 				            </div>
 			      		</div>
 			      	</div>
-			       <div class="col-md-9">
+			      	</div>
+					<div class="row">
+			       <div class="col-md-12">
 			        <div class="box box-default row-padding-min">
 			            <div class="box-body" style="">
 			            	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true">
@@ -159,7 +152,6 @@
 				           			<h:panelGroup id="canvasGroup">
 										<div id="chartdiv1" class="chartdiv"></div>             
 									</h:panelGroup>
-				           			
 				           		</div>
 				           		<div class="col-sm-1 text-center" id="divChart2">
 				           			<h:panelGroup id="canvasGroupPS">
@@ -186,7 +178,6 @@
 								        <th>ERP ID</th>
 							            <th>Branch</th>
 							            <th>Receipt Date</th>
-							            <th>Amount Header</th>
 							            <th>Cash</th>
 							            <th>Rabbit</th>
 							            <th>Card (BBL)</th>
@@ -213,7 +204,6 @@
 		            								value="#{receipt.arReceiptDateStr}"
 		            								styleClass="form-control datepicker dateintable"></h:inputText>
 		            						</td>
-								            <td>#{receipt.amountHeader}</td>
 								            <td>#{receipt.cash}</td>
 								            <td>#{receipt.rabit}</td>
 								            <td>#{receipt.creditBBL}</td>

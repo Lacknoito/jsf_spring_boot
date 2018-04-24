@@ -22,6 +22,7 @@ import com.erp.dashboard.utils.SessionUtils;
 @RequestScoped
 public class LoginController {
 	private User userLogin;
+	private String errorMessage;
 	
 	@Autowired
 	private IERPService userService;
@@ -34,6 +35,8 @@ public class LoginController {
 	
 	public void onload() {
 		try {
+			errorMessage = null;
+			
 			userLogin = erpSession.getUser();
 			if(userLogin != null)
 				FacesContext.getCurrentInstance().getExternalContext().redirect("dashboard.jsf");
@@ -52,11 +55,21 @@ public class LoginController {
 	    		SessionUtils.setUserName("ERPTest");
 	    		
 	    		FacesContext.getCurrentInstance().getExternalContext().redirect("dashboard.jsf");
+	    		
+	    		errorMessage = null;
 	    	}else {
-	    		FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
+	    		errorMessage = "username or password not correct";
 	    	}
     	}catch (Exception e) {
 
     	}
     }
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 }

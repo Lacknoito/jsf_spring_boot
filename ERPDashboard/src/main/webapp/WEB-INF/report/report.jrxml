@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05939485-0e68-478a-943c-2bde5aaf3735">
 	<property name="ireport.zoom" value="1.3636363636363635"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="46"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -111,12 +111,15 @@ order by datas.receipt_number, datas.account_code]]>
 	<variable name="RECEIPT_NUMBER" class="java.lang.String" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="First">
 		<variableExpression><![CDATA[$F{RECEIPT_NUMBER}]]></variableExpression>
 	</variable>
-	<variable name="SUM_REPORT" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
+	<variable name="SUM_REPORT_CR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACCOUNTED_CR}]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<variable name="RECEIPT_GROUP_COUNT" class="java.lang.Integer" resetType="Group" resetGroup="RECREIPT_NUMBER" calculation="Count">
 		<variableExpression><![CDATA[1]]></variableExpression>
+	</variable>
+	<variable name="SUM_REPORT_DR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
 	</variable>
 	<group name="RECREIPT_NUMBER">
 		<groupExpression><![CDATA[$F{RECEIPT_NUMBER}]]></groupExpression>
@@ -126,10 +129,10 @@ order by datas.receipt_number, datas.account_code]]>
 					<reportElement x="340" y="0" width="94" height="20" uuid="25d13d4c-f0c2-4775-942d-eed47fb13b6f"/>
 					<box>
 						<pen lineWidth="0.5"/>
-						<topPen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.5"/>
 						<bottomPen lineWidth="0.5"/>
-						<rightPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.0"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
@@ -141,7 +144,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<reportElement x="434" y="0" width="100" height="20" uuid="ccf63bb5-bc91-4ad3-8c92-924e9be936d1"/>
 					<box>
 						<pen lineWidth="0.5"/>
-						<topPen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.5"/>
 						<bottomPen lineWidth="0.5"/>
 						<rightPen lineWidth="0.5"/>
@@ -156,10 +159,10 @@ order by datas.receipt_number, datas.account_code]]>
 					<reportElement x="18" y="0" width="322" height="20" uuid="784de9e5-263e-42a5-a4d8-6092a6753c78"/>
 					<box>
 						<pen lineWidth="0.5"/>
-						<topPen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
 						<leftPen lineWidth="0.5"/>
 						<bottomPen lineWidth="0.5"/>
-						<rightPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.0"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
@@ -187,7 +190,7 @@ order by datas.receipt_number, datas.account_code]]>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUM_REPORT} != null ? "Total Amount : " + new java.text.DecimalFormat("#,##0.00").format($V{SUM_REPORT}) : "Total Amount : 0"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_REPORT_DR} != null ? "Total Amount : " + new java.text.DecimalFormat("#,##0.00").format($V{SUM_REPORT_DR}) : "Total Amount : 0"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -200,7 +203,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -215,7 +218,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -245,7 +248,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -260,7 +263,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -275,10 +278,10 @@ order by datas.receipt_number, datas.account_code]]>
 			<textField isBlankWhenNull="true">
 				<reportElement x="18" y="0" width="90" height="20" printWhenGroupChanges="RECREIPT_NUMBER" uuid="82156466-b0f7-4318-a6b8-1079f51d5ae0"/>
 				<box>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
@@ -289,10 +292,10 @@ order by datas.receipt_number, datas.account_code]]>
 			<textField isBlankWhenNull="true">
 				<reportElement x="108" y="0" width="90" height="20" uuid="acc9345a-4c58-4f71-8f50-ebea3613d7a1"/>
 				<box>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isStrikeThrough="false"/>
@@ -303,10 +306,10 @@ order by datas.receipt_number, datas.account_code]]>
 			<textField isBlankWhenNull="true">
 				<reportElement x="198" y="0" width="142" height="20" uuid="6a52cb79-7797-4811-8cee-f6de603204c8"/>
 				<box>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
@@ -317,21 +320,21 @@ order by datas.receipt_number, datas.account_code]]>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="340" y="0" width="94" height="20" uuid="ef797528-54b0-4e68-96d3-2c718e43a321"/>
 				<box>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ACCOUNTED_DR}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_DR}.compareTo(BigDecimal.ZERO) == 0 ? null : $F{ACCOUNTED_DR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="434" y="0" width="100" height="20" uuid="fa996193-a5c7-4b8d-9f7f-48743162179b"/>
 				<box>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
@@ -340,7 +343,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<font size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ACCOUNTED_CR}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_CR}.compareTo(BigDecimal.ZERO) == 0 ? null : $F{ACCOUNTED_CR}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -350,10 +353,10 @@ order by datas.receipt_number, datas.account_code]]>
 				<reportElement x="18" y="0" width="322" height="20" uuid="98b6b0c7-1bbd-46d8-ab87-3da95d013929"/>
 				<box>
 					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -365,22 +368,22 @@ order by datas.receipt_number, datas.account_code]]>
 				<reportElement x="340" y="0" width="94" height="20" uuid="864785bf-68c2-4039-82bb-1326f5827b5b"/>
 				<box>
 					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUM_REPORT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_REPORT_DR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="434" y="0" width="100" height="20" uuid="6ccc3ae1-2e95-4bb2-bfb7-86a4c0a2ce0d"/>
 				<box>
 					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
@@ -389,7 +392,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<font size="8" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUM_REPORT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUM_REPORT_CR}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

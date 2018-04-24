@@ -7,6 +7,9 @@
 		<title>ERP Dashboard</title>
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<f:metadata>
+			<f:viewAction action="#{loginController.onload}" />
+		</f:metadata>
 		<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
 		<link rel="stylesheet" type="text/css" href="../v6/vendor/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="../v6/fonts/font-awesome-4.7.0/css/font-awesome.min.css" />
@@ -25,6 +28,8 @@
 				  <div class="container-login100">
 				   <div class="wrap-login100 p-t-85 p-b-20" style="padding-top: 30px;">
 				     <span class="login100-form-title p-b-70">ERP DASHBOARD</span>
+
+				     <h:outputLabel value="#{loginController.errorMessage}" style="color:red; padding-bottom:10px;" />
 				     
 				     <div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate="Enter username" style="margin-top: 10px;">
 					      <h:inputText styleClass="#{userModel.userEmpty ? 'input100 has-val' : 'input100'}" value="#{userModel.userName}"></h:inputText>

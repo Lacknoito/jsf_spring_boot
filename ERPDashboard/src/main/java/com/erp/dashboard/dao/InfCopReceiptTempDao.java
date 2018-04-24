@@ -149,7 +149,9 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 	, r.ar_receipt_date as oldArReceiptDate ");
 		str.append(" 	, r.record_status as status ");
 		str.append(" 	, r.record_status as oldStatus ");
-		str.append(" 	, 0 as cash ");
+		str.append(" 	, sum(case when r.ar_pos_type in ('TRAN','COD','OTHER','TOPUP','TUD','INSUR','ADJ1','ADJ3','VAT') then r.ar_amount_dis ");
+		str.append(" 		when r.ar_pos_type in ('LINEPAY','CREDIT BBL','CREDIT SCB','RABBIT','DISC','ADJ5','ADJ6','ADJ7') then -1*r.ar_amount_dis ");
+		str.append(" 		else r.ar_amount_dis end) as cash ");
 		str.append(" 	, sum(case when r.ar_pos_type = 'RABBIT' then r.ar_amount_dis else 0 end) as rabit  ");
 		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT BBL' then r.ar_amount_dis else 0 end) as creditBBL ");
 		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT SCB' then r.ar_amount_dis else 0 end) as creditSCB ");

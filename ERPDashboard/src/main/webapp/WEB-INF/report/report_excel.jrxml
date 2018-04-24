@@ -176,7 +176,7 @@ order by datas.receipt_number, datas.account_code]]>
 	<title>
 		<band height="33" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="5" width="134" height="15" uuid="79cf9650-f29e-4a6a-ab32-8e67636b6605"/>
+				<reportElement x="0" y="5" width="198" height="15" uuid="79cf9650-f29e-4a6a-ab32-8e67636b6605"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -326,7 +326,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<font size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ACCOUNTED_DR}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_DR}.compareTo(BigDecimal.ZERO) == 0 ? null : $F{ACCOUNTED_DR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="434" y="0" width="100" height="20" uuid="fa996193-a5c7-4b8d-9f7f-48743162179b"/>
@@ -340,7 +340,7 @@ order by datas.receipt_number, datas.account_code]]>
 					<font size="8"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ACCOUNTED_CR}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_CR}.compareTo(BigDecimal.ZERO) == 0 ? null : $F{ACCOUNTED_CR}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
