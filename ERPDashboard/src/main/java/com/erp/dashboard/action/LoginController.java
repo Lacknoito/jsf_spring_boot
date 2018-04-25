@@ -47,8 +47,10 @@ public class LoginController {
 
     public void onClickLogin() {
     	try {
-    		User user = userService.checkUserLogin(new User(userModel.getUserName(), userModel.getPassword()));
+//    		User user = userService.checkUserLogin(new User(userModel.getUserName(), userModel.getPassword()));
 	    	
+    		User user = new User();
+    		
 	    	if(user != null) {
 	    		erpSession.setUser(user);
 	    		

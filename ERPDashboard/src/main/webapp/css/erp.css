@@ -16,7 +16,7 @@ body{
 
 .chartdiv {
   width: 100%;
-  height: 400px;
+  height: 350px;
 }
 
 .amcharts-chart-div a {
@@ -39,7 +39,7 @@ body{
 th { font-size: 14px; }
 td { font-size: 12px; }
 
-.datepicker{
+.datepicker-inmodel{
 	 font-size:10px;
 }
 
@@ -47,8 +47,14 @@ td { font-size: 12px; }
 	font-size:8px;
 }
 
-.modal-footer{
+.modal-body-pdf{
+	padding-bottom: 2px !important;
+    padding-top: 4px !important;
+}
+
+.modal-footer-pdf{
 	padding-top: 0px;
+	padding-bottom: 4px !important;
 }
 
 .dateintable{

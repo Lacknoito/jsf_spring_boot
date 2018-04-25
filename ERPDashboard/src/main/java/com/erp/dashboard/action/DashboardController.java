@@ -170,6 +170,8 @@ public class DashboardController {
 		if(StringUtils.isBlank(dateStr)) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
 			
+			datas = "[]";
+			
 			return;
 		}
 		
@@ -196,17 +198,11 @@ public class DashboardController {
 	}
 	
 	public void showPDF() throws Exception {
-		logger.info("---showPDF---");
-		
 		accountings = erpService.queryAccountingByDate(dateStr);
-		
-		logger.info("---queryAccountingByDate---");
 		
 		if(StringUtils.isNotBlank(dateStr)) {
 			streamedContent = new DefaultStreamedContent(genJasper(), "application/pdf", "downloaded_report.pdf");
 		}
-		
-		logger.info("---DefaultStreamedContent---");
 	}
 	
 	public InputStream genJasper() throws Exception {
@@ -251,17 +247,6 @@ public class DashboardController {
         exporter.exportReport();
         FacesContext.getCurrentInstance().responseComplete();
 	}
-	
-//	public Connection genConnection() throws Exception {
-//		String dbUrl = "jdbc:oracle:thin:@//THBKK01ITSN127.kerrylogistics.com:1521/XE";
-//		String dbDriver = "org.hibernate.dialect.Oracle10gDialect";
-//		String dbUname = "SYSTEM";
-//		String dbPwd = "password";
-//		Class.forName(dbDriver);
-//		Connection conn = DriverManager.getConnection(dbUrl, dbUname, dbPwd);
-//		
-//		return conn;
-//	}
 	
 	public void exportTransactionExcel() throws Exception {
 		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/transaction_excel.jrxml");

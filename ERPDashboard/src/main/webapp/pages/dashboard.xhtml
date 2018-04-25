@@ -1,297 +1,335 @@
-<?xml version="1.0"?>
-
-<f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:c="http://java.sun.com/jsp/jstl/core">
-	<h:head>
-		  <meta charset="utf-8" />
-		  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		  <title>ERP Dashboard</title>
-		  <f:metadata>
-			    <f:viewAction action="#{dashboardController.onload}" />
-			</f:metadata>
-		  <!-- Tell the browser to be responsive to screen width -->
-		  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
-		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/bootstrap/dist/css/bootstrap.min.css" />
-		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/font-awesome/css/font-awesome.min.css" />
-		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/Ionicons/css/ionicons.min.css" />
-		  <link rel="stylesheet" href="../AdminLTE-2.4.3/bower_components/jvectormap/jquery-jvectormap.css" />
-		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/AdminLTE.min.css" />
-		  <link rel="stylesheet" href="../AdminLTE-2.4.3/dist/css/skins/_all-skins.min.css" />
-		   <link href="../css/jquery.dataTables.min.css" rel="stylesheet" />
-		   
-		   <!-- Include Date Range Picker -->
-			<script type="text/javascript" src="../js/bootstrap-datepicker.min.js"></script>
-			<link rel="stylesheet" href="../css/bootstrap-datepicker3.css"/>
-		   
-		   <link href="../css/bootstrap-toggle.min.css" rel="stylesheet" />
-			<script src="../js/bootstrap-toggle.min.js"></script>
-			
-			<link rel="stylesheet" href="../css/erp.css" />
-			<script type="text/javascript" src="../js/erp.js"></script>
-	</h:head>
-    <h:body styleClass="skin-blue sidebar-mini sidebar-collapse">
-    	<h:form id="formId">
-			<div class="wrapper">
-			  <header class="main-header">
-			    <!-- Logo -->
-			    <a href="index2.html" class="logo" style="background-color:#356582">
-			      <!-- mini logo for sidebar mini 50x50 pixels -->
-			      <span class="logo-mini">ERP</span>
-			      <!-- logo for regular state and mobile devices -->
-			      <span class="logo-lg"><b>ERP</b></span>
-			    </a>
-			
-			    <!-- Header Navbar: style can be found in header.less -->
-			    <nav class="navbar navbar-static-top" style="background-color:#356582">
-			      <!-- Sidebar toggle button-->
-			      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-			        <span class="sr-only">Toggle navigation</span>
-			      </a>
-			      <!-- Navbar Right Menu -->
-			      <div class="navbar-custom-menu">
-			        <ul class="nav navbar-nav">
-			         
-			          <!-- User Account: style can be found in dropdown.less -->
-			          <li class="dropdown user user-menu">
-			            <ul class="dropdown-menu">
-			              <li class="user-footer">
-			                <div class="pull-left">
-			                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-			                </div>
-			                <div class="pull-right">
-			                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
-			                </div>
-			              </li>
-			            </ul>
-			          </li>
-			          <!-- Control Sidebar Toggle Button -->
-			          <li>
-			            <h:commandLink styleClass="nav-link" value="Logout"
-			       			action="#{dashboardController.onLogout}">
-			       			<i class="fa fa-fw fa-sign-out"></i>
-			       		</h:commandLink>
-			          </li>
-			        </ul>
-			      </div>
-			
-			    </nav>
-			  </header>
-			  <!-- Left side column. contains the logo and sidebar -->
-			  <aside class="main-sidebar">
-			    <!-- sidebar: style can be found in sidebar.less -->
-			    <section class="sidebar">
-			      
-			      <!-- sidebar menu: : style can be found in sidebar.less -->
-			      <ul class="sidebar-menu" data-widget="tree">
-			    
-			        <li class="active treeview menu-open">
-			          <a href="#">
-			            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-			            <span class="pull-right-container">
-			              <i class="fa fa-angle-left pull-right"></i>
-			            </span>
-			          </a>
-			          <ul class="treeview-menu">
-			            <li class="active"><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-			          </ul>
-			        </li>
-			      </ul>
-			    </section>
-			    <!-- /.sidebar -->
-			  </aside>
-			
-			  <!-- Content Wrapper. Contains page content -->
-			  <div class="content-wrapper row-padding">
-			    <!-- Content Header (Page header) -->
-			    <section class="content-header">
-			      	<h:outputLabel style="font-size: 24px;" value="Dashboard"></h:outputLabel>
-			    </section>
-			
-			    <!-- Main content -->
-			    <section class="content">
-			      <div class="row">
-			      	<div class="col-md-12">
-			      		<div class="box box-default row-padding-min">
-				            <div class="box-body" style="">
-				             	<div class="row">
-				             		<div class="col-md-1">
-										<h:outputLabel value="Receipt Date: " style="padding-right: 10px;"></h:outputLabel>
-				             		</div>
-				             		<div class="col-md-2">
-				             			<h:inputText value="#{dashboardController.dateStr}"
-	            								styleClass="form-control datepicker"></h:inputText>
-				             		</div>
-				             		<div class="col-md-5">
-					             		<p:commandButton styleClass="btn btn-primary" value="View Graph" 
-						             			update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
-						             			actionListener="#{dashboardController.updateReceiptTempChart}"
-						             			oncomplete="clearDivChart()" />
-						             			
-						             	<p:commandButton styleClass="btn btn-info"
-						             			value="View Accounting" actionListener="#{dashboardController.showPDF}"
-					  							update="pdfId" oncomplete="showModalPDF()" />
-				  					</div>
-				             	</div>
-				            </div>
-			      		</div>
-			      	</div>
-			      	</div>
-					<div class="row">
-			       <div class="col-md-12">
-			        <div class="box box-default row-padding-min">
-			            <div class="box-body" style="">
-			            	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true">
-		   		 			</p:messages>
-			            	<div class="row pull-right"></div>
-			             	<div class="row">
-				           		<div class="col-sm-11 text-center" id="divChart1">
-				           			<h:panelGroup id="canvasGroup">
-										<div id="chartdiv1" class="chartdiv"></div>             
-									</h:panelGroup>
-				           		</div>
-				           		<div class="col-sm-1 text-center" id="divChart2">
-				           			<h:panelGroup id="canvasGroupPS">
-										<div id="chartdiv2" class="chartdiv" ></div>  
-									</h:panelGroup>
-				           		</div>
-				           	</div>
-			            </div>
-			          </div>
-			       </div>
-			      </div>
-			    </section>
-			  </div>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<meta charset="utf-8" />
+	<title>ERP Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta content="kvthemes" name="author" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<f:metadata>
+		<f:viewAction action="#{dashboardController.onload}" />
+	</f:metadata>
+	<link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
+	<script src="../assets/js/modernizr.min.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="https://vitalets.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+	<link href="../css/datepicker.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../css/erp.css" />
+	<link href="../css/jquery.dataTables.min.css" rel="stylesheet" />
+	<link href="../css/bootstrap-toggle.min.css" rel="stylesheet" />
+</h:head>
+<h:body class="fixed-left">
+	<div id="wrapper" class="collapse-menu forced">
+		<header class="topbar">
+			<div class="topbar-left">
+				<div class="left-content text-center">
+					<a href="../index.html" class="logo">ERP</a>
+				</div>
 			</div>
-			
-			<div class="modal fade" id="myModal" role="dialog">
-			    <div class="modal-dialog modal-lg " style="width: 100%; max-width: 1170px;">
-			      <div class="modal-content">
-			        <div class="modal-body">
-			        	<h:panelGroup id="tb_revenue">
-				          <table id="example" class="display" style="width:100%">
-								<thead>
-								    <tr>
-								        <th>ERP ID</th>
-							            <th>Branch</th>
-							            <th>Receipt Date</th>
-							            <th>Cash</th>
-							            <th>Rabbit</th>
-							            <th>Card (BBL)</th>
-							            <th>Card (SCB)</th>
-							            <th>LinePay</th>
-							            <th>Bonus Commission</th>
-							            <th>AdjOther</th>
-							            <th>Return Charge</th>
-							            <th>Suspense</th>
-							            <th>With Holding Tax</th>
-							            <th>Promotion</th>
-							            <th>Insurance</th>
-							            <th>Status</th>
-								    </tr>
-								</thead>
-								<tbody>
-									<c:forEach var="receipt" items="#{dashboardController.copReceiptTemps}">
-		            					<tr>
-		            						
-							                <td>#{receipt.shopCode}</td>
-								            <td>#{receipt.shopName}</td>
-								            <td>
-		            							<h:inputText 	
-		            								value="#{receipt.arReceiptDateStr}"
-		            								styleClass="form-control datepicker dateintable"></h:inputText>
-		            						</td>
-								            <td>#{receipt.cash}</td>
-								            <td>#{receipt.rabit}</td>
-								            <td>#{receipt.creditBBL}</td>
-								            <td>#{receipt.creditSCB}</td>
-								            <td>#{receipt.linePay}</td>
-								            <td>#{receipt.bonus}</td>
-								            <td>#{receipt.adjOther}</td>
-								            <td>#{receipt.adjReturnCharge}</td>
-								            <td>#{receipt.suspense}</td>
-								            <td>#{receipt.withholdingTax}</td>
-								            <td>#{receipt.promotion}</td>
-								            <td>#{receipt.insurance}</td>
-								            <td>
-								            	<input class="toggle-demo" type="checkbox" checked="#{receipt.status == 'N' ? '' : 'check'}"
-								            		disabled="#{receipt.status == 'N' ? 'disabled' : ''}"
-								            		data-toggle="toggle" onchange="statusChange(this, #{receipt.rownum})" 
-								            		data-size="small"/>
-											</td>
-		            					</tr>
-	            					</c:forEach>
-	            				</tbody>
-	            			</table>
-	            		</h:panelGroup>
-			        </div>
-			        <div class="modal-footer">
-                    	<button type="button" class="btn btn-primary" onclick="saveReceiptTempJs()">Save</button>
-                    		
-			          	<h:commandButton value="export excel" 
-			          			 styleClass="btn btn-info"
-			           			 action="#{dashboardController.exportTransactionExcel}" />
-			           			  
-			          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        </div>
-			      </div>
-			    </div>
-			  </div>
-			  
-			  <div class="modal fade" id="myModalPDF" role="dialog">
-			    <div class="modal-dialog modal-lg " style="width: 100%; max-width: 1170px;">
-			    
-			      <!-- Modal content-->
-			      <div class="modal-content">
-			        <div class="modal-body">
-			        	<h:panelGroup id="pdfId">
-					          <p:media value="#{dashboardController.streamedContent}" player="pdf" width="100%" height="550px">
-							  </p:media>
-					 	</h:panelGroup>
-					 </div>
-			        <div class="modal-footer">
-			           <h:commandButton value="export excel" styleClass="btn btn-info" action="#{dashboardController.exportExcel}" /> 
-			        </div>
-			      </div>
-			      
-			    </div>
-			  </div>
-			  
-			<h:inputHidden id="x" value="#{dashboardController.param}" />
-			<h:inputHidden id="y" value="#{dashboardController.param2}" />
-			
-			<p:remoteCommand name="saveReceiptTempJs" update="canvasGroup, canvasGroupJs, canvasGroupPSJs"
-				 action="#{dashboardController.saveReceiptTemp}"
-				 oncomplete="closeModal()" ></p:remoteCommand>
-			<p:remoteCommand name="selectItemFromChart" update="tb_revenue, tb_revenueJS"
-				 action="#{dashboardController.updateReceiptTemp}"
-				 oncomplete="showModal()" ></p:remoteCommand>
-			<p:remoteCommand name="tableNextPage" update="datepickerJs"></p:remoteCommand>
-		  	<p:remoteCommand name="selectItemFromChartPS" update="canvasGroupPS canvasGroupPSJs"
-				 action="#{dashboardController.updateChartPS}" ></p:remoteCommand>
-			<p:remoteCommand name="updateStatus" action="#{dashboardController.updateStatus}"></p:remoteCommand>
-		</h:form>
-		
-		<script src="../js/Chart.min.js"></script>
-		<script src="../js/jquery.dataTables.min.js"></script>
-		<script src="../js/amcharts.js"></script>
-		<script src="../js/pie.js"></script>
-		<script src="../js/export.min.js"></script>
-		<link rel="stylesheet" href="../css/export.css" type="text/css" media="all" />
-		<script src="../js/light.js"></script>
-		<script src="../AdminLTE-2.4.3/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="../AdminLTE-2.4.3/bower_components/fastclick/lib/fastclick.js"></script>
-		<script src="../AdminLTE-2.4.3/dist/js/adminlte.min.js"></script>
-		<script src="../AdminLTE-2.4.3/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-		<script src="../AdminLTE-2.4.3/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-		<script src="../AdminLTE-2.4.3/dist/js/demo.js"></script>
-		
-		<!-- Chart code -->
-		<h:panelGroup id="canvasGroupJs">
-			<h:outputScript>
+
+			<div class="navbar navbar-default" role="navigation">
+				<div class="container">
+					<div class="mobile-button pull-left">
+						<button type="button" class="button-menu-mobile open-left">
+							<i class="icon-menu"></i>
+						</button>
+						<span class="clearfix"></span>
+					</div>
+
+					<div class="zoom-out-button pull-left">
+						<a href="javascript:void();" id="btn-fullscreen"
+							class="waves-effect fullscreen-button"><i class="icon-frame"></i></a>
+						<span class="clearfix"></span>
+					</div>
+
+					<ul class="nav navbar-nav navbar-right pull-right">
+						<li class="dropdown"><a href="javascript:void();"
+							class="dropdown-toggle profile" data-toggle="dropdown"
+							aria-expanded="true"><img
+								src="../images/gear-settings.png" alt="user-img"
+								class="img-circle" /> </a>
+							<ul class="dropdown-menu">
+								<h:form>
+									<li class="divider"></li>
+									<li>
+							            <h:commandLink styleClass="nav-link" value="Logout"
+							       			action="#{dashboardController.onLogout}">
+							       			<i class="fa fa-fw fa-sign-out"></i>
+							       		</h:commandLink>
+							          </li>
+								</h:form>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+		</header>
+		<div class="left side-menu">
+			<div class="sidebar-inner slimscrollleft">
+				<!--- Divider -->
+				<div id="sidebar-menu">
+					<ul>
+						<li class="child-menu"><a href="../index.html"
+							class="waves-effect"><i class="icon-home"></i><span>Dashboard
+							</span> <span class="pull-right"><i class="icon-arrow-right"></i></span></a>
+							<ul class="list-unstyled">
+								<li><a href="../dashboard-1.html"><i
+										class="fa fa-hand-o-right"></i>Dashboard 1</a></li>
+							</ul></li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="content-page">
+			<div class="content">
+				<div class="container">
+					<h:form id="formId">
+						<div class="row">
+							<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true">
+		   		 			</p:messages>
+						</div>
+						<div class="row">
+							<div class="col-sm-5">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-sm-4" style="text-align: right;">
+												<h4>
+													<i class="icon-calendar"></i> Receipt Date
+												</h4>
+											</div>
+											<div class="col-sm-8">
+												<h:inputText value="#{dashboardController.dateStr}"
+													styleClass="form-control datepicker"></h:inputText>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!--Button View-->
+							<div class="col-lg-2 col-sm-6 col-xs-12">
+								<div class="card p-20 bg-rose">
+									<div class="media">
+										<div class="media-body">
+											<div class="col-sm-6 text-left">
+												<p:commandLink update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
+								             			actionListener="#{dashboardController.updateReceiptTempChart}"
+								             			oncomplete="clearDivChart()">
+												    <h:graphicImage value="../images/pie-chart-stats.png" />
+												</p:commandLink>
+											</div>
+											<div class="col-sm-6 text-right">
+												<h4 class="text-white">View Report</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-2 col-sm-6 col-xs-12">
+								<div class="card p-20 bg-blue" style="width: 230px">
+									<div class="media">
+										<div class="col-sm-5 text-left">
+												<p:commandLink actionListener="#{dashboardController.showPDF}"
+					  								update="pdfId" oncomplete="showModalPDF()">
+												    <h:graphicImage value="../images/book-opened-symmetrical-shape.png" />
+												</p:commandLink>
+											</div>
+											<div class="col-sm-7 text-right">
+												<h4 class="text-white">View Accounting</h4>
+											</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<i class="fa fa-bar-chart-o fa-fw"></i>Graphs
+									</div>
+									<div class="panel-body">
+										<div class="panel panel-default">
+											<div class="panel-body">
+												<div class="col-sm-11 text-center" id="divChart1">
+													<h:panelGroup id="canvasGroup">
+														<div id="chartdiv1" class="chartdiv"></div>
+													</h:panelGroup>
+												</div>
+												<div class="col-sm-1 text-center" id="divChart2">
+													<h:panelGroup id="canvasGroupPS">
+														<div id="chartdiv2" class="chartdiv"></div>
+													</h:panelGroup>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal fade" id="myModal" role="dialog">
+							<div class="modal-dialog modal-lg "
+								style="width: 100%; max-width: 1170px;">
+								<div class="modal-content">
+									<div class="modal-body">
+										<h:panelGroup id="tb_revenue">
+											<table id="example" class="display" style="width: 100%">
+												<thead>
+													<tr>
+														<th>ERP ID</th>
+														<th>Branch</th>
+														<th>Receipt Date</th>
+														<th>Cash</th>
+														<th>Rabbit</th>
+														<th>Card (BBL)</th>
+														<th>Card (SCB)</th>
+														<th>LinePay</th>
+														<th>Bonus Commission</th>
+														<th>AdjOther</th>
+														<th>Return Charge</th>
+														<th>Suspense</th>
+														<th>With Holding Tax</th>
+														<th>Promotion</th>
+														<th>Insurance</th>
+														<th>Status</th>
+													</tr>
+												</thead>
+												<tbody>
+													<c:forEach var="receipt"
+														items="#{dashboardController.copReceiptTemps}">
+														<tr>
+
+															<td>#{receipt.shopCode}</td>
+															<td>#{receipt.shopName}</td>
+															<td><h:inputText value="#{receipt.arReceiptDateStr}"
+																	styleClass="form-control datepicker dateintable datepicker-inmodel"></h:inputText>
+															</td>
+															<td>#{receipt.cash}</td>
+															<td>#{receipt.rabit}</td>
+															<td>#{receipt.creditBBL}</td>
+															<td>#{receipt.creditSCB}</td>
+															<td>#{receipt.linePay}</td>
+															<td>#{receipt.bonus}</td>
+															<td>#{receipt.adjOther}</td>
+															<td>#{receipt.adjReturnCharge}</td>
+															<td>#{receipt.suspense}</td>
+															<td>#{receipt.withholdingTax}</td>
+															<td>#{receipt.promotion}</td>
+															<td>#{receipt.insurance}</td>
+															<td><input class="toggle-demo" type="checkbox"
+																checked="#{receipt.status == 'N' ? '' : 'check'}"
+																disabled="#{receipt.status == 'N' ? 'disabled' : ''}"
+																data-toggle="toggle"
+																onchange="statusChange(this, #{receipt.rownum})"
+																data-size="small" /></td>
+														</tr>
+													</c:forEach>
+												</tbody>
+											</table>
+										</h:panelGroup>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary"
+											onclick="saveReceiptTempJs()">Save</button>
+
+										<h:commandButton value="export excel"
+											styleClass="btn btn-info"
+											action="#{dashboardController.exportTransactionExcel}" />
+
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal fade" id="myModalPDF" role="dialog">
+							<div class="modal-dialog modal-lg "
+								style="width: 100%; max-width: 1170px;">
+
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-body modal-body-pdf">
+										<h:panelGroup id="pdfId">
+											<p:media value="#{dashboardController.streamedContent}"
+												player="pdf" width="100%" height="550px">
+											</p:media>
+										</h:panelGroup>
+									</div>
+									<div class="modal-footer modal-footer-pdf">
+										<h:commandButton value="export excel"
+											styleClass="btn btn-info"
+											action="#{dashboardController.exportExcel}" />
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+
+						<h:inputHidden id="x" value="#{dashboardController.param}" />
+						<h:inputHidden id="y" value="#{dashboardController.param2}" />
+						<p:remoteCommand name="saveReceiptTempJs"
+							update="canvasGroup , canvasGroupJs , canvasGroupPSJs"
+							action="#{dashboardController.saveReceiptTemp}"
+							oncomplete="closeModal()"></p:remoteCommand>
+						<p:remoteCommand name="selectItemFromChart"
+							update="tb_revenue , tb_revenueJS"
+							action="#{dashboardController.updateReceiptTemp}"
+							oncomplete="showModal()"></p:remoteCommand>
+						<p:remoteCommand name="tableNextPage" update="datepickerJs"></p:remoteCommand>
+						<p:remoteCommand name="selectItemFromChartPS"
+							update="canvasGroupPS , canvasGroupPSJs"
+							action="#{dashboardController.updateChartPS}"></p:remoteCommand>
+						<p:remoteCommand name="updateStatus"
+							action="#{dashboardController.updateStatus}"></p:remoteCommand>
+					</h:form>
+				</div>
+			</div>
+
+			<footer class="footer text-right">
+				Copyright © 2018 <span class="text-warning">Rocks Admin </span>| All
+				rights reserved.
+			</footer>
+		</div>
+	</div>
+	<script>
+		var resizefunc = [];
+	</script>
+
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/detect.js"></script>
+	<script src="../assets/js/fastclick.js"></script>
+	<script src="../assets/js/jquery.slimscroll.js"></script>
+	<script src="../assets/js/jquery.blockUI.js"></script>
+	<script src="../assets/js/waves.js"></script>
+	<script src="../assets/js/jquery.nicescroll.js"></script>
+	<script src="../assets/js/jquery.scrollTo.min.js"></script>
+	<script src="../assets/js/jquery.app.js"></script>
+
+	<script src="../js/bootstrap-datepicker.js"></script>
+	<script src="../js/amcharts.js"></script>
+	<script src="../js/pie.js"></script>
+	<script src="../js/light.js"></script>
+	<script src="../js/bootstrap-toggle.min.js"></script>
+	<script src="../js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="../js/erp.js"></script>
+
+	<h:panelGroup id="canvasGroupJs">
+		<h:outputScript>
 	    		AmCharts.makeChart("chartdiv1", {
 	    		  "type": "pie",
 				  "theme": "light",
@@ -299,6 +337,7 @@
 				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",
+				  "colors": ["#2F4F4F", "#483D8B", "#8B0000", "#00008B", "#B0DE09"],
 				  "pullOutDuration": 0,
   				   "pullOutRadius": 0,
 				   "balloon":{
@@ -312,9 +351,12 @@
 					    "event": "clickSlice",
 					    "method": function(e) {
 					    		document.getElementById("formId:x").value = e.dataItem.title;
+					    		
 						    	if(e.dataItem.title == 'BSD'
 						          		|| e.dataItem.title == 'DC'
 						          		|| e.dataItem.title == 'UPC'){
+						          		console.log('1111');
+						          		
 							      		selectItemFromChart();
 						          	}else{
 						          		selectItemFromChartPS();
@@ -327,10 +369,12 @@
 						          	}
 					    }}]
 				} );
+				
+				console.log("canvasGroupJs");
 			</h:outputScript>
-		</h:panelGroup>
-		<h:panelGroup id="canvasGroupPSJs">
-			<h:outputScript>
+	</h:panelGroup>
+	<h:panelGroup id="canvasGroupPSJs">
+		<h:outputScript>
 				AmCharts.makeChart("chartdiv2", {
 	    		  "type": "pie",
 				  "theme": "light",
@@ -338,8 +382,9 @@
 				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",
+				  "colors": ["#2F4F4F", "#483D8B", "#8B0000", "#00008B", "#B0DE09", "#696969", "#4B0082", "#0000CD", "#000080"],
 				  "pullOutDuration": 0,
-  				   "pullOutRadius": 0,
+				  "labelRadius": 5,
 				   "balloon":{
 				   "fixedPosition":true
 				  },
@@ -355,9 +400,9 @@
 					    }}]
 				} );
 			</h:outputScript>
-		</h:panelGroup>
-		<h:panelGroup id="tb_revenueJS">
-			<h:outputScript>
+	</h:panelGroup>
+	<h:panelGroup id="tb_revenueJS">
+		<h:outputScript>
 				var table = $('#example').DataTable({
 				    	  "scrollX": true
 				    });
@@ -370,9 +415,9 @@
 				    tableNextPage();
 				} );
 			</h:outputScript>
-			
-			<h:panelGroup id="datepickerJs">
-				<h:outputScript>	
+
+		<h:panelGroup id="datepickerJs">
+			<h:outputScript>	
 					$('.toggle-demo').bootstrapToggle({
 				      on: 'Active',
 				      off: 'Inacive'
@@ -386,7 +431,7 @@
 						autoclose: true,
 					})
 				</h:outputScript>
-			</h:panelGroup>
 		</h:panelGroup>
-    </h:body>
-</f:view>
+	</h:panelGroup>
+</h:body>
+</html>

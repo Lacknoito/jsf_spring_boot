@@ -1,0 +1,299 @@
+<ui:composition template="./template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<ui:define name="description">
+		<link href="../css/datepicker.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/erp.css" />
+		<link href="../css/jquery.dataTables.min.css" rel="stylesheet" />
+		<link href="../css/bootstrap-toggle.min.css" rel="stylesheet" />
+		 <f:metadata>
+		    <f:viewAction action="#{dashboardController.onload}" />
+		</f:metadata>
+		
+		<h:form id="formId">		
+			<div class="row">
+				<div class="col-sm-5">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-4" style="text-align: right;">
+									<h4><i class="icon-calendar"></i> Receipt Date</h4>
+								</div>
+								<div class="col-sm-8"> 
+									<h:inputText value="#{dashboardController.dateStr}"
+										styleClass="form-control datepicker"></h:inputText>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+	
+				<!--Button View-->
+				<div class="col-lg-2 col-sm-6 col-xs-12">
+					<div class="card p-20 bg-rose" onclick="test()">
+						<div class="media">
+							<div class="media-body text-right">
+								<h3 class="text-white">300</h3>
+								<span class="text-white">View Graphs</span>
+								<p:commandButton styleClass="btn btn-primary" value="View Graph" 
+			             			update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
+			             			actionListener="#{dashboardController.updateReceiptTempChart}"
+			             			oncomplete="clearDivChart()" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-2 col-sm-6 col-xs-12">
+					<div class="card p-20 bg-blue">
+						<div class="media">
+							<div class="media-left media-middle">
+								<div id="widgets4chart2"></div>
+							</div>
+							<div class="media-body text-right">
+								<h3 class="text-white">263</h3>
+								<span class="text-white">View Graphs</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<i class="fa fa-bar-chart-o fa-fw"></i>Graphs 
+						</div>
+						<div class="panel-body">
+						  <div class="panel panel-default">
+							<div class="panel-body">
+							  <div class="col-sm-11 text-center" id="divChart1">
+				           			<h:panelGroup id="canvasGroup">
+										<div id="chartdiv1" class="chartdiv"></div>             
+									</h:panelGroup>
+				           		</div>
+				           		<div class="col-sm-1 text-center" id="divChart2">
+				           			<h:panelGroup id="canvasGroupPS">
+										<div id="chartdiv2" class="chartdiv" ></div>  
+									</h:panelGroup>
+				           		</div>
+						   </div>
+						  </div>
+						</div>
+					</div>			
+				</div>
+			</div>
+			
+			<div class="modal fade" id="myModal" role="dialog">
+			    <div class="modal-dialog modal-lg " style="width: 100%; max-width: 1170px;">
+			      <div class="modal-content">
+			        <div class="modal-body">
+			        	<h:panelGroup id="tb_revenue">
+				          <table id="example" class="display" style="width:100%">
+								<thead>
+								    <tr>
+								        <th>ERP ID</th>
+							            <th>Branch</th>
+							            <th>Receipt Date</th>
+							            <th>Cash</th>
+							            <th>Rabbit</th>
+							            <th>Card (BBL)</th>
+							            <th>Card (SCB)</th>
+							            <th>LinePay</th>
+							            <th>Bonus Commission</th>
+							            <th>AdjOther</th>
+							            <th>Return Charge</th>
+							            <th>Suspense</th>
+							            <th>With Holding Tax</th>
+							            <th>Promotion</th>
+							            <th>Insurance</th>
+							            <th>Status</th>
+								    </tr>
+								</thead>
+								<tbody>
+									<c:forEach var="receipt" items="#{dashboardController.copReceiptTemps}">
+		            					<tr>
+		            						
+							                <td>#{receipt.shopCode}</td>
+								            <td>#{receipt.shopName}</td>
+								            <td>
+		            							<h:inputText 	
+		            								value="#{receipt.arReceiptDateStr}"
+		            								styleClass="form-control datepicker dateintable"></h:inputText>
+		            						</td>
+								            <td>#{receipt.cash}</td>
+								            <td>#{receipt.rabit}</td>
+								            <td>#{receipt.creditBBL}</td>
+								            <td>#{receipt.creditSCB}</td>
+								            <td>#{receipt.linePay}</td>
+								            <td>#{receipt.bonus}</td>
+								            <td>#{receipt.adjOther}</td>
+								            <td>#{receipt.adjReturnCharge}</td>
+								            <td>#{receipt.suspense}</td>
+								            <td>#{receipt.withholdingTax}</td>
+								            <td>#{receipt.promotion}</td>
+								            <td>#{receipt.insurance}</td>
+								            <td>
+								            	<input class="toggle-demo" type="checkbox" checked="#{receipt.status == 'N' ? '' : 'check'}"
+								            		disabled="#{receipt.status == 'N' ? 'disabled' : ''}"
+								            		data-toggle="toggle" onchange="statusChange(this, #{receipt.rownum})" 
+								            		data-size="small"/>
+											</td>
+		            					</tr>
+	            					</c:forEach>
+	            				</tbody>
+	            			</table>
+	            		</h:panelGroup>
+			        </div>
+			        <div class="modal-footer">
+                    	<button type="button" class="btn btn-primary" onclick="saveReceiptTempJs()">Save</button>
+                    		
+			          	<h:commandButton value="export excel" 
+			          			 styleClass="btn btn-info"
+			           			 action="#{dashboardController.exportTransactionExcel}" />
+			           			  
+			          	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+
+			
+			<h:inputHidden id="x" value="#{dashboardController.param}" />
+			<h:inputHidden id="y" value="#{dashboardController.param2}" />
+			<p:remoteCommand name="saveReceiptTempJs" update="canvasGroup , canvasGroupJs , canvasGroupPSJs"
+				 action="#{dashboardController.saveReceiptTemp}"
+				 oncomplete="closeModal()" ></p:remoteCommand>
+			<p:remoteCommand name="selectItemFromChart" update="tb_revenue , tb_revenueJS"
+				 action="#{dashboardController.updateReceiptTemp}"
+				 oncomplete="showModal()" ></p:remoteCommand>
+			<p:remoteCommand name="tableNextPage" update="datepickerJs"></p:remoteCommand>
+		  	<p:remoteCommand name="selectItemFromChartPS" update="canvasGroupPS , canvasGroupPSJs"
+				 action="#{dashboardController.updateChartPS}" ></p:remoteCommand>
+			<p:remoteCommand name="updateStatus" action="#{dashboardController.updateStatus}"></p:remoteCommand>
+		</h:form>
+
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../js/bootstrap-datepicker.js"></script>
+		<script src="../js/amcharts.js"></script>
+		<script src="../js/pie.js"></script>
+		<script src="../js/light.js"></script>
+		<script src="../js/bootstrap-toggle.min.js"></script>
+		<script src="../js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="../js/erp.js"></script>
+		
+		<h:outputScript>
+			function test() {
+				console.log("11");
+			}
+		</h:outputScript>
+		
+		<h:panelGroup id="canvasGroupJs">
+			<h:outputScript>
+	    		AmCharts.makeChart("chartdiv1", {
+	    		  "type": "pie",
+				  "theme": "light",
+				  "dataProvider": #{dashboardController.datas},
+				  "labelText": "[[branchType]]",
+				  "valueField": "count",
+				  "titleField": "branchType",
+				  "pullOutDuration": 0,
+  				   "pullOutRadius": 0,
+				   "balloon":{
+				   "fixedPosition":true
+				  },
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeader]]",
+				  "export": {
+				    "enabled": false
+				  },
+				  "listeners": [{
+					    "event": "clickSlice",
+					    "method": function(e) {
+					    		document.getElementById("formId:x").value = e.dataItem.title;
+					    		
+						    	if(e.dataItem.title == 'BSD'
+						          		|| e.dataItem.title == 'DC'
+						          		|| e.dataItem.title == 'UPC'){
+						          		console.log('1111');
+						          		
+							      		selectItemFromChart();
+						          	}else{
+						          		selectItemFromChartPS();
+						          		
+						          		$("#divChart1").removeClass("col-sm-11");
+						          		$("#divChart1").addClass("col-sm-6");
+						          		
+						          		$("#divChart2").removeClass("col-sm-1");
+						          		$("#divChart2").addClass("col-sm-6");
+						          	}
+					    }}]
+				} );
+			</h:outputScript>
+		</h:panelGroup>
+		<h:panelGroup id="canvasGroupPSJs">
+			<h:outputScript>
+				AmCharts.makeChart("chartdiv2", {
+	    		  "type": "pie",
+				  "theme": "light",
+				  "dataProvider": #{dashboardController.chartPS},
+				  "labelText": "[[branchType]]",
+				  "valueField": "count",
+				  "titleField": "branchType",
+				  "pullOutDuration": 0,
+  				   "pullOutRadius": 0,
+				   "balloon":{
+				   "fixedPosition":true
+				  },
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeader]]",
+				  "export": {
+				    "enabled": false
+				  },
+				  "listeners": [{
+					    "event": "clickSlice",
+					    "method": function(e) {
+						    	document.getElementById("formId:x").value = e.dataItem.title;
+							    selectItemFromChart();
+					    }}]
+				} );
+			</h:outputScript>
+		</h:panelGroup>
+		<h:panelGroup id="tb_revenueJS">
+			<h:outputScript>
+				var table = $('#example').DataTable({
+				    	  "scrollX": true
+				    });
+				    
+				$('#example').on( 'page.dt', function () {
+						tableNextPage();
+					} );
+					
+				$('#example').on( 'search.dt', function () {
+				    tableNextPage();
+				} );
+			</h:outputScript>
+			
+			<h:panelGroup id="datepickerJs">
+				<h:outputScript>	
+					$('.toggle-demo').bootstrapToggle({
+				      on: 'Active',
+				      off: 'Inacive'
+				    });
+				
+					var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+					$( ".datepicker" ).datepicker({
+						format: 'dd/mm/yyyy',
+						container: container,
+						todayHighlight: true,
+						autoclose: true,
+					})
+				</h:outputScript>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

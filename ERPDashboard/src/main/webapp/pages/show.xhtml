@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:head>
+	</h:head>
+    <h:body>
+    	<link rel="stylesheet" href="../css/erp.css" />
+    	<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script src="https://www.amcharts.com/lib/3/pie.js"></script>
+		
+		<div id="chartdiv1" class="chartdiv"></div>
+		
+		<h:outputScript>
+			var chart = AmCharts.makeChart("chartdiv1", {
+			  "type": "pie",
+			  "dataProvider": [{
+			    "country": "Lithuania",
+			    "litres": 1
+			  }, {
+			    "country": "Czech Republic",
+			    "litres": 1
+			  }, {
+			    "country": "Ireland",
+			    "litres": 1
+			  }, {
+			    "country": "Germany",
+			    "litres": 165.8
+			  }, {
+			    "country": "Australia",
+			    "litres": 139.9
+			  }, {
+			    "country": "Austria",
+			    "litres": 128.3
+			  }, {
+			    "country": "UK",
+			    "litres": 99
+			  }, {
+			    "country": "Belgium",
+			    "litres": 60
+			  }, {
+			    "country": "The Netherlands",
+			    "litres": 50
+			  }],
+			  "valueField": "litres",
+			  "titleField": "country",
+			   "pullOutDuration": 0
+			});
+		</h:outputScript>
+    </h:body>
+</f:view>

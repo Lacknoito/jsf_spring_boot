@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<meta charset="utf-8" />
+	<title>ERP Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta content="kvthemes" name="author" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
+	<script src="../assets/js/modernizr.min.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    <link href="https://vitalets.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+</h:head>
+<h:body class="fixed-left">
+	<div id="wrapper" class="collapse-menu forced">
+		<header class="topbar">
+			<div class="topbar-left">
+				<div class="left-content text-center">
+					<a href="../index.html" class="logo"><img
+						src="../assets/images/logo-icon-white.png" /> <span>Rocks Admin </span></a>
+				</div>
+			</div>
+
+			<div class="navbar navbar-default" role="navigation">
+				<div class="container">
+					<div class="mobile-button pull-left">
+						<button type="button" class="button-menu-mobile open-left">
+							<i class="icon-menu"></i>
+						</button>
+						<span class="clearfix"></span>
+					</div>
+
+					<div class="zoom-out-button pull-left">
+						<a href="javascript:void();" id="btn-fullscreen"
+							class="waves-effect fullscreen-button"><i class="icon-frame"></i></a>
+						<span class="clearfix"></span>
+					</div>
+
+					<ul class="nav navbar-nav navbar-right pull-right">
+						<li class="dropdown"><a href="javascript:void();"
+							class="dropdown-toggle profile" data-toggle="dropdown"
+							aria-expanded="true"><img
+								src="../assets/images/users/avatar-1.jpg" alt="user-img"
+								class="img-circle" /> </a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-user"><a href="javascript:void(0);">
+										<div class="media">
+											<div class="media-left">
+												<img src="../assets/images/users/avatar-1.jpg" />
+											</div>
+											<div class="media-body clearfix">
+												<div class="media-heading">
+													<h5>Hrithik Roshan</h5>
+												</div>
+												<p class="m-0">
+													<small>roshan.hrithik72@outlook.com</small>
+												</p>
+
+											</div>
+										</div>
+								</a></li>
+								<li class="divider"></li>
+								<li><a href="javascript:void(0)"><i class="icon-power"></i>Logout</a></li>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+		</header>
+		<div class="left side-menu">
+			<div class="sidebar-inner slimscrollleft">
+				<!--- Divider -->
+				<div id="sidebar-menu">
+					<ul>
+						<li class="child-menu"><a href="../index.html"
+							class="waves-effect"><i class="icon-home"></i><span>Dashboard
+							</span> <span class="pull-right"><i class="icon-arrow-right"></i></span></a>
+							<ul class="list-unstyled">
+								<li><a href="../dashboard-1.html"><i
+										class="fa fa-hand-o-right"></i>Dashboard 1</a></li>
+							</ul></li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="content-page">
+			<div class="content">
+				<div class="container">
+					<ui:insert name="description"/>
+				</div>
+			</div>
+
+			<footer class="footer text-right">
+				Copyright © 2018 <span class="text-warning">Rocks Admin </span>| All
+				rights reserved.
+			</footer>
+		</div>
+	</div>
+	<script>
+		var resizefunc = [];
+	</script>
+
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/detect.js"></script>
+	<script src="../assets/js/fastclick.js"></script>
+	<script src="../assets/js/jquery.slimscroll.js"></script>
+	<script src="../assets/js/jquery.blockUI.js"></script>
+	<script src="../assets/js/waves.js"></script>
+	<script src="../assets/js/jquery.nicescroll.js"></script>
+	<script src="../assets/js/jquery.scrollTo.min.js"></script>
+	<script src="../assets/js/jquery.app.js"></script>
+</h:body>
+</html>
