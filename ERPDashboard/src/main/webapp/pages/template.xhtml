@@ -11,22 +11,27 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta content="kvthemes" name="author" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+	<f:metadata>
+		<f:viewAction action="#{dashboardController.onload}" />
+	</f:metadata>
 	<link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="../assets/css/responsive.css" rel="stylesheet" type="text/css" />
 	<link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
 	<script src="../assets/js/modernizr.min.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	    <link href="https://vitalets.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+	<link href="https://vitalets.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+	<link href="../css/datepicker.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../css/erp.css" />
+	<link href="../css/jquery.dataTables.min.css" rel="stylesheet" />
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" />
 </h:head>
 <h:body class="fixed-left">
 	<div id="wrapper" class="collapse-menu forced">
 		<header class="topbar">
 			<div class="topbar-left">
 				<div class="left-content text-center">
-					<a href="../index.html" class="logo"><img
-						src="../assets/images/logo-icon-white.png" /> <span>Rocks Admin </span></a>
+					<a href="../index.html" class="logo">ERP</a>
 				</div>
 			</div>
 
@@ -49,27 +54,18 @@
 						<li class="dropdown"><a href="javascript:void();"
 							class="dropdown-toggle profile" data-toggle="dropdown"
 							aria-expanded="true"><img
-								src="../assets/images/users/avatar-1.jpg" alt="user-img"
+								src="../images/gear-settings.png" alt="user-img"
 								class="img-circle" /> </a>
 							<ul class="dropdown-menu">
-								<li class="dropdown-user"><a href="javascript:void(0);">
-										<div class="media">
-											<div class="media-left">
-												<img src="../assets/images/users/avatar-1.jpg" />
-											</div>
-											<div class="media-body clearfix">
-												<div class="media-heading">
-													<h5>Hrithik Roshan</h5>
-												</div>
-												<p class="m-0">
-													<small>roshan.hrithik72@outlook.com</small>
-												</p>
-
-											</div>
-										</div>
-								</a></li>
-								<li class="divider"></li>
-								<li><a href="javascript:void(0)"><i class="icon-power"></i>Logout</a></li>
+								<h:form>
+									<li class="divider"></li>
+									<li>
+							            <h:commandLink styleClass="nav-link" value="Logout"
+							       			action="#{dashboardController.onLogout}">
+							       			<i class="fa fa-fw fa-sign-out"></i>
+							       		</h:commandLink>
+							          </li>
+								</h:form>
 							</ul></li>
 					</ul>
 				</div>
@@ -94,11 +90,7 @@
 			</div>
 		</div>
 		<div class="content-page">
-			<div class="content">
-				<div class="container">
-					<ui:insert name="description"/>
-				</div>
-			</div>
+			<ui:insert name="description"/>
 
 			<footer class="footer text-right">
 				Copyright © 2018 <span class="text-warning">Rocks Admin </span>| All
@@ -120,5 +112,13 @@
 	<script src="../assets/js/jquery.nicescroll.js"></script>
 	<script src="../assets/js/jquery.scrollTo.min.js"></script>
 	<script src="../assets/js/jquery.app.js"></script>
+
+	<script src="../js/bootstrap-datepicker.js"></script>
+	<script src="../js/amcharts.js"></script>
+	<script src="../js/pie.js"></script>
+	<script src="../js/light.js"></script>
+	<script src="../js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="../js/erp.js"></script>
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 </h:body>
 </html>

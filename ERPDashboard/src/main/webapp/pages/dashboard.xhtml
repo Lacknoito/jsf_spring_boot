@@ -185,7 +185,7 @@
 								<div class="modal-content">
 									<div class="modal-body">
 										<h:panelGroup id="tb_revenue">
-											<table id="example" class="display" style="width: 100%">
+											<table id="example" class="display" style="width: 100%;">
 												<thead>
 													<tr>
 														<th>ERP ID</th>
@@ -228,12 +228,12 @@
 															<td>#{receipt.withholdingTax}</td>
 															<td>#{receipt.promotion}</td>
 															<td>#{receipt.insurance}</td>
-															<td><input class="toggle-demo" type="checkbox"
+															<td><input class="toggle-demo toggle-w" type="checkbox"
 																checked="#{receipt.status == 'N' ? '' : 'check'}"
 																disabled="#{receipt.status == 'N' ? 'disabled' : ''}"
 																data-toggle="toggle"
-																onchange="statusChange(this, #{receipt.rownum})"
-																data-size="small" /></td>
+																data-width="20px"
+																onchange="statusChange(this, #{receipt.rownum})"  /></td>
 														</tr>
 													</c:forEach>
 												</tbody>
@@ -277,7 +277,16 @@
 
 							</div>
 						</div>
-
+						
+						<div class="modal fade modalLoading" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-body">
+										<img src="../images/45.gif" />
+									</div>
+								</div>
+							</div>
+						</div>
 
 						<h:inputHidden id="x" value="#{dashboardController.param}" />
 						<h:inputHidden id="y" value="#{dashboardController.param2}" />
@@ -295,6 +304,8 @@
 							action="#{dashboardController.updateChartPS}"></p:remoteCommand>
 						<p:remoteCommand name="updateStatus"
 							action="#{dashboardController.updateStatus}"></p:remoteCommand>
+							
+						<p:ajaxStatus onstart="onStartProcess()" onsuccess="onEndProcess()" />
 					</h:form>
 				</div>
 			</div>
@@ -337,7 +348,6 @@
 				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",
-				  "colors": ["#2F4F4F", "#483D8B", "#8B0000", "#00008B", "#B0DE09"],
 				  "pullOutDuration": 0,
   				   "pullOutRadius": 0,
 				   "balloon":{
@@ -355,8 +365,6 @@
 						    	if(e.dataItem.title == 'BSD'
 						          		|| e.dataItem.title == 'DC'
 						          		|| e.dataItem.title == 'UPC'){
-						          		console.log('1111');
-						          		
 							      		selectItemFromChart();
 						          	}else{
 						          		selectItemFromChartPS();
@@ -382,7 +390,6 @@
 				  "labelText": "[[branchType]]",
 				  "valueField": "count",
 				  "titleField": "branchType",
-				  "colors": ["#2F4F4F", "#483D8B", "#8B0000", "#00008B", "#B0DE09", "#696969", "#4B0082", "#0000CD", "#000080"],
 				  "pullOutDuration": 0,
 				  "labelRadius": 5,
 				   "balloon":{
@@ -404,23 +411,21 @@
 	<h:panelGroup id="tb_revenueJS">
 		<h:outputScript>
 				var table = $('#example').DataTable({
-				    	  "scrollX": true
+				    	  scrollY:        '50vh',
+        				  scrollCollapse: true
 				    });
 				    
-				$('#example').on( 'page.dt', function () {
+				$('#example').on( 'draw.dt', function () {
 						tableNextPage();
 					} );
-					
-				$('#example').on( 'search.dt', function () {
-				    tableNextPage();
-				} );
 			</h:outputScript>
 
 		<h:panelGroup id="datepickerJs">
 			<h:outputScript>	
 					$('.toggle-demo').bootstrapToggle({
-				      on: 'Active',
-				      off: 'Inacive'
+						on: '',
+				      	off: '',
+						size: 'small'
 				    });
 				
 					var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";

@@ -83,9 +83,12 @@ public class DashboardController {
 			if(userLogin == null)
 				FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
 			
-			datas = "[]";
-			dateStr = null;
+//			datas = "[]";
+//			dateStr = null;
 			chartPS = "[]";
+			
+			dateStr = "10/04/2018";
+			updateChart();
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

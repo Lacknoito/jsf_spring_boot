@@ -44,7 +44,7 @@ td { font-size: 12px; }
 }
 
 .toggle-on, .toggle-off{
-	font-size:8px;
+	font-size:5px;
 }
 
 .modal-body-pdf{
@@ -60,3 +60,9 @@ td { font-size: 12px; }
 .dateintable{
 	height: 25px;
 }
+
+.toggle-w{
+	width: 10px;
+	font-size: 10px;
+}
+
