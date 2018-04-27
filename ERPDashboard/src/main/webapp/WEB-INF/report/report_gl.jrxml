@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_gl" pageWidth="900" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="880" leftMargin="0" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="3a27eb3b-fb30-4565-b577-e4588d978f15">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="RECEIPT_DATE" class="java.lang.String"/>
+	<parameter name="PERIOD_NO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT  xte.transaction_number transaction_number,
+      xe.transaction_date,
+      gjh.period_name period_name,
+      gjh.default_effective_date gl_date,
+      gcc.segment2 Account,
+      gcc.segment4 Cost_Center,
+      xal.accounted_dr,
+      xal.accounted_cr
+FROM apps.gl_je_batches gjb,
+      apps.gl_je_headers gjh,
+      apps.gl_je_lines gjl,
+      apps.gl_code_combinations gcc,
+      apps.gl_import_references gir,
+      xla.xla_ae_lines xal,
+      xla.xla_ae_headers xah,
+      xla.xla_events xe,
+      xla.xla_transaction_entities xte,
+      apps.hz_cust_accounts hca,
+      apps.hz_parties hp,
+      gl_period_statuses ps
+WHERE     gjb.JE_BATCH_ID = gjh.JE_BATCH_ID
+      AND gjh.je_header_id = gjl.je_header_id
+      AND gjh.actual_flag = 'A'
+      AND gjh.status = 'P'
+      AND gjh.je_source = 'Receivables'
+      AND (gjl.accounted_dr != 0 OR gjl.accounted_cr != 0)
+      AND gjl.CODE_COMBINATION_ID = gcc.CODE_COMBINATION_ID
+      AND gjl.je_header_id = gir.je_header_id
+      AND gjl.je_line_num = gir.je_line_num
+      AND gir.gl_sl_link_id = xal.gl_sl_link_id
+      AND gir.gl_sl_link_table = xal.gl_sl_link_table
+      AND xal.ae_header_id = xah.ae_header_id
+      AND xal.application_id = xah.application_id
+      AND xah.event_id = xe.event_id
+      AND xah.application_id = xe.application_id
+      AND xe.entity_id = xte.entity_id
+      AND xe.application_id = xte.application_id
+      AND (xal.accounted_dr != 0 OR xal.accounted_cr != 0)
+      AND xal.party_id = hca.cust_account_id(+)
+      AND hca.party_id = hp.party_id(+)
+      AND ps.application_id = 101
+      AND gjl.period_name = ps.period_name
+      AND ps.ledger_id = gjh.LEDGER_ID
+      AND ps.effective_period_num >= ($P{PERIOD_NO})
+      AND ps.effective_period_num <= ($P{PERIOD_NO})
+      and gcc.segment2 in (
+          112150
+          ,112151
+          ,112171
+          ,112190
+          ,113401
+          ,213602
+          ,401101
+          ,401103
+          ,401201
+          ,401202
+          ,409104
+          ,710100
+          ,760230
+          ,770100
+          ,770120
+      )
+      and gjh.default_effective_date = to_date($P{RECEIPT_DATE},'DD/MM/YYYY')
+order by xte.transaction_number, gjh.period_name, gcc.segment2]]>
+	</queryString>
+	<field name="TRANSACTION_NUMBER" class="java.lang.String"/>
+	<field name="TRANSACTION_DATE" class="java.sql.Timestamp"/>
+	<field name="PERIOD_NAME" class="java.lang.String"/>
+	<field name="GL_DATE" class="java.sql.Timestamp"/>
+	<field name="ACCOUNT" class="java.lang.String"/>
+	<field name="COST_CENTER" class="java.lang.String"/>
+	<field name="ACCOUNTED_DR" class="java.math.BigDecimal"/>
+	<field name="ACCOUNTED_CR" class="java.math.BigDecimal"/>
+	<variable name="SUM_DR" class="java.math.BigDecimal" resetType="Group" resetGroup="transaction_no" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACCOUNTED_DR}]]></variableExpression>
+	</variable>
+	<variable name="SUM_CR" class="java.math.BigDecimal" resetType="Group" resetGroup="transaction_no" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACCOUNTED_CR}]]></variableExpression>
+	</variable>
+	<group name="transaction_no">
+		<groupExpression><![CDATA[$F{TRANSACTION_NUMBER}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="612" y="0" width="94" height="20" uuid="64bf149a-ed36-413d-a0d7-aa30a4364f50"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+						<paragraph rightIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_DR}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="706" y="0" width="100" height="20" uuid="cb7d57e0-5214-4648-b13b-8feb733d6ce4"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+						<paragraph rightIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUM_CR}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="612" height="20" uuid="0e357963-6262-4856-9513-95836bf1f64e"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+						<paragraph rightIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Transaction Number : " + $F{TRANSACTION_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="216" height="20" uuid="973cc690-9516-411a-92d1-1961333b1797"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["GL Date : " + $P{RECEIPT_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="108" height="20" backcolor="#FFFFFF" uuid="4cc2f2c2-459e-4273-9a78-0a8aad6f4781"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Transaction Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="0" width="108" height="20" backcolor="#FFFFFF" uuid="5eda4fa6-4494-43c5-aaaa-f4aa7e6b292a"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Transaction Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="0" width="108" height="20" backcolor="#FFFFFF" uuid="92f06ddc-7412-42b3-8166-c1ed00f29e38"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Period Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="0" width="108" height="20" backcolor="#FFFFFF" uuid="0a3f1dae-7042-44b0-bd8c-9f7679417370"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Gl Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="0" width="90" height="20" backcolor="#FFFFFF" uuid="60f82c2c-5d23-425a-8cd5-d52b49abd5a1"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Account Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="522" y="0" width="90" height="20" backcolor="#FFFFFF" uuid="4120e514-05fb-4816-aa7b-315c57df5b36"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Cost Center]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="612" y="0" width="94" height="20" backcolor="#FFFFFF" uuid="23d19cf6-f2bb-4270-8c9a-787908de79fb"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Accounted Dr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="706" y="0" width="100" height="20" backcolor="#FFFFFF" uuid="54f5e696-d132-4332-be94-dcc81ad1271c"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Accounted Cr]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="108" height="20" uuid="92340970-b3f4-4fa6-8985-1d4c4c094e3b"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRANSACTION_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="108" y="0" width="108" height="20" uuid="3641c2cb-198b-4b9b-9056-adf49ec4f2ae"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRANSACTION_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="216" y="0" width="108" height="20" uuid="12e60f7e-cc96-406f-b1aa-24dc8b568198"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PERIOD_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="324" y="0" width="108" height="20" uuid="645865db-efd1-4162-b067-41837a474c8d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GL_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="0" width="90" height="20" uuid="42dfeee4-0dd3-4d2c-8f7e-a417816d943f"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="522" y="0" width="90" height="20" uuid="112b9dab-3cbc-4a32-996f-4b71a96b3890"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COST_CENTER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="612" y="0" width="94" height="20" uuid="5dee1cd5-6f38-4b09-be76-c8763656bce8"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_DR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="706" y="0" width="100" height="20" uuid="c7004261-2448-4243-902a-b840210221be"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACCOUNTED_CR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

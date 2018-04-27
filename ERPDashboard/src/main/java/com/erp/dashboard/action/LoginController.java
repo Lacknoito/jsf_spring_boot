@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
 import com.erp.dashboard.ERPSession;
 import com.erp.dashboard.entity.User;
@@ -15,9 +16,8 @@ import com.erp.dashboard.model.UserModel;
 import com.erp.dashboard.service.IERPService;
 import com.erp.dashboard.utils.SessionUtils;
 
-
-
 @Component
+@RequestScope
 @ManagedBean
 @RequestScoped
 public class LoginController {
@@ -47,10 +47,8 @@ public class LoginController {
 
     public void onClickLogin() {
     	try {
-//    		User user = userService.checkUserLogin(new User(userModel.getUserName(), userModel.getPassword()));
+    		User user = userService.checkUserLogin(new User(userModel.getUserName(), userModel.getPassword()));
 	    	
-    		User user = new User();
-    		
 	    	if(user != null) {
 	    		erpSession.setUser(user);
 	    		

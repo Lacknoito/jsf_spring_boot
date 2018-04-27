@@ -30,7 +30,7 @@ function clearDivChart(){
 }
 
 function onStartProcess() {
-	$('.modalLoading').modal({backdrop: 'static', keyboard: false});
+	$('.modalLoading').modal();
 }
 function onEndProcess() {
 	$('.modalLoading').modal('hide');

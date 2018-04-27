@@ -1,9 +1,12 @@
 package com.erp.dashboard.action;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import com.erp.dashboard.ERPSession;
 import com.erp.dashboard.entity.Accounting;
@@ -48,6 +52,7 @@ import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 
 @SuppressWarnings("deprecation")
 @Component
+@SessionScope
 @ManagedBean
 @SessionScoped
 public class DashboardController {
@@ -59,6 +64,7 @@ public class DashboardController {
 	private String dateStr;
 	private StreamedContent streamedContent;
 	private List<Accounting> accountings;
+	private boolean result;
 	
 	private static Logger logger = LogManager.getLogger(DashboardController.class);
 	
@@ -80,15 +86,12 @@ public class DashboardController {
 			
 			userLogin = erpSession.getUser();
 			
-			if(userLogin == null)
-				FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
+//			if(userLogin == null)
+//				FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
 			
-//			datas = "[]";
-//			dateStr = null;
+			datas = "[]";
+			dateStr = null;
 			chartPS = "[]";
-			
-			dateStr = "10/04/2018";
-			updateChart();
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -201,12 +204,117 @@ public class DashboardController {
 	}
 	
 	public void showPDF() throws Exception {
+		result = false;
+		
+		if(StringUtils.isBlank(dateStr)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
+			return;
+		}
+		
 		accountings = erpService.queryAccountingByDate(dateStr);
 		
-		if(StringUtils.isNotBlank(dateStr)) {
-			streamedContent = new DefaultStreamedContent(genJasper(), "application/pdf", "downloaded_report.pdf");
-		}
+		streamedContent = new DefaultStreamedContent(genJasper(), "application/pdf", "downloaded_report.pdf");
+		
+		result = true;
 	}
+	
+//	public Connection genConnection() throws Exception {
+//		String dbUrl = "jdbc:oracle:thin:@//172.25.32.77:1521/PROD";
+//		String dbDriver = "org.hibernate.dialect.Oracle10gDialect";
+//		String dbUname = "apps";
+//		String dbPwd = "apps";
+//		Class.forName(dbDriver);
+//		Connection conn = DriverManager.getConnection(dbUrl, dbUname, dbPwd);
+//		
+//		return conn;
+//	}
+	
+	public StreamedContent getShowExcelGL() throws Exception {
+		if(StringUtils.isBlank(dateStr)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
+			return null;
+		}
+		
+		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/report_gl.jrxml");
+		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
+		
+		Date date = ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT);
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		String monthStr;
+		int month = ((int) calendar.get(Calendar.MONTH) + 1);
+		if(month < 10) {
+			monthStr = "0" + month;
+		}else {
+			monthStr = "" + month;
+		}
+		
+		String period = calendar.get(Calendar.YEAR) + "00" + monthStr;
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("RECEIPT_DATE", dateStr);
+		parameters.put("PERIOD_NO", period);
+		
+		logger.info("dateStr : " + dateStr);
+		logger.info("period : " + period);
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
+		JRXlsxExporter exporter = new JRXlsxExporter();
+        exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+        exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, output);
+        exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+        exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+        exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+        exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+        exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+        exporter.exportReport();
+        
+        InputStream in = new BinaryStreamImpl(output.toByteArray());
+        
+        return new DefaultStreamedContent(in, "application/xls", "gl_accounting.xlsx");
+	}
+	
+//	public void showExcelGL() throws Exception {
+//		logger.info("showExcelGL start");
+//		
+//		result = false;
+//		
+//		if(StringUtils.isBlank(dateStr)) {
+//			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
+//			return;
+//		}
+//		
+//		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/report_gl.jrxml");
+//		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
+//		
+//		Map<String, Object> parameters = new HashMap<String, Object>();
+//		parameters.put("RECEIPT_DATE", dateStr);
+//		
+//        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//		response.setContentType("application/xls");
+//		response.setHeader("Content-disposition", "attachment; filename=" + "test" + ".xlsx");
+//		OutputStream out = response.getOutputStream();
+//		
+//		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, genConnection());
+//		JRXlsxExporter exporter = new JRXlsxExporter();
+//        exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+//        exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, out);
+//        exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+//        exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+//        exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+//        exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+//        exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+//        exporter.exportReport();
+//        FacesContext.getCurrentInstance().responseComplete();
+//		
+//		result = true;
+//		
+//		logger.info("showExcelGL end");
+//	}
 	
 	public InputStream genJasper() throws Exception {
 		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/report.jrxml");
@@ -235,7 +343,7 @@ public class DashboardController {
 		
         HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 		response.setContentType("application/xls");
-		response.setHeader("Content-disposition", "attachment; filename=" + "test" + ".xlsx");
+		response.setHeader("Content-disposition", "attachment; filename=" + "temp_accounting" + ".xlsx");
 		OutputStream out = response.getOutputStream();
 		
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(accountings));
@@ -260,7 +368,7 @@ public class DashboardController {
 		
         HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 		response.setContentType("application/xls");
-		response.setHeader("Content-disposition", "attachment; filename=" + "test" + ".xlsx");
+		response.setHeader("Content-disposition", "attachment; filename=" + "temp_data" + ".xlsx");
 		OutputStream out = response.getOutputStream();
 		
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(copReceiptTemps));
@@ -369,5 +477,13 @@ public class DashboardController {
 
 	public void setErpService(IERPService erpService) {
 		this.erpService = erpService;
+	}
+
+	public boolean isResult() {
+		return result;
+	}
+
+	public void setResult(boolean result) {
+		this.result = result;
 	}
 }
