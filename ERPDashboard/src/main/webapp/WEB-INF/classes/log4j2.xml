@@ -10,7 +10,7 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
         
-        <File name="file" fileName="/opt/glassfish5/glassfish/domains/domain1/logs/app.log">
+        <File name="file" fileName="C:\Users\NNoito\Desktop\Backup\app.log">
 	      <PatternLayout pattern="${LOG_PATTERN}"/>
 	    </File>
     </Appenders>
@@ -21,7 +21,7 @@
 
         <Root level="info">
             <AppenderRef ref="ConsoleAppender" />
-            <!-- <AppenderRef ref="file" /> -->
+            <AppenderRef ref="file" />
         </Root>
     </Loggers>
 </Configuration>

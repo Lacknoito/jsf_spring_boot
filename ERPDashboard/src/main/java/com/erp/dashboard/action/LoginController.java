@@ -1,14 +1,12 @@
 package com.erp.dashboard.action;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 
 import com.erp.dashboard.ERPSession;
 import com.erp.dashboard.entity.User;
@@ -16,10 +14,8 @@ import com.erp.dashboard.model.UserModel;
 import com.erp.dashboard.service.IERPService;
 import com.erp.dashboard.utils.SessionUtils;
 
-@Component
-@RequestScope
-@ManagedBean
-@RequestScoped
+@Scope(value = "session")
+@Component(value = "loginController")
 public class LoginController {
 	private User userLogin;
 	private String errorMessage;
@@ -71,5 +67,45 @@ public class LoginController {
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	public User getUserLogin() {
+		return userLogin;
+	}
+
+	public void setUserLogin(User userLogin) {
+		this.userLogin = userLogin;
+	}
+
+	public IERPService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(IERPService userService) {
+		this.userService = userService;
+	}
+
+	public ERPSession getErpSession() {
+		return erpSession;
+	}
+
+	public void setErpSession(ERPSession erpSession) {
+		this.erpSession = erpSession;
+	}
+
+	public UserModel getUserModel() {
+		return userModel;
+	}
+
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
+	}
+
+	public static Logger getLogger() {
+		return logger;
+	}
+
+	public static void setLogger(Logger logger) {
+		LoginController.logger = logger;
 	}
 }

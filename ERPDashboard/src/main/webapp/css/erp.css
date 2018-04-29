@@ -66,3 +66,13 @@ td { font-size: 12px; }
 	font-size: 10px;
 }
 
+.loadingerp{
+    width: 400px !important;
+    height: 100px !important;
+    z-index: 5022 !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-top: -50px !important;
+    margin-left: -200px !important;
+}

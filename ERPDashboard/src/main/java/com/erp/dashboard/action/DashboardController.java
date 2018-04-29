@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
@@ -25,8 +23,8 @@ import org.hibernate.engine.jdbc.internal.BinaryStreamImpl;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
 
 import com.erp.dashboard.ERPSession;
 import com.erp.dashboard.entity.Accounting;
@@ -35,7 +33,6 @@ import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
 import com.erp.dashboard.service.IERPService;
 import com.erp.dashboard.utils.ERPUtils;
-import com.erp.dashboard.utils.SessionUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,11 +47,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 
-@SuppressWarnings("deprecation")
-@Component
-@SessionScope
-@ManagedBean
-@SessionScoped
+@Scope(value = "session")
+@Component(value = "dashboardController")
 public class DashboardController {
 	private User userLogin;
 	private List<InfCopReceiptTempChart> ratings;
@@ -82,8 +76,6 @@ public class DashboardController {
 	
 	public void onload() {
 		try {
-			logger.info("UserId : " + SessionUtils.getUserId());
-			
 			userLogin = erpSession.getUser();
 			
 //			if(userLogin == null)
