@@ -46,6 +46,9 @@ public class LoginController {
     		User user = userService.checkUserLogin(new User(userModel.getUserName(), userModel.getPassword()));
 	    	
 	    	if(user != null) {
+	    		userLogin = new User();
+	    		userLogin.setUserName("test");
+	    		
 	    		erpSession.setUser(user);
 	    		
 	    		SessionUtils.setUserName("ERPTest");

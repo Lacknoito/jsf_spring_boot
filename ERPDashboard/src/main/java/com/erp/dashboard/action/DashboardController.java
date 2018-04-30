@@ -78,8 +78,8 @@ public class DashboardController {
 		try {
 			userLogin = erpSession.getUser();
 			
-//			if(userLogin == null)
-//				FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
+			if(userLogin == null)
+				FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
 			
 			datas = "[]";
 			dateStr = null;
