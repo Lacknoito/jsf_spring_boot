@@ -3,10 +3,10 @@ package com.erp.dashboard.model;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
-@Scope(value = "session")
+@SessionScope
 @Component(value = "userModel")
 public class UserModel {
 	private String userName;
