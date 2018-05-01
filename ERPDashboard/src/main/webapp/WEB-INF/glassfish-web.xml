@@ -7,5 +7,8 @@
 	            <property name="sessionFilename" value="sessionstate" />
 	        </manager-properties>
 	    </session-manager>
+	    <session-properties>
+			<property name="enableCookies" value="true"></property>
+		</session-properties>
 	</session-config>
 </glassfish-web-app>

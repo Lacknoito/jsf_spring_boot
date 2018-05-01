@@ -56,7 +56,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 	where r.ar_receipt_date >= to_date(:date,'MM/DD/YYYY')  ");
 		str.append(" 		and r.ar_receipt_date < to_date(:date,'MM/DD/YYYY') + 1  ");
 		str.append(" 		and r.ar_amount_dis <> 0 ");
-		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.ar_amount_header, r.record_status ");
+		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.ar_gl_date, r.ar_amount_header, r.record_status ");
 		str.append(" ) receiptTemp ");
 		str.append(" group by receiptTemp.Branchtype ");
 
@@ -149,22 +149,32 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 	, t.description as shopName ");
 		str.append(" 	, r.ar_receipt_date as arReceiptDate ");
 		str.append(" 	, r.ar_receipt_date as oldArReceiptDate ");
+		str.append(" 	, TO_CHAR(r.ar_gl_date, 'DD/MM/YYYY') as arGlDateStr ");
 		str.append(" 	, r.record_status as status ");
 		str.append(" 	, r.record_status as oldStatus ");
 		str.append(" 	, sum(case when r.ar_pos_type in ('TRAN','COD','OTHER','TOPUP','TUD','INSUR','ADJ1','ADJ3','VAT') then r.ar_amount_dis ");
 		str.append(" 		when r.ar_pos_type in ('LINEPAY','CREDIT BBL','CREDIT SCB','RABBIT','DISC','ADJ5','ADJ6','ADJ7') then -1*r.ar_amount_dis ");
 		str.append(" 		else r.ar_amount_dis end) as cash ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'RABBIT' then r.ar_amount_dis else 0 end) as rabit  ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT BBL' then r.ar_amount_dis else 0 end) as creditBBL ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT SCB' then r.ar_amount_dis else 0 end) as creditSCB ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'LINEPAY' then r.ar_amount_dis else 0 end) as linePay ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ1' then r.ar_amount_dis else 0 end) as bonus ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ2' then r.ar_amount_dis else 0 end) as adjOther ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ3' then r.ar_amount_dis else 0 end) as adjReturnCharge ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ4' then r.ar_amount_dis else 0 end) as suspense ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ5' then r.ar_amount_dis else 0 end) as withholdingTax ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ6' then r.ar_amount_dis else 0 end) as promotion ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'INSUR' then r.ar_amount_dis else 0 end) as insurance ");
+		str.append(" 	, sum(case when r.ar_pos_type = 'TRAN' then r.ar_amount_dis else 0 end) as freight "); 
+		str.append(" 	, sum(case when r.ar_pos_type = 'COD' then r.ar_amount_dis else 0 end) as cod "); 
+		str.append(" 	, sum(case when r.ar_pos_type = 'OTHER' then r.ar_amount_dis else 0 end) as packageSalePackage "); 
+		str.append(" 	, sum(case when r.ar_pos_type = 'LINEPAY' then r.ar_amount_dis else 0 end) as linePay ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT BBL' then r.ar_amount_dis else 0 end) as creditBBL ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT SCB' then r.ar_amount_dis else 0 end) as creditSCB ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'RABBIT' then r.ar_amount_dis else 0 end) as rabit ");  
+		str.append(" 	, sum(case when r.ar_pos_type in ('TOPUP', 'TUD') then r.ar_amount_dis else 0 end) as topup  "); 
+		str.append(" 	, sum(case when r.ar_pos_type = 'DISC' then r.ar_amount_dis else 0 end) as discount  "); 
+		str.append(" 	, sum(case when r.ar_pos_type = 'INSUR' then r.ar_amount_dis else 0 end) as insurance  "); 
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ1' then r.ar_amount_dis else 0 end) as bonus ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ2' then r.ar_amount_dis else 0 end) as adjOther ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ3' then r.ar_amount_dis else 0 end) as adjReturnCharge ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ4' then r.ar_amount_dis else 0 end) as suspense ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ5' then r.ar_amount_dis else 0 end) as withholdingTax ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ6' then r.ar_amount_dis else 0 end) as promotion ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ7' then r.ar_amount_dis else 0 end) as bankCharge ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ8' then r.ar_amount_dis else 0 end) as creditCard ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ9' then r.ar_amount_dis else 0 end) as adjLinePay ");  
+		str.append(" 	, sum(case when r.ar_pos_type = 'VAT' then r.ar_amount_dis else 0 end) as vat  ");
 		str.append(" from XXINF_COP_RECEIPT_TEMP r ");
 		str.append(" inner join FND_FLEX_VALUES b on b.FLEX_VALUE = r.ar_shop_name  ");
 		str.append(" 	and b.FLEX_VALUE_SET_ID = :valueSetId ");
@@ -183,7 +193,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 			str.append(" and r.ar_shop_name like '19%' ");
 		}else if(ERPUtils.REGIONAL_PARCEL_SHOP.equalsIgnoreCase(type)) {
 			str.append(" and r.ar_shop_name like '182%' ");
-		}else {
+		}else{
 			if(ERPUtils.REGION.T_BKK.equalsIgnoreCase(type)) {
 				str.append(" and r.ar_shop_name like :shop ");
 				param.put("shop", ERPUtils.REGION.V_BKK + "%");
@@ -217,7 +227,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 			}
 		}
 		
-		str.append(" group by r.ar_shop_name, t.description, r.ar_receipt_date, r.ar_amount_header, r.record_status ");
+		str.append(" group by r.ar_shop_name, t.description, r.ar_receipt_date, r.ar_gl_date, r.ar_amount_header, r.record_status ");
 		str.append(" order by r.ar_shop_name, r.ar_receipt_date, r.record_status ");
 		
 		Query query =  entityManager.unwrap(Session.class)
@@ -228,19 +238,29 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 				.addScalar("arReceiptDate")
 				.addScalar("oldArReceiptDate")
 				.addScalar("cash")
-				.addScalar("rabit")
+				.addScalar("freight")
+				.addScalar("cod")
+				.addScalar("packageSalePackage")
+				.addScalar("linePay")
 				.addScalar("creditBBL")
 				.addScalar("creditSCB")
-				.addScalar("linePay")
+				.addScalar("rabit")
+				.addScalar("topup")
+				.addScalar("discount")
+				.addScalar("insurance")
 				.addScalar("bonus")
 				.addScalar("adjOther")
 				.addScalar("adjReturnCharge")
 				.addScalar("suspense")
 				.addScalar("withholdingTax")
 				.addScalar("promotion")
-				.addScalar("insurance")
+				.addScalar("bankCharge")
+				.addScalar("creditCard")
+				.addScalar("adjLinePay")
+				.addScalar("vat")
 				.addScalar("status")
 				.addScalar("oldStatus")
+				.addScalar("arGlDateStr")
 				.setResultTransformer(Transformers.aliasToBean(InfCopReceiptTemp.class));
 		
 		ERPUtils.setParameterByMap(param, query);

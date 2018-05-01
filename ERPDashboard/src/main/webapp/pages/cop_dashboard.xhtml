@@ -203,15 +203,25 @@
 									<div class="panel-body">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<div class="col-sm-11 text-center" id="divChart1">
-													<h:panelGroup id="canvasGroup">
-														<div id="chartdiv1" onclick="divChartClick()" class="chartdiv"></div>
-													</h:panelGroup>
+												<div class="row">
+													<div class="col-12" style="text-align: right">
+														<p:commandButton ajax="false" value="Export All" styleClass="btn btn-info"
+																onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+													        <p:fileDownload value="#{copDashboardController.showAllTransactionExcel}" />
+													    </p:commandButton>
+													</div>
 												</div>
-												<div class="col-sm-1 text-center" id="divChart2">
-													<h:panelGroup id="canvasGroupPS">
-														<div id="chartdiv2" onclick="divChartClick()" class="chartdiv"></div>
-													</h:panelGroup>
+												<div class="row">
+													<div class="col-sm-11 text-center" id="divChart1">
+														<h:panelGroup id="canvasGroup">
+															<div id="chartdiv1" onclick="divChartClick()" class="chartdiv"></div>
+														</h:panelGroup>
+													</div>
+													<div class="col-sm-1 text-center" id="divChart2">
+														<h:panelGroup id="canvasGroupPS">
+															<div id="chartdiv2" onclick="divChartClick()" class="chartdiv"></div>
+														</h:panelGroup>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -232,18 +242,28 @@
 														<th>ERP ID</th>
 														<th>Branch</th>
 														<th>Receipt Date</th>
+														<th>GL Date</th>
 														<th>Cash</th>
-														<th>Rabbit</th>
+														<th>Freight</th>
+														<th>COD</th>
+														<th>Package+Sale Package</th>
+														<th>Line Pay</th>
 														<th>Card (BBL)</th>
 														<th>Card (SCB)</th>
-														<th>LinePay</th>
+														<th>Rabbit</th>
+														<th>Topup</th>
+														<th>Discount</th>
+														<th>Insurance</th>
 														<th>Bonus Commission</th>
 														<th>AdjOther</th>
 														<th>Return Charge</th>
 														<th>Suspense</th>
-														<th>With Holding Tax</th>
+														<th>Withholding Tax</th>
 														<th>Promotion</th>
-														<th>Insurance</th>
+														<th>Bank Charge</th>
+														<th>Credit Card</th>
+														<th>Adj Line Pay</th>
+														<th>VAT</th>
 														<th>Status</th>
 													</tr>
 												</thead>
@@ -257,18 +277,28 @@
 															<td><h:inputText value="#{receipt.arReceiptDateStr}"
 																	styleClass="form-control datepicker dateintable datepicker-inmodel"></h:inputText>
 															</td>
+															<td>#{receipt.arGlDateStr}</td>
 															<td>#{receipt.cash}</td>
-															<td>#{receipt.rabit}</td>
+															<td>#{receipt.freight}</td>
+															<td>#{receipt.cod}</td>
+															<td>#{receipt.packageSalePackage}</td>
+															<td>#{receipt.linePay}</td>
 															<td>#{receipt.creditBBL}</td>
 															<td>#{receipt.creditSCB}</td>
-															<td>#{receipt.linePay}</td>
+															<td>#{receipt.rabit}</td>
+															<td>#{receipt.topup}</td>
+															<td>#{receipt.discount}</td>
+															<td>#{receipt.insurance}</td>
 															<td>#{receipt.bonus}</td>
 															<td>#{receipt.adjOther}</td>
 															<td>#{receipt.adjReturnCharge}</td>
 															<td>#{receipt.suspense}</td>
 															<td>#{receipt.withholdingTax}</td>
 															<td>#{receipt.promotion}</td>
-															<td>#{receipt.insurance}</td>
+															<td>#{receipt.bankCharge}</td>
+															<td>#{receipt.creditCard}</td>
+															<td>#{receipt.adjLinePay}</td>
+															<td>#{receipt.vat}</td>
 															<td><input class="toggle-demo toggle-w" type="checkbox"
 																checked="#{receipt.status == 'N' ? '' : 'check'}"
 																disabled="#{receipt.status == 'N' ? 'disabled' : ''}"

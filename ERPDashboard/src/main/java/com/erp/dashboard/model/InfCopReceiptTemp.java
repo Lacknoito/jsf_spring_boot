@@ -12,6 +12,7 @@ public class InfCopReceiptTemp implements Serializable {
 	private String shopName;
 	private String arReceiptDateStr;
 	private Date arReceiptDate;
+	private String arGlDateStr;
 	private Date oldArReceiptDate;
 	private BigDecimal amountHeader;
 	private BigDecimal cash;
@@ -28,6 +29,15 @@ public class InfCopReceiptTemp implements Serializable {
 	private String status;
 	private String oldStatus;
 	private BigDecimal insurance;
+	private BigDecimal freight;
+	private BigDecimal cod;
+	private BigDecimal packageSalePackage;
+	private BigDecimal topup;
+	private BigDecimal discount;
+	private BigDecimal bankCharge;
+	private BigDecimal creditCard;
+	private BigDecimal adjLinePay;
+	private BigDecimal vat;
 	
 	public Integer getRownum() {
 		return rownum;
@@ -157,5 +167,65 @@ public class InfCopReceiptTemp implements Serializable {
 	}
 	public void setArReceiptDateStr(String arReceiptDateStr) {
 		this.arReceiptDateStr = arReceiptDateStr;
+	}
+	public BigDecimal getFreight() {
+		return freight;
+	}
+	public void setFreight(BigDecimal freight) {
+		this.freight = freight;
+	}
+	public BigDecimal getCod() {
+		return cod;
+	}
+	public void setCod(BigDecimal cod) {
+		this.cod = cod;
+	}
+	public BigDecimal getPackageSalePackage() {
+		return packageSalePackage;
+	}
+	public void setPackageSalePackage(BigDecimal packageSalePackage) {
+		this.packageSalePackage = packageSalePackage;
+	}
+	public BigDecimal getTopup() {
+		return topup;
+	}
+	public void setTopup(BigDecimal topup) {
+		this.topup = topup;
+	}
+	public BigDecimal getDiscount() {
+		return discount;
+	}
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
+	}
+	public BigDecimal getBankCharge() {
+		return bankCharge;
+	}
+	public void setBankCharge(BigDecimal bankCharge) {
+		this.bankCharge = bankCharge;
+	}
+	public BigDecimal getCreditCard() {
+		return creditCard;
+	}
+	public void setCreditCard(BigDecimal creditCard) {
+		this.creditCard = creditCard;
+	}
+	public BigDecimal getAdjLinePay() {
+		return adjLinePay;
+	}
+	public void setAdjLinePay(BigDecimal adjLinePay) {
+		this.adjLinePay = adjLinePay;
+	}
+	public BigDecimal getVat() {
+		return vat;
+	}
+	public void setVat(BigDecimal vat) {
+		this.vat = vat;
+	}
+	public String getArGlDateStr() {
+		return arGlDateStr;
+	}
+	public void setArGlDateStr(String arGlDateStr) {
+		this.arGlDateStr = arGlDateStr;
 	}
 }
