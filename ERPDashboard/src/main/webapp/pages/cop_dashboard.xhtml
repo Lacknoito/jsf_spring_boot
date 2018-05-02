@@ -49,29 +49,18 @@
 							class="waves-effect fullscreen-button"><i class="icon-frame"></i></a>
 						<span class="clearfix"></span>
 					</div>
-
-					<ul class="nav navbar-nav navbar-right pull-right">
-						<li class="dropdown"><a href="javascript:void();"
-							class="dropdown-toggle profile" data-toggle="dropdown"
-							aria-expanded="true"><img
-								src="../images/gear-settings.png" alt="user-img"
-								class="img-circle" /> </a>
-							<ul class="dropdown-menu">
-								<h:form>
-									<li class="dropdown-user" style="padding-left: 10px;padding-bottom: 5px;padding-top: 5px;">
-                                          <div class="media-heading"><h5>User Name : #{copDashboardController.userLogin.userName}</h5></div>
-                                    </li>
-									<li class="divider"></li>
-									<li style="padding-left: 10px;">
-							            <h:commandLink
-							       			action="#{dashboardController.onLogout}">
-							       			<i class="icon-power"></i>
-							       			<h:outputLabel value="Logout" style="padding-left: 5px;"></h:outputLabel>
-							       		</h:commandLink>
-							          </li>
-								</h:form>
-							</ul></li>
-					</ul>
+					<div class="pull-right">
+						<h:form>
+								<h:commandLink
+					       			action="#{dashboardController.onLogout}" class="logout-button" title="Log out">
+					       			<i class="glyphicon glyphicon-log-out"></i>
+					       		</h:commandLink>
+					       		<span class="clearfix"></span>
+					    </h:form>
+					</div>
+					<div class="lbl-username pull-right">
+						#{erpSession.user.userName}
+					</div>
 				</div>
 			</div>
 		</header>
@@ -91,7 +80,7 @@
 									<li>
 										<h:commandLink 
 											action="#{dashboardController.onPageCopDashboard}">
-											<i class="fa fa-hand-o-right"></i>
+											<i class="fa fa-circle circlr-ic" style="font-size:8px"></i>
 											<h:outputLabel value="COP Dashboard" style="padding-left: 5px;"></h:outputLabel>
 										</h:commandLink>
 									</li>
@@ -112,105 +101,81 @@
 							<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true">
 		   		 			</p:messages>
 						</div>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="panel panel-default">
-									<div class="panel-body">
-										<div class="row">
-											<div class="col-sm-5" style="text-align: right;">
-												<h4>
-													<i class="icon-calendar"></i> Receipt Date
-												</h4>
-											</div>
-											<div class="col-sm-7">
-												<h:inputText id="dateStrId" value="#{copDashboardController.dateStr}"
-													styleClass="form-control datepicker"></h:inputText>
-											</div>
+					
+						<div class="panel panel-default" style="border-top: 3px solid #FAA945">
+							<div class="panel-title">
+								<div class="row">
+									<div class="col-md-12 col-sm-12" style="padding-left:20px">
+										<h4 style="font-size:20px;">COP Dashboard</h4>
+									</div>
+								</div>
+							
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-4 col-sm-12">
+										<div class="col-sm-5" style="text-align: center;">
+											<h5>Receipt Date</h5>
+										</div>
+										<div class="col-sm-7">
+											<div class="input-group date">
+							                  <div class="input-group-addon">
+							                    <i class="fa fa-calendar"></i>
+							                  </div>
+							                 <h:inputText id="dateStrId" value="#{copDashboardController.dateStr}"
+																				styleClass="form-control datepicker"></h:inputText>
+							                </div>
 										</div>
 									</div>
-								</div>
-							</div>
-
-							<!--Button View-->
-							<div class="col-lg-2 col-sm-6 col-xs-12">
-								<div class="card p-20 bg-rose">
-									<div class="media">
-										<div class="media-body">
-											<div class="col-sm-6 text-left">
-												<p:commandLink update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
-								             			actionListener="#{copDashboardController.updateReceiptTempChart}"
-								             			oncomplete="clearDivChart()">
-												    <h:graphicImage value="../images/pie-chart-stats.png" />
-												</p:commandLink>
-											</div>
-											<div class="col-sm-6 text-right">
-												<p:commandLink update="canvasGroup, canvasGroupJs, canvasGroupPSJs" 
-								             			actionListener="#{copDashboardController.updateReceiptTempChart}"
-								             			oncomplete="clearDivChart()">
-												    <h4 class="text-white">View Report</h4>
-												</p:commandLink>
-											</div>
-										</div>
+									<div class="col-md-8 col-sm-12">
+										  <a class="btn btn-success" onclick="ViewGraphFN()">
+							                	<i class="fa fa-pie-chart"></i> View Graph
+							              </a>
+							              <a class="btn btn-info" onclick="ViewAccountingTempFN()">
+							                	<i class="fa fa-area-chart"></i> View Accounting Temp
+							              </a>
+							              
+							              <p:commandLink ajax="false"  styleClass="btn btn-default" style="margin-left: 5px;"
+												onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-bar-chart">
+											<i class="fa fa-bar-chart"></i> View Accounting Temp
+									        <p:fileDownload value="#{copDashboardController.showExcelGL}" />
+									      </p:commandLink>
 									</div>
-								</div>
-							</div>
-							<div class="col-lg-2 col-sm-6 col-xs-12">
-								<div class="card p-20 bg-blue">
-									<div class="media">
-										<div class="col-sm-5 text-left">
-												<p:commandLink actionListener="#{copDashboardController.showPDF}"
-					  								update="pdfId" oncomplete="showModalPDF()">
-												    <h:graphicImage value="../images/book-opened-symmetrical-shape.png" />
-												</p:commandLink>
-											</div>
-											<div class="col-sm-6 text-right">
-												<p:commandLink actionListener="#{copDashboardController.showPDF}"
-					  								update="pdfId" oncomplete="showModalPDF()">
-												    <h6 class="text-white">View Accounting Temp</h6>
-												</p:commandLink>
-											</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-2 col-sm-6 col-xs-12">
-								<div class="card p-20 bg-blue"  >
-									<div class="media">
-										<div class="col-sm-5 text-left">
-												<p:commandLink ajax="false" 
-														onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-												    <h:graphicImage value="../images/book-opened-symmetrical-shape.png" />
-											        <p:fileDownload value="#{copDashboardController.showExcelGL}" />
-											    </p:commandLink>
-											</div>
-											<div class="col-sm-7 text-right">
-												<p:commandLink ajax="false" 
-														onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-												    <h6 class="text-white">View Accounting GL</h6>
-											        <p:fileDownload value="#{copDashboardController.showExcelGL}" />
-											    </p:commandLink>
-											</div>
-									</div>
+									
+									<p:remoteCommand name="ViewGraphFN" update="canvasGroup, canvasGroupJs, canvasGroupPSJs"
+										actionListener="#{copDashboardController.updateReceiptTempChart}"
+										oncomplete="clearDivChart()" />
+										
+									<p:remoteCommand name="ViewAccountingTempFN" update="pdfId"
+										actionListener="#{copDashboardController.showPDF}"
+										oncomplete="showModalPDF()" />
 								</div>
 							</div>
 						</div>
 						<br />
 						<div class="row">
 							<div class="col-lg-12">
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-										<i class="fa fa-bar-chart-o fa-fw"></i>Graphs
+								<div class="panel panel-default" style="border-top: 3px solid #FAA945;">
+									<div class="panel-title">
+										
+										<div class="row">
+											<div class="col-md-6 col-sm-12" style="padding-left:20px">
+												<h4 style="font-size:20px;"><i class="fa fa-bar-chart-o fa-fw"></i>Graph</h4>
+											</div>
+											<div class="col-md-6 col-sm-12" style="text-align:right">
+											    <p:commandLink ajax="false"  styleClass="btn btn-warning" style="margin-left: 5px;"
+														onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download">
+													<i class="fa fa-download"></i> Export All
+											        <p:fileDownload value="#{copDashboardController.showAllTransactionExcel}" />
+											      </p:commandLink>
+											</div>
+										</div>
+										
 									</div>
 									<div class="panel-body">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<div class="row">
-													<div class="col-12" style="text-align: right">
-														<p:commandButton ajax="false" value="Export All" styleClass="btn btn-info"
-																onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-													        <p:fileDownload value="#{copDashboardController.showAllTransactionExcel}" />
-													    </p:commandButton>
-													</div>
-												</div>
+												
 												<div class="row">
 													<div class="col-sm-11 text-center" id="divChart1">
 														<h:panelGroup id="canvasGroup">
@@ -312,14 +277,14 @@
 										</h:panelGroup>
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-primary"
+										<button type="button" class="btn btn-success"
 											onclick="saveReceiptTempJs()">Save</button>
 
 										<h:commandButton value="export excel"
 											styleClass="btn btn-info"
 											action="#{copDashboardController.exportTransactionExcel}" />
 
-										<button type="button" class="btn btn-default"
+										<button type="button" class="btn btn-danger"
 											data-dismiss="modal">Close</button>
 									</div>
 								</div>
@@ -364,9 +329,9 @@
 							closable="false" resizable="false" 
 							showHeader="false"
 							styleClass="loadingerp">
-							<div class="row" style="width: 100%;height: 100%">
+							<div class="row" style="width: 100%;height: 100%; margin-top:20px; padding-left:50px;">
 								<div class="col-sm-4" style="text-align: right;">
-									<img src="../images/45.gif" />
+									<img src="../images/45.gif" style="width: 40px; "/>
 								</div>
 								<div class="col-sm-8" style="text-align: left;vertical-align: middle;">
 						    		<h4 >Loading...</h4>

@@ -130,6 +130,24 @@ ul li {
   text-align: center;
   width: 30px;
 }
+
+.btn-app {
+    border-radius: 3px;
+    position: relative;
+    padding: 15px 5px;
+    margin: 0 0 10px 10px;
+    min-width: 80px;
+    height: 60px;
+    text-align: center;
+    color: #666;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    font-size: 12px;
+}
+.btn-app>.fa, .btn-app>.glyphicon, .btn-app>.ion {
+    font-size: 20px;
+    display: block;
+}
 /* ==============
   Bootstrap-custom
 ===================*/
@@ -573,7 +591,7 @@ input[type=month].form-control {
 }
 
  label{
-    color: #75787d;
+    
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -1630,7 +1648,7 @@ form.striped-rows .form-group:nth-child(2n) {
     border-radius: 3px;
     border: 1px solid #eeeeee;
     background-color: #e9ecef;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid #dddddd;
 }
 
 .has-success .form-control-feedback {
@@ -2511,9 +2529,9 @@ table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
 .btn-default:focus,
 .btn-default:active
  {
-    background-color: #fff !important;
-    border: 1px solid #bfc2c7 !important;
-    color: #000 !important;
+    background-color: #5D8CAE !important;
+    border: 1px solid #5D8CAE !important;
+    color: #FFFFFF !important;
 }
 
 
@@ -2521,37 +2539,37 @@ table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active {
-  background-color: #9c27b0 !important;
-  border: 1px solid #9c27b0 !important;
+  background-color: #5D9CEC !important;
+  border: 1px solid #5D9CEC !important;
 }
 .btn-success,
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:active {
-  background-color: #4caf50 !important;
-  border: 1px solid #4caf50 !important;
+  background-color: #37BC9B !important;
+  border: 1px solid #37BC9B !important;
 }
 .btn-info,
 .btn-info:hover,
 .btn-info:focus,
 .btn-info:active {
-  background-color: #0acae2 !important;
-  border: 1px solid #0acae2 !important;
+  background-color: #3BAFDA !important;
+  border: 1px solid #3BAFDA !important;
 }
 .btn-warning,
 .btn-warning:hover,
 .btn-warning:focus,
 .btn-warning:active {
-  background-color: #ffa200 !important;
-  border: 1px solid #ffa200 !important;
+  background-color: #F6BB42 !important;
+  border: 1px solid #F6BB42 !important;
  
 }
 .btn-danger,
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:hover {
-  background-color: #ff3e43 !important;
-  border: 1px solid #ff3e43 !important;
+  background-color: #ED5565 !important;
+  border: 1px solid #ED5565 !important;
 }
 .btn-black,
 .btn-black:hover,
@@ -3260,7 +3278,8 @@ table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
   font-size: 14px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  font-weight: 600;                       
+  font-weight: 600; 
+  padding:10px;                      
 }
 
 .panel-default > .panel-heading {
@@ -3270,11 +3289,11 @@ table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
 }
 
 
-.panel-primary > .panel-heading {
+/* .panel-primary > .panel-heading {
   color: #fff;
   border-bottom: 1px solid #000000;
   background-color: #000000;
-}
+} */
 
 
 .panel-info > .panel-heading {
@@ -5770,9 +5789,9 @@ div.dataTables_info {
   top: 8px;
 }
 .profile img {
-  border: 2px solid #0acae2;
-  height: 40px;
-  width: 40px;
+ 
+  height: 20px;
+  width: 20px;
 }
 .dropdown-lg {
   width: 320px;
@@ -5918,6 +5937,23 @@ body.fixed-left .side-menu.left {
   line-height: 60px;
   padding: 0px 25px 0px 10px;
 }
+.lbl-username{
+ 
+  border: none;
+  color: #888888;
+  font-size: 14px;
+  line-height: 60px;
+  padding: 0px 15px;
+}
+
+.logout-button {
+  background: transparent;
+  border: none;
+  color: #888888;
+  font-size: 16px;
+  line-height: 60px;
+  padding: 0px 10px 0px 10px;
+}
 
 .button-menu-mobile:hover {
   color: #212121;
@@ -5957,7 +5993,7 @@ body.fixed-left .side-menu.left {
   color: #ffffff;
 }
 #sidebar-menu ul ul a {
-  color: #75798B;
+  color: #FFFFFF;
   display: block;
   padding: 10px 25px 10px 64px;
 }
@@ -6052,7 +6088,7 @@ body.fixed-left .side-menu.left {
   width: 190px;
 }
 #wrapper.collapse-menu .left.side-menu #sidebar-menu ul > li:hover > ul a {
-  background: #ffffff;
+  background: #666c6f;
   border-left: 3px solid #edf0f0;
   border: none;
   box-shadow: none;
@@ -9006,3 +9042,4 @@ Keyframes
             transform: scale(0.9);
   }
 }
+
