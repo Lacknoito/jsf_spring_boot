@@ -288,7 +288,7 @@ public class COPDashboardController {
 		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/transaction_excel.jrxml");
 		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
 		
-		copReceiptTemps = erpService.getReceiptTempDetail(null, ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+		copReceiptTemps = erpService.getReceiptTempDetail("ALL", ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("RECEIPT_DATE", dateStr);
@@ -309,6 +309,42 @@ public class COPDashboardController {
         InputStream in = new BinaryStreamImpl(output.toByteArray());
         
         return new DefaultStreamedContent(in, "application/xls", "receipt_temp.xlsx");
+	}
+	
+	public StreamedContent getShowAllDCSPExcel() throws Exception {
+		if(StringUtils.isBlank(dateStr)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
+			
+			datas = "[]";
+			chartPS = "[]";
+			
+			return null;
+		}
+		
+		String fullPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/WEB-INF/report/transaction_excel.jrxml");
+		JasperReport jasperReport = JasperCompileManager.compileReport(fullPath);
+		
+		copReceiptTemps = erpService.getReceiptTempDetail("DCSP", ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("RECEIPT_DATE", dateStr);
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(copReceiptTemps));
+		JRXlsxExporter exporter = new JRXlsxExporter();
+        exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+        exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, output);
+        exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+        exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+        exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+        exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+        exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+        exporter.exportReport();
+        
+        InputStream in = new BinaryStreamImpl(output.toByteArray());
+        
+        return new DefaultStreamedContent(in, "application/xls", "dcsp.xlsx");
 	}
 	
 //	public void showExcelGL() throws Exception {

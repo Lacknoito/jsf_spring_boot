@@ -137,7 +137,7 @@
 							              
 							              <p:commandLink ajax="false"  styleClass="btn btn-default" style="margin-left: 5px;"
 												onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-bar-chart">
-											<i class="fa fa-bar-chart"></i> View Accounting Temp
+											<i class="fa fa-bar-chart"></i> View Accounting GL
 									        <p:fileDownload value="#{copDashboardController.showExcelGL}" />
 									      </p:commandLink>
 									</div>
@@ -183,9 +183,18 @@
 														</h:panelGroup>
 													</div>
 													<div class="col-sm-1 text-center" id="divChart2">
-														<h:panelGroup id="canvasGroupPS">
-															<div id="chartdiv2" onclick="divChartClick()" class="chartdiv"></div>
-														</h:panelGroup>
+														<div class="row">
+															<h:panelGroup id="canvasGroupPS">
+																<div id="chartdiv2" onclick="divChartClick()" class="chartdiv"></div>
+															</h:panelGroup>
+														</div>
+														<div class="row" id="ExportDCSP" >
+															<p:commandLink ajax="false" styleClass="btn btn-warning" style="margin-left: 5px;"
+																	onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download">
+																<i class="fa fa-download"></i> Export DCSP
+														        <p:fileDownload value="#{copDashboardController.showAllDCSPExcel}" />
+														      </p:commandLink>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -208,7 +217,7 @@
 														<th>Branch</th>
 														<th>Receipt Date</th>
 														<th>GL Date</th>
-														<th>Cash</th>
+														<th>Transfer</th>
 														<th>Freight</th>
 														<th>COD</th>
 														<th>Package+Sale Package</th>
@@ -240,6 +249,7 @@
 															<td>#{receipt.shopCode}</td>
 															<td>#{receipt.shopName}</td>
 															<td><h:inputText value="#{receipt.arReceiptDateStr}"
+																	disabled="#{receipt.status == 'N'}"
 																	styleClass="form-control datepicker dateintable datepicker-inmodel"></h:inputText>
 															</td>
 															<td>#{receipt.arGlDateStr}</td>
@@ -391,6 +401,8 @@
 
 	<h:panelGroup id="canvasGroupJs">
 		<h:outputScript>
+				$("#ExportDCSP").hide();
+				
 	    		AmCharts.makeChart("chartdiv1", {
 	    		  "type": "pie",
 				  "theme": "light",
@@ -403,7 +415,7 @@
 				   "balloon":{
 				   "fixedPosition":true
 				  },
-				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeader]]",
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeaderStr]]",
 				  "export": {
 				    "enabled": false
 				  },
@@ -413,7 +425,7 @@
 					    		document.getElementById("formId:x").value = e.dataItem.title;
 					    		
 						    	if(e.dataItem.title == 'BSD'
-						          		|| e.dataItem.title == 'DC'
+						          		|| e.dataItem.title == 'FC/KE'
 						          		|| e.dataItem.title == 'UPC'){
 							      		selectItemFromChart();
 						          	}else{
@@ -424,6 +436,8 @@
 						          		
 						          		$("#divChart2").removeClass("col-sm-1");
 						          		$("#divChart2").addClass("col-sm-6");
+						          		
+						          		$("#ExportDCSP").show();
 						          	}
 					    }}]
 				} );
@@ -445,7 +459,7 @@
 				   "balloon":{
 				   "fixedPosition":true
 				  },
-				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeader]]",
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeaderStr]]",
 				  "export": {
 				    "enabled": false
 				  },
@@ -480,9 +494,8 @@
 		<h:panelGroup id="datepickerJs">
 			<h:outputScript>	
 					$('.toggle-demo').bootstrapToggle({
-						on: '',
-				      	off: '',
-						size: 'small'
+						on: 'Active',
+				      	off: 'Inactive'
 				    });
 				
 					var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";

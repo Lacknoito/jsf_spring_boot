@@ -7,6 +7,7 @@ import com.erp.dashboard.entity.Accounting;
 import com.erp.dashboard.entity.User;
 import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
+import com.erp.dashboard.model.api.AgentServiceFee;
 import com.erp.dashboard.model.api.InfCopReceiptTempAPI;
 
 
@@ -19,4 +20,5 @@ public interface IERPService {
 	public void insertInfCOPReceiptTemp(List<InfCopReceiptTempAPI> copReceiptTemps);
 	public List<String> queryCostCenterByName(String name);
 	public List<Accounting> queryAccountingByDate(String date);
+	public void insertPRCommissionTempList(List<AgentServiceFee> agentServiceFees);
 }

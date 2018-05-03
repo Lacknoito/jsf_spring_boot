@@ -3,6 +3,8 @@ package com.erp.dashboard.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.erp.dashboard.utils.ERPUtils;
+
 
 public class InfCopReceiptTempChart implements Serializable {
 	private static final long serialVersionUID = 12412415644L;
@@ -30,5 +32,11 @@ public class InfCopReceiptTempChart implements Serializable {
 	}
 	public void setAmountHeader(BigDecimal amountHeader) {
 		this.amountHeader = amountHeader;
+	}
+	public String getCountStr() {
+		return ERPUtils.convertNumberToStringFormat(count, ERPUtils.SIMPLE_NUMBER);
+	}
+	public String getAmountHeaderStr() {
+		return ERPUtils.convertNumberToStringFormat(amountHeader, ERPUtils.SIMPLE_NUMBER_DECIMAL);
 	}
 }

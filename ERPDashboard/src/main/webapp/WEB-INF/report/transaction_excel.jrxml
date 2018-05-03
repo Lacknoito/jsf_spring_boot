@@ -128,7 +128,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[Cash]]></text>
+				<text><![CDATA[Transfer]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="855" y="0" width="65" height="30" uuid="e3a827e7-93de-4c9e-ae61-ac77a2c99b25">

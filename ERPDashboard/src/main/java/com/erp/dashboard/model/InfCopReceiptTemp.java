@@ -38,6 +38,7 @@ public class InfCopReceiptTemp implements Serializable {
 	private BigDecimal creditCard;
 	private BigDecimal adjLinePay;
 	private BigDecimal vat;
+	private String arSource;
 	
 	public Integer getRownum() {
 		return rownum;
@@ -227,5 +228,11 @@ public class InfCopReceiptTemp implements Serializable {
 	}
 	public void setArGlDateStr(String arGlDateStr) {
 		this.arGlDateStr = arGlDateStr;
+	}
+	public String getArSource() {
+		return arSource;
+	}
+	public void setArSource(String arSource) {
+		this.arSource = arSource;
 	}
 }

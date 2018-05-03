@@ -1,8 +1,6 @@
 package com.erp.dashboard.dao;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,9 +43,9 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 		else receiptTemp.ar_amount_header end) as amountHeader ");
 		str.append(" from ( ");
 		str.append(" 	select case when r.ar_shop_name = '181002' then :bsd ");
-		str.append(" 		when r.ar_shop_name like '19%' then :dc ");
+		str.append(" 		when r.ar_shop_name like '19%' then :fc_ke ");
 		str.append(" 		when r.ar_shop_name like '182%' then :upc ");
-		str.append(" 		else :fc_ke end as branchType, r.ar_amount_header ");
+		str.append(" 		else :dc end as branchType, sum(r.ar_amount_header) as ar_amount_header ");
 		str.append(" 		, r.record_status ");
 		str.append(" 	from XXINF_COP_RECEIPT_TEMP r ");
 		str.append(" 	inner join FND_FLEX_VALUES b on b.FLEX_VALUE = r.ar_shop_name ");
@@ -56,7 +54,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 	where r.ar_receipt_date >= to_date(:date,'MM/DD/YYYY')  ");
 		str.append(" 		and r.ar_receipt_date < to_date(:date,'MM/DD/YYYY') + 1  ");
 		str.append(" 		and r.ar_amount_dis <> 0 ");
-		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.ar_gl_date, r.ar_amount_header, r.record_status ");
+		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.ar_gl_date, r.record_status ");
 		str.append(" ) receiptTemp ");
 		str.append(" group by receiptTemp.Branchtype ");
 
@@ -98,7 +96,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 			when r.ar_shop_name like '109%' then :dcsp ");
 		str.append(" 			when r.ar_shop_name like '181%' then :bsd ");
 		str.append(" 			else r.ar_shop_name end as branchType ");
-		str.append(" 		, r.ar_amount_header, r.record_status  ");
+		str.append(" 		, sum(r.ar_amount_header) as ar_amount_header, r.record_status  ");
 		str.append(" 	from XXINF_COP_RECEIPT_TEMP r  ");
 		str.append(" 	inner join FND_FLEX_VALUES b on b.FLEX_VALUE = r.ar_shop_name  ");
 		str.append(" 		and b.FLEX_VALUE_SET_ID = :valueSetId ");
@@ -109,7 +107,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		str.append(" 		and r.ar_shop_name not like '182%' ");
 		str.append(" 		and r.ar_shop_name not like '19%' ");
 		str.append(" 		and r.ar_amount_dis <> 0 ");
-		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.ar_amount_header, r.record_status ");
+		str.append(" 	group by r.ar_shop_name, r.ar_receipt_date, r.record_status ");
 		str.append(" ) receiptTemp  ");
 		str.append(" group by receiptTemp.Branchtype ");
 
@@ -137,138 +135,235 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 		return copReceiptTemps;
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
 	public List<InfCopReceiptTemp> getReceiptTempDetail(String type, Date date){
-		Map<String, Object> param = new HashMap<String, Object>();
 		
-		StringBuilder str = new StringBuilder();
-		str.append(" select ");
-		str.append(" 	r.ar_shop_name as shopCode ");
-		str.append(" 	, r.ar_amount_header as amountHeader ");
-		str.append(" 	, t.description as shopName ");
-		str.append(" 	, r.ar_receipt_date as arReceiptDate ");
-		str.append(" 	, r.ar_receipt_date as oldArReceiptDate ");
-		str.append(" 	, TO_CHAR(r.ar_gl_date, 'DD/MM/YYYY') as arGlDateStr ");
-		str.append(" 	, r.record_status as status ");
-		str.append(" 	, r.record_status as oldStatus ");
-		str.append(" 	, sum(case when r.ar_pos_type in ('TRAN','COD','OTHER','TOPUP','TUD','INSUR','ADJ1','ADJ3','VAT') then r.ar_amount_dis ");
-		str.append(" 		when r.ar_pos_type in ('LINEPAY','CREDIT BBL','CREDIT SCB','RABBIT','DISC','ADJ5','ADJ6','ADJ7') then -1*r.ar_amount_dis ");
-		str.append(" 		else r.ar_amount_dis end) as cash ");
-		str.append(" 	, sum(case when r.ar_pos_type = 'TRAN' then r.ar_amount_dis else 0 end) as freight "); 
-		str.append(" 	, sum(case when r.ar_pos_type = 'COD' then r.ar_amount_dis else 0 end) as cod "); 
-		str.append(" 	, sum(case when r.ar_pos_type = 'OTHER' then r.ar_amount_dis else 0 end) as packageSalePackage "); 
-		str.append(" 	, sum(case when r.ar_pos_type = 'LINEPAY' then r.ar_amount_dis else 0 end) as linePay ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT BBL' then r.ar_amount_dis else 0 end) as creditBBL ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT SCB' then r.ar_amount_dis else 0 end) as creditSCB ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'RABBIT' then r.ar_amount_dis else 0 end) as rabit ");  
-		str.append(" 	, sum(case when r.ar_pos_type in ('TOPUP', 'TUD') then r.ar_amount_dis else 0 end) as topup  "); 
-		str.append(" 	, sum(case when r.ar_pos_type = 'DISC' then r.ar_amount_dis else 0 end) as discount  "); 
-		str.append(" 	, sum(case when r.ar_pos_type = 'INSUR' then r.ar_amount_dis else 0 end) as insurance  "); 
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ1' then r.ar_amount_dis else 0 end) as bonus ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ2' then r.ar_amount_dis else 0 end) as adjOther ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ3' then r.ar_amount_dis else 0 end) as adjReturnCharge ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ4' then r.ar_amount_dis else 0 end) as suspense ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ5' then r.ar_amount_dis else 0 end) as withholdingTax ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ6' then r.ar_amount_dis else 0 end) as promotion ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ7' then r.ar_amount_dis else 0 end) as bankCharge ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ8' then r.ar_amount_dis else 0 end) as creditCard ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ9' then r.ar_amount_dis else 0 end) as adjLinePay ");  
-		str.append(" 	, sum(case when r.ar_pos_type = 'VAT' then r.ar_amount_dis else 0 end) as vat  ");
-		str.append(" from XXINF_COP_RECEIPT_TEMP r ");
-		str.append(" inner join FND_FLEX_VALUES b on b.FLEX_VALUE = r.ar_shop_name  ");
-		str.append(" 	and b.FLEX_VALUE_SET_ID = :valueSetId ");
-		str.append(" inner join FND_FLEX_VALUES_TL t on b.FLEX_VALUE_ID = t.FLEX_VALUE_ID  ");
-		str.append(" where r.ar_receipt_date >= to_date(:date,'MM/DD/YYYY') ");
-		str.append(" 	and r.ar_receipt_date < to_date(:date,'MM/DD/YYYY') + 1 ");
-		str.append(" 	and r.ar_amount_dis <> 0 ");
-		
-		param.put("valueSetId", ERPUtils.FIX_FLEX_VALUE_SET_ID);
-		param.put("date", ERPUtils.convertDateToStringFormat(date, "MM/dd/YYYY"));
-
-		if(ERPUtils.BANGKOK_SAME_DAY.equalsIgnoreCase(type)) {
-			str.append(" and r.ar_shop_name = :BSDCodr ");
-			param.put("BSDCodr", ERPUtils.BANGKOK_SAME_DAY_CODE);
-		}else if(ERPUtils.DISTRIBUTION_CENTER.equalsIgnoreCase(type)) {
-			str.append(" and r.ar_shop_name like '19%' ");
-		}else if(ERPUtils.REGIONAL_PARCEL_SHOP.equalsIgnoreCase(type)) {
-			str.append(" and r.ar_shop_name like '182%' ");
-		}else{
-			if(ERPUtils.REGION.T_BKK.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_BKK + "%");
-			}else if(ERPUtils.REGION.T_GREATER.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_GREATER + "%");
-			}else if(ERPUtils.REGION.T_CENTRAL.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_CENTRAL + "%");
-			}else if(ERPUtils.REGION.T_EAST.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_EAST + "%");
-			}else if(ERPUtils.REGION.T_NORTH.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_NORTH + "%");
-			}else if(ERPUtils.REGION.T_NORTHEAST.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_NORTHEAST + "%");
-			}else if(ERPUtils.REGION.T_SOUTH.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_SOUTH + "%");
-			}else if(ERPUtils.REGION.T_SAMZONE.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_SAMZONE + "%");
-			}else if(ERPUtils.REGION.T_DCSP.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_DCSP + "%");
-			}else if(ERPUtils.REGION.T_BSD.equalsIgnoreCase(type)) {
-				str.append(" and r.ar_shop_name like :shop ");
-				param.put("shop", ERPUtils.REGION.V_BSD + "%");
-			}
+		String shop = "";
+		if(ERPUtils.REGION.T_BKK.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_BKK;
+		}else if(ERPUtils.REGION.T_GREATER.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_GREATER;
+		}else if(ERPUtils.REGION.T_CENTRAL.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_CENTRAL;
+		}else if(ERPUtils.REGION.T_EAST.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_EAST;
+		}else if(ERPUtils.REGION.T_NORTH.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_NORTH;
+		}else if(ERPUtils.REGION.T_NORTHEAST.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_NORTHEAST;
+		}else if(ERPUtils.REGION.T_SOUTH.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_SOUTH;
+		}else if(ERPUtils.REGION.T_SAMZONE.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_SAMZONE;
+		}else if(ERPUtils.REGION.T_DCSP.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_DCSP;
+		}else if(ERPUtils.REGION.T_BSD.equalsIgnoreCase(type)) {
+			shop = ERPUtils.REGION.V_BSD;
 		}
 		
-		str.append(" group by r.ar_shop_name, t.description, r.ar_receipt_date, r.ar_gl_date, r.ar_amount_header, r.record_status ");
-		str.append(" order by r.ar_shop_name, r.ar_receipt_date, r.record_status ");
+		shop += "%";
 		
-		Query query =  entityManager.unwrap(Session.class)
-				.createSQLQuery(str.toString())
-				.addScalar("shopCode")
-				.addScalar("amountHeader")
-				.addScalar("shopName")
-				.addScalar("arReceiptDate")
-				.addScalar("oldArReceiptDate")
-				.addScalar("cash")
-				.addScalar("freight")
-				.addScalar("cod")
-				.addScalar("packageSalePackage")
-				.addScalar("linePay")
-				.addScalar("creditBBL")
-				.addScalar("creditSCB")
-				.addScalar("rabit")
-				.addScalar("topup")
-				.addScalar("discount")
-				.addScalar("insurance")
-				.addScalar("bonus")
-				.addScalar("adjOther")
-				.addScalar("adjReturnCharge")
-				.addScalar("suspense")
-				.addScalar("withholdingTax")
-				.addScalar("promotion")
-				.addScalar("bankCharge")
-				.addScalar("creditCard")
-				.addScalar("adjLinePay")
-				.addScalar("vat")
-				.addScalar("status")
-				.addScalar("oldStatus")
-				.addScalar("arGlDateStr")
-				.setResultTransformer(Transformers.aliasToBean(InfCopReceiptTemp.class));
+		logger.info("date : " + ERPUtils.convertDateToStringFormat(date, "MM/dd/YYYY"));
+		logger.info("type : " + type);
+		logger.info("shop : " + shop);
 		
-		ERPUtils.setParameterByMap(param, query);
+		List<InfCopReceiptTemp> infCopReceiptTemps = new ArrayList<>();
+		StoredProcedureQuery query = entityManager
+			    .createStoredProcedureQuery("XX_GET_COP_RECEIPT_TEMP")
+			    .registerStoredProcedureParameter(1, String.class, 
+			        ParameterMode.IN)
+			    .registerStoredProcedureParameter(2, String.class, 
+				        ParameterMode.IN)
+			    .registerStoredProcedureParameter(3, String.class, 
+				        ParameterMode.IN)
+			    .registerStoredProcedureParameter(4, Class.class, 
+			        ParameterMode.REF_CURSOR)
+			    .setParameter(1, ERPUtils.convertDateToStringFormat(date, "MM/dd/YYYY"))
+			    .setParameter(2, type)
+			    .setParameter(3, shop);
+			 
+		query.execute();
+			
+		List<Object[]> resultList = query.getResultList();
 		
-		List<InfCopReceiptTemp> copReceiptTemps =  query.list();
+		for(Object[] result : resultList) {
+			InfCopReceiptTemp copReceiptTemp = new InfCopReceiptTemp();
+			copReceiptTemp.setShopCode((String) result[0]);
+			copReceiptTemp.setAmountHeader((BigDecimal) result[1]);
+			copReceiptTemp.setShopName((String) result[2]);
+			copReceiptTemp.setArReceiptDate((Date) result[3]);
+			copReceiptTemp.setOldArReceiptDate((Date) result[4]);
+			copReceiptTemp.setArGlDateStr((String) result[5]);
+			copReceiptTemp.setStatus((String) result[6]);
+			copReceiptTemp.setOldStatus((String) result[7]);
+			copReceiptTemp.setCash((BigDecimal) result[8]);
+			copReceiptTemp.setFreight((BigDecimal) result[9]);
+			copReceiptTemp.setCod((BigDecimal) result[10]);
+			copReceiptTemp.setPackageSalePackage((BigDecimal) result[11]);
+			copReceiptTemp.setLinePay((BigDecimal) result[12]);
+			copReceiptTemp.setCreditBBL((BigDecimal) result[13]);
+			copReceiptTemp.setCreditSCB((BigDecimal) result[14]);
+			copReceiptTemp.setRabit((BigDecimal) result[15]);
+			copReceiptTemp.setTopup((BigDecimal) result[16]);
+			copReceiptTemp.setDiscount((BigDecimal) result[17]);
+			copReceiptTemp.setInsurance((BigDecimal) result[18]);
+			copReceiptTemp.setBonus((BigDecimal) result[19]);
+			copReceiptTemp.setAdjOther((BigDecimal) result[20]);
+			copReceiptTemp.setAdjReturnCharge((BigDecimal) result[21]);
+			copReceiptTemp.setSuspense((BigDecimal) result[22]);
+			copReceiptTemp.setWithholdingTax((BigDecimal) result[23]);
+			copReceiptTemp.setPromotion((BigDecimal) result[24]);
+			copReceiptTemp.setBankCharge((BigDecimal) result[25]);
+			copReceiptTemp.setCreditCard((BigDecimal) result[26]);
+			copReceiptTemp.setAdjLinePay((BigDecimal) result[27]);
+			copReceiptTemp.setVat((BigDecimal) result[28]);
+			infCopReceiptTemps.add(copReceiptTemp);
+		}
 		
-		return copReceiptTemps;
+		return infCopReceiptTemps;
 	}
+	
+//	@Override
+//	@SuppressWarnings("unchecked")
+//	public List<InfCopReceiptTemp> getReceiptTempDetail(String type, Date date){
+//		Map<String, Object> param = new HashMap<String, Object>();
+//		
+//		StringBuilder str = new StringBuilder();
+//		str.append(" select ");
+//		str.append(" 	r.ar_shop_name as shopCode ");
+//		str.append(" 	, r.ar_amount_header as amountHeader ");
+//		str.append(" 	, t.description as shopName ");
+//		str.append(" 	, r.ar_receipt_date as arReceiptDate ");
+//		str.append(" 	, r.ar_receipt_date as oldArReceiptDate ");
+//		str.append(" 	, TO_CHAR(r.ar_gl_date, 'DD/MM/YYYY') as arGlDateStr ");
+//		str.append(" 	, r.record_status as status ");
+//		str.append(" 	, r.record_status as oldStatus ");
+//		str.append(" 	, r.ar_source as arSource ");
+//		if(ERPUtils.FRANCHISE_KERRYEXPRESS_SHOP.equalsIgnoreCase(type)) {
+//			str.append(" 	, sum(case when r.ar_pos_type in ('TRAN') then r.ar_amount_dis  ");
+//			str.append(" 		when r.ar_pos_type in ('RABBIT', 'CREDIT BBL', 'CREDIT SCB', 'LINEPAY') then -1*r.ar_amount_dis  ");
+//			str.append(" 		else 0 end) as cash  ");
+//		}else {
+//			str.append(" 	, sum(case when r.ar_pos_type in ('TRAN','COD','OTHER','TOPUP','TUD','INSUR','ADJ1','ADJ3','VAT') then r.ar_amount_dis ");
+//			str.append(" 		when r.ar_pos_type in ('LINEPAY','CREDIT BBL','CREDIT SCB','RABBIT','DISC','ADJ5','ADJ6','ADJ7') then -1*r.ar_amount_dis ");
+//			str.append(" 		else r.ar_amount_dis end) as cash ");
+//		}
+//		str.append(" 	, sum(case when r.ar_pos_type = 'TRAN' "); 
+//		str.append(" 		or r.ar_pos_type not in ('TRAN','COD','OTHER','TOPUP','TUD','INSUR','ADJ1','ADJ3','VAT', 'LINEPAY','CREDIT BBL','CREDIT SCB','RABBIT','DISC','ADJ5','ADJ6','ADJ7') "); 
+//		str.append(" 		then r.ar_amount_dis else 0 end) as freight "); 
+//		str.append(" 	, sum(case when r.ar_pos_type = 'COD' then r.ar_amount_dis else 0 end) as cod "); 
+//		str.append(" 	, sum(case when r.ar_pos_type = 'OTHER' then r.ar_amount_dis else 0 end) as packageSalePackage "); 
+//		str.append(" 	, sum(case when r.ar_pos_type = 'LINEPAY' then r.ar_amount_dis else 0 end) as linePay ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT BBL' then r.ar_amount_dis else 0 end) as creditBBL ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'CREDIT SCB' then r.ar_amount_dis else 0 end) as creditSCB ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'RABBIT' then r.ar_amount_dis else 0 end) as rabit ");  
+//		str.append(" 	, sum(case when r.ar_pos_type in ('TOPUP', 'TUD') then r.ar_amount_dis else 0 end) as topup  "); 
+//		str.append(" 	, sum(case when r.ar_pos_type = 'DISC' then r.ar_amount_dis else 0 end) as discount  "); 
+//		str.append(" 	, sum(case when r.ar_pos_type = 'INSUR' then r.ar_amount_dis else 0 end) as insurance  "); 
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ1' then r.ar_amount_dis else 0 end) as bonus ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ2' then r.ar_amount_dis else 0 end) as adjOther ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ3' then r.ar_amount_dis else 0 end) as adjReturnCharge ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ4' then r.ar_amount_dis else 0 end) as suspense ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ5' then r.ar_amount_dis else 0 end) as withholdingTax ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ6' then r.ar_amount_dis else 0 end) as promotion ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ7' then r.ar_amount_dis else 0 end) as bankCharge ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ8' then r.ar_amount_dis else 0 end) as creditCard ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'ADJ9' then r.ar_amount_dis else 0 end) as adjLinePay ");  
+//		str.append(" 	, sum(case when r.ar_pos_type = 'VAT' then r.ar_amount_dis else 0 end) as vat  ");
+//		str.append(" from XXINF_COP_RECEIPT_TEMP r ");
+//		str.append(" inner join FND_FLEX_VALUES b on b.FLEX_VALUE = r.ar_shop_name  ");
+//		str.append(" 	and b.FLEX_VALUE_SET_ID = :valueSetId ");
+//		str.append(" inner join FND_FLEX_VALUES_TL t on b.FLEX_VALUE_ID = t.FLEX_VALUE_ID  ");
+//		str.append(" where r.ar_receipt_date >= to_date(:date,'MM/DD/YYYY') ");
+//		str.append(" 	and r.ar_receipt_date < to_date(:date,'MM/DD/YYYY') + 1 ");
+//		str.append(" 	and r.ar_amount_dis <> 0 ");
+//		
+//		param.put("valueSetId", ERPUtils.FIX_FLEX_VALUE_SET_ID);
+//		param.put("date", ERPUtils.convertDateToStringFormat(date, "MM/dd/YYYY"));
+//
+//		if(ERPUtils.BANGKOK_SAME_DAY.equalsIgnoreCase(type)) {
+//			str.append(" and r.ar_shop_name = :BSDCodr ");
+//			param.put("BSDCodr", ERPUtils.BANGKOK_SAME_DAY_CODE);
+//		}else if(ERPUtils.FRANCHISE_KERRYEXPRESS_SHOP.equalsIgnoreCase(type)) {
+//			str.append(" and r.ar_shop_name like '19%' ");
+//		}else if(ERPUtils.REGIONAL_PARCEL_SHOP.equalsIgnoreCase(type)) {
+//			str.append(" and r.ar_shop_name like '182%' ");
+//		}else{
+//			if(ERPUtils.REGION.T_BKK.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_BKK + "%");
+//			}else if(ERPUtils.REGION.T_GREATER.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_GREATER + "%");
+//			}else if(ERPUtils.REGION.T_CENTRAL.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_CENTRAL + "%");
+//			}else if(ERPUtils.REGION.T_EAST.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_EAST + "%");
+//			}else if(ERPUtils.REGION.T_NORTH.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_NORTH + "%");
+//			}else if(ERPUtils.REGION.T_NORTHEAST.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_NORTHEAST + "%");
+//			}else if(ERPUtils.REGION.T_SOUTH.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_SOUTH + "%");
+//			}else if(ERPUtils.REGION.T_SAMZONE.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_SAMZONE + "%");
+//			}else if(ERPUtils.REGION.T_DCSP.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_DCSP + "%");
+//			}else if(ERPUtils.REGION.T_BSD.equalsIgnoreCase(type)) {
+//				str.append(" and r.ar_shop_name like :shop ");
+//				param.put("shop", ERPUtils.REGION.V_BSD + "%");
+//			}
+//		}
+//		
+//		str.append(" group by r.ar_shop_name, t.description, r.ar_receipt_date, r.ar_gl_date, r.ar_amount_header, r.ar_source, r.record_status ");
+//		str.append(" order by r.ar_shop_name, r.ar_receipt_date, r.record_status ");
+//		
+//		Query query =  entityManager.unwrap(Session.class)
+//				.createSQLQuery(str.toString())
+//				.addScalar("shopCode")
+//				.addScalar("amountHeader")
+//				.addScalar("shopName")
+//				.addScalar("arReceiptDate")
+//				.addScalar("oldArReceiptDate")
+//				.addScalar("cash")
+//				.addScalar("freight")
+//				.addScalar("cod")
+//				.addScalar("packageSalePackage")
+//				.addScalar("linePay")
+//				.addScalar("creditBBL")
+//				.addScalar("creditSCB")
+//				.addScalar("rabit")
+//				.addScalar("topup")
+//				.addScalar("discount")
+//				.addScalar("insurance")
+//				.addScalar("bonus")
+//				.addScalar("adjOther")
+//				.addScalar("adjReturnCharge")
+//				.addScalar("suspense")
+//				.addScalar("withholdingTax")
+//				.addScalar("promotion")
+//				.addScalar("bankCharge")
+//				.addScalar("creditCard")
+//				.addScalar("adjLinePay")
+//				.addScalar("vat")
+//				.addScalar("status")
+//				.addScalar("oldStatus")
+//				.addScalar("arGlDateStr")
+//				.addScalar("arSource")
+//				.setResultTransformer(Transformers.aliasToBean(InfCopReceiptTemp.class));
+//		
+//		ERPUtils.setParameterByMap(param, query);
+//		
+//		List<InfCopReceiptTemp> copReceiptTemps =  query.list();
+//		
+//		return copReceiptTemps;
+//	}
 	
 	public void saveReceiptTempDetails(List<InfCopReceiptTemp> copReceiptTemps) {
 		for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
@@ -375,7 +470,7 @@ public class InfCopReceiptTempDao implements IInfCopReceiptTempDao{
 	public List<Accounting> queryAccountingByDate(String date){
 		List<Accounting> accountings = new ArrayList<>();
 		StoredProcedureQuery query = entityManager
-			    .createStoredProcedureQuery("GET_ACCOUNTING")
+			    .createStoredProcedureQuery("XX_GET_ACCOUNTING")
 			    .registerStoredProcedureParameter(1, String.class, 
 			        ParameterMode.IN)
 			    .registerStoredProcedureParameter(2, Class.class, 

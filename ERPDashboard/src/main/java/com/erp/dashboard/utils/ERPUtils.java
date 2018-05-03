@@ -1,6 +1,8 @@
 package com.erp.dashboard.utils;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -13,7 +15,7 @@ import org.hibernate.Query;
 
 public class ERPUtils {
 	public static String BANGKOK_SAME_DAY = "BSD";
-	public static String DISTRIBUTION_CENTER = "DC";
+	public static String DISTRIBUTION_CENTER = "DCSP";
 	public static String FRANCHISE_KERRYEXPRESS_SHOP = "FC/KE";
 	public static String REGIONAL_PARCEL_SHOP = "UPC";
 
@@ -45,6 +47,9 @@ public class ERPUtils {
 	}
 
 	public static String SIMPLE_DATE_FORMAT = "dd/MM/yyyy";
+
+	public static String SIMPLE_NUMBER = "#,##0";
+	public static String SIMPLE_NUMBER_DECIMAL = "#,##0.00";
 	
 	public static boolean collectionIsEmpty(@SuppressWarnings("rawtypes") List list) {
 		if(list == null
@@ -71,6 +76,18 @@ public class ERPUtils {
 		String reportDate = df.format(date);
 		
 		return reportDate;
+	}
+	
+	public static String convertNumberToStringFormat(BigDecimal number, String format) {
+		try {
+			if(number == null) 
+				return "0";
+			
+			DecimalFormat decimalFormat = new DecimalFormat(format);
+			return decimalFormat.format(number);
+		}catch (Exception e) {
+			return "0";
+		}
 	}
 	
 	public static void setParameterByMap(Map<String, Object> param, Query query) {

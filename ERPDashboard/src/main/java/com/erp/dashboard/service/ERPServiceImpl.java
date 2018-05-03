@@ -7,20 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erp.dashboard.dao.IInfCopReceiptTempDao;
+import com.erp.dashboard.dao.IPRCommissionTempDao;
 import com.erp.dashboard.dao.IUserDao;
 import com.erp.dashboard.entity.Accounting;
 import com.erp.dashboard.entity.User;
 import com.erp.dashboard.model.InfCopReceiptTemp;
 import com.erp.dashboard.model.InfCopReceiptTempChart;
+import com.erp.dashboard.model.api.AgentServiceFee;
 import com.erp.dashboard.model.api.InfCopReceiptTempAPI;
 
 @Service
 public class ERPServiceImpl implements IERPService {
 	@Autowired
 	private IUserDao userDao;
-	
 	@Autowired
 	private IInfCopReceiptTempDao copReceiptTempDao;
+	@Autowired
+	private IPRCommissionTempDao commissionTempDao;
 	
 	@Override
 	public User checkUserLogin(User user){
@@ -60,5 +63,9 @@ public class ERPServiceImpl implements IERPService {
 	@Override
 	public List<Accounting> queryAccountingByDate(String date) {
 		return copReceiptTempDao.queryAccountingByDate(date);
+	}
+	
+	public void insertPRCommissionTempList(List<AgentServiceFee> agentServiceFees) {
+		commissionTempDao.insertPRCommissionTempList(agentServiceFees);
 	}
 }

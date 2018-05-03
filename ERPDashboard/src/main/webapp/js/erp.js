@@ -27,6 +27,8 @@ function clearDivChart(){
 	
 	$("#divChart2").removeClass("col-sm-6");
 	$("#divChart2").addClass("col-sm-1");
+	
+	$("#ExportDCSP").hide();
 }
 
 function onStartProcess() {
