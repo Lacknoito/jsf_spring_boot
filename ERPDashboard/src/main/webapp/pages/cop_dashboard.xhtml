@@ -415,6 +415,15 @@
 				   "balloon":{
 				   "fixedPosition":true
 				  },
+				  "legend":{
+				  	"markerType": "circle",
+				   	"position": "bottom",
+				    "marginRight":100,
+				    "autoMargins":false,
+				    "valueText":"[[value]] Shop",
+				    "clickMarker": handleLegend1Click,
+    				"clickLabel": handleLegend1Click
+				  },
 				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeaderStr]]",
 				  "export": {
 				    "enabled": false
@@ -456,6 +465,15 @@
 				  "titleField": "branchType",
 				  "pullOutDuration": 0,
 				  "labelRadius": 5,
+				  "legend":{
+				  	"markerType": "circle",
+				   	"position": "bottom",
+				    "marginRight":100,
+				    "autoMargins":false,
+				    "valueText":"[[value]] Shop",
+				    "clickMarker": handleLegend2Click,
+    				"clickLabel": handleLegend2Click
+				  },
 				   "balloon":{
 				   "fixedPosition":true
 				  },
