@@ -273,7 +273,7 @@ public class COPDashboardController {
 		
 //		ratings = erpService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 		
-		if(ERPUtils.collectionIsEmpty(ratings)) {
+		if(ERPUtils.collectionIsEmpty(copReceiptTemps)) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", "Data not available."));
 		}
 		

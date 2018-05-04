@@ -2,6 +2,7 @@ package com.erp.dashboard.action;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import com.erp.dashboard.ERPSession;
 import com.erp.dashboard.entity.User;
 import com.erp.dashboard.model.UserModel;
 import com.erp.dashboard.service.IERPService;
-import com.erp.dashboard.utils.SessionUtils;
 
 @RequestScope
 @Component(value = "loginController")
@@ -40,18 +40,40 @@ public class LoginController {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public boolean validate() {
+		boolean result = true;
+		
+		errorMessage = "";
+		
+		if(StringUtils.isBlank(userModel.getUserName()) 
+				&& StringUtils.isBlank(userModel.getPassword())) {
+			errorMessage = "Please enter username and password";
+			
+			result = false;
+		}else if(StringUtils.isBlank(userModel.getUserName())) {
+			errorMessage = "Please enter username";
+			
+			result = false;
+		}else if(StringUtils.isBlank(userModel.getPassword())) {
+			errorMessage = "Please enter password";
+			
+			result = false;
+		}
+		
+		return result;
+	}
 
     public void onClickLogin() {
     	try {
+    		if(!validate()) {
+    			return;
+    		}
+    		
     		User user = userService.checkUserLogin(new User(userModel.getUserName(), userModel.getPassword()));
 	    	
 	    	if(user != null) {
-	    		userLogin = new User();
-	    		userLogin.setUserName("test");
-	    		
 	    		erpSession.setUser(user);
-	    		
-	    		SessionUtils.setUserName("ERPTest");
 	    		
 	    		FacesContext.getCurrentInstance().getExternalContext().redirect("cop_dashboard.jsf");
 	    		
