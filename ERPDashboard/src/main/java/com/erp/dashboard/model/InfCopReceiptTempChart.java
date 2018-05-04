@@ -13,6 +13,14 @@ public class InfCopReceiptTempChart implements Serializable {
 	private BigDecimal count;
 	private BigDecimal amountHeader;
 	
+	public InfCopReceiptTempChart() {};
+	
+	public InfCopReceiptTempChart(String branchType, BigDecimal count, BigDecimal amountHeader) {
+		this.branchType = branchType;
+		this.count = count;
+		this.amountHeader = amountHeader;
+	}
+	
 	public BigDecimal getCount() {
 		return count;
 	}

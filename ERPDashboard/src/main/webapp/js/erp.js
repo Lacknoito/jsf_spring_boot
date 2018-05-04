@@ -27,8 +27,8 @@ function clearDivChart(){
 	
 	$("#divChart2").removeClass("col-sm-6");
 	$("#divChart2").addClass("col-sm-1");
-	
-	$("#ExportDCSP").hide();
+
+	$("#divGraph").css("display", "block");
 }
 
 function onStartProcess() {
@@ -53,8 +53,6 @@ function handleLegend1Click(graph) {
   		
   		$("#divChart2").removeClass("col-sm-1");
   		$("#divChart2").addClass("col-sm-6");
-  		
-  		$("#ExportDCSP").show();
   	}
 }
 function handleLegend2Click(graph) {

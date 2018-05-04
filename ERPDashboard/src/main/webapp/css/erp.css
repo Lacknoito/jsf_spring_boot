@@ -6,6 +6,7 @@ body{
 	font-family: 'Kanit-Light';
 }
 
+
 .row-padding{
 	padding: 20px;
 }
@@ -42,10 +43,6 @@ td { font-size: 12px; }
 	 font-size:10px;
 }
 
-.toggle-on, .toggle-off{
-	font-size:5px;
-}
-
 .modal-body-pdf{
 	padding-bottom: 2px !important;
     padding-top: 4px !important;
@@ -76,7 +73,39 @@ td { font-size: 12px; }
     margin-left: -200px !important;
 }
 
-.toggle-on, .toggle-off{
-	font-size: 7px !important;
+.modal-header {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #FFFFFF;
+}
+
+.editPopupClass{
+    width: 800px !important;
+    height: 500px !important;
+    z-index: 7022 !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-top: -250px !important;
+    margin-left: -400px !important;
+}
+
+.toggle-on{
+	font-size: 10px !important;
     padding-left: 15px !important;
+}
+
+.toggle-off{
+	font-size: 10px !important;
+    padding-left: 15px !important;
+}
+
+.inputintable{
+	height: 25px !important;
+	width: 65px !important;
+	font-size:10px !important;
 }

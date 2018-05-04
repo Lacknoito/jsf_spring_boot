@@ -3,6 +3,7 @@ package com.erp.dashboard.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class InfCopReceiptTemp implements Serializable {
 	private static final long serialVersionUID = 21251235234L;
@@ -39,6 +40,9 @@ public class InfCopReceiptTemp implements Serializable {
 	private BigDecimal adjLinePay;
 	private BigDecimal vat;
 	private String arSource;
+	private String arPosType;
+	private List<String> notInArPosType;
+	private BigDecimal arAmountDis;
 	
 	public Integer getRownum() {
 		return rownum;
@@ -234,5 +238,23 @@ public class InfCopReceiptTemp implements Serializable {
 	}
 	public void setArSource(String arSource) {
 		this.arSource = arSource;
+	}
+	public String getArPosType() {
+		return arPosType;
+	}
+	public void setArPosType(String arPosType) {
+		this.arPosType = arPosType;
+	}
+	public BigDecimal getArAmountDis() {
+		return arAmountDis;
+	}
+	public void setArAmountDis(BigDecimal arAmountDis) {
+		this.arAmountDis = arAmountDis;
+	}
+	public List<String> getNotInArPosType() {
+		return notInArPosType;
+	}
+	public void setNotInArPosType(List<String> notInArPosType) {
+		this.notInArPosType = notInArPosType;
 	}
 }

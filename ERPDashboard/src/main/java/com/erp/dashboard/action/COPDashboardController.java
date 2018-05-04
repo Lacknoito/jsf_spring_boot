@@ -4,6 +4,7 @@ package com.erp.dashboard.action;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,6 +60,7 @@ public class COPDashboardController {
 	private StreamedContent streamedContent;
 	private List<Accounting> accountings;
 	private boolean result;
+	private InfCopReceiptTemp editCOPReceipt;
 	
 	private static Logger logger = LogManager.getLogger(COPDashboardController.class);
 	
@@ -76,6 +78,8 @@ public class COPDashboardController {
 	
 	public void onload() {
 		try {
+			editCOPReceipt = new InfCopReceiptTemp();
+			
 			userLogin = erpSession.getUser();
 			
 			if(userLogin == null)
@@ -98,20 +102,20 @@ public class COPDashboardController {
 		}
 	}
 	
-	public List<InfCopReceiptTemp> getReceiptForSave() {
-		List<InfCopReceiptTemp> receiptForSaves = new ArrayList<>();
-		if(!ERPUtils.collectionIsEmpty(copReceiptTemps)){
-			for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
-				copReceiptTemp.setArReceiptDate(ERPUtils.convertStringToDateFormat(copReceiptTemp.getArReceiptDateStr(), ERPUtils.SIMPLE_DATE_FORMAT));
-				if(!copReceiptTemp.getArReceiptDate().equals(copReceiptTemp.getOldArReceiptDate())
-						|| ("N".equalsIgnoreCase(copReceiptTemp.getStatus())
-								&& !StringUtils.equalsIgnoreCase(copReceiptTemp.getOldStatus(), copReceiptTemp.getStatus()))) {
-					receiptForSaves.add(copReceiptTemp);
-				}
-			}
-		}
-		return receiptForSaves;
-	}
+//	public List<InfCopReceiptTemp> getReceiptForSave() {
+//		List<InfCopReceiptTemp> receiptForSaves = new ArrayList<>();
+//		if(!ERPUtils.collectionIsEmpty(copReceiptTemps)){
+//			for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
+//				copReceiptTemp.setArReceiptDate(ERPUtils.convertStringToDateFormat(copReceiptTemp.getArReceiptDateStr(), ERPUtils.SIMPLE_DATE_FORMAT));
+//				if(!copReceiptTemp.getArReceiptDate().equals(copReceiptTemp.getOldArReceiptDate())
+//						|| ("N".equalsIgnoreCase(copReceiptTemp.getStatus())
+//								&& !StringUtils.equalsIgnoreCase(copReceiptTemp.getOldStatus(), copReceiptTemp.getStatus()))) {
+//					receiptForSaves.add(copReceiptTemp);
+//				}
+//			}
+//		}
+//		return receiptForSaves;
+//	}
 	
 	public void updateStatus() {
 		for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
@@ -129,11 +133,9 @@ public class COPDashboardController {
 	
 	public void saveReceiptTemp() {
 		try {
-			List<InfCopReceiptTemp> receiptForSaves = getReceiptForSave();
 			
-			if(!ERPUtils.collectionIsEmpty(receiptForSaves)){
-				erpService.saveReceiptTempDetails(receiptForSaves);
-			}
+			editCOPReceipt.setArReceiptDate(ERPUtils.convertStringToDateFormat(editCOPReceipt.getArReceiptDateStr(), ERPUtils.SIMPLE_DATE_FORMAT));
+			erpService.saveReceiptTempDetail(editCOPReceipt);
 			
 			updateChart();
 		}catch (Exception e) {
@@ -152,8 +154,6 @@ public class COPDashboardController {
 					copReceiptTemp.setRownum(index++);
 					copReceiptTemp.setArReceiptDateStr(ERPUtils.convertDateToStringFormat(copReceiptTemp.getArReceiptDate(), ERPUtils.SIMPLE_DATE_FORMAT));
 				}
-				
-				logger.info("copReceiptTemps : " + copReceiptTemps.size());
 			}
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -163,7 +163,68 @@ public class COPDashboardController {
 	public void updateChartPS() throws JsonProcessingException {
 		if(param != null
 				&& param != "") {
-			ratings = erpService.getReceiptTempParcelShop(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+//			ratings = erpService.getReceiptTempParcelShop(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+			
+			ratings = new ArrayList<>();
+			InfCopReceiptTempChart bkk = new InfCopReceiptTempChart("BKK", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart greater = new InfCopReceiptTempChart("GREATER", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart central = new InfCopReceiptTempChart("CENTRAL", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart east = new InfCopReceiptTempChart("EAST", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart north = new InfCopReceiptTempChart("NORTH", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart northeast = new InfCopReceiptTempChart("NORTHEAST", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart south = new InfCopReceiptTempChart("SOUTH", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart samzone = new InfCopReceiptTempChart("SAMZONE", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart dcsp = new InfCopReceiptTempChart("DCSP", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart bsd = new InfCopReceiptTempChart("BSD", BigDecimal.ZERO, BigDecimal.ZERO); 
+			
+			copReceiptTemps = erpService.getReceiptTempDetail("ALL", ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+			
+			if(!ERPUtils.collectionIsEmpty(copReceiptTemps)) {
+				for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
+					if(copReceiptTemp.getShopCode().startsWith("101")) {
+						bkk.setCount(bkk.getCount().add(BigDecimal.ONE));
+						bkk.setAmountHeader(bkk.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("102")) {
+						greater.setCount(greater.getCount().add(BigDecimal.ONE));
+						greater.setAmountHeader(greater.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("103")) {
+						central.setCount(central.getCount().add(BigDecimal.ONE));
+						central.setAmountHeader(central.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("104")) {
+						east.setCount(east.getCount().add(BigDecimal.ONE));
+						east.setAmountHeader(east.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("105")) {
+						north.setCount(north.getCount().add(BigDecimal.ONE));
+						north.setAmountHeader(north.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("106")) {
+						northeast.setCount(northeast.getCount().add(BigDecimal.ONE));
+						northeast.setAmountHeader(northeast.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("107")) {
+						south.setCount(south.getCount().add(BigDecimal.ONE));
+						south.setAmountHeader(south.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("108")) {
+						samzone.setCount(samzone.getCount().add(BigDecimal.ONE));
+						samzone.setAmountHeader(samzone.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("109")) {
+						dcsp.setCount(dcsp.getCount().add(BigDecimal.ONE));
+						dcsp.setAmountHeader(dcsp.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("181")) {
+						bsd.setCount(bsd.getCount().add(BigDecimal.ONE));
+						bsd.setAmountHeader(bsd.getAmountHeader().add(copReceiptTemp.getCash()));
+					}
+				}
+			}
+			
+			ratings.add(bkk);
+			ratings.add(greater);
+			ratings.add(central);
+			ratings.add(east);
+			ratings.add(north);
+			ratings.add(northeast);
+			ratings.add(south);
+			ratings.add(samzone);
+			ratings.add(dcsp);
+			ratings.add(bsd);
 			
 			ObjectMapper mapper = new ObjectMapper();
 			chartPS = mapper.writeValueAsString(ratings);
@@ -179,7 +240,38 @@ public class COPDashboardController {
 			return;
 		}
 		
-		ratings = erpService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+		copReceiptTemps = erpService.getReceiptTempDetail("ALL", ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+		
+		ratings = new ArrayList<>();
+		InfCopReceiptTempChart bsd = new InfCopReceiptTempChart("BSD", BigDecimal.ZERO, BigDecimal.ZERO); 
+		InfCopReceiptTempChart dc = new InfCopReceiptTempChart("DCSP", BigDecimal.ZERO, BigDecimal.ZERO);
+		InfCopReceiptTempChart fc = new InfCopReceiptTempChart("FC/KE", BigDecimal.ZERO, BigDecimal.ZERO);
+		InfCopReceiptTempChart upc = new InfCopReceiptTempChart("UPC", BigDecimal.ZERO, BigDecimal.ZERO);
+		
+		if(!ERPUtils.collectionIsEmpty(copReceiptTemps)) {
+			for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
+				if(ERPUtils.BANGKOK_SAME_DAY_CODE.equals(copReceiptTemp.getShopCode())) {
+					bsd.setCount(bsd.getCount().add(BigDecimal.ONE));
+					bsd.setAmountHeader(bsd.getAmountHeader().add(copReceiptTemp.getCash()));
+				}else if(copReceiptTemp.getShopCode().startsWith("19")) {
+					fc.setCount(fc.getCount().add(BigDecimal.ONE));
+					fc.setAmountHeader(fc.getAmountHeader().add(copReceiptTemp.getCash()));
+				}else if(copReceiptTemp.getShopCode().startsWith("182")) {
+					upc.setCount(upc.getCount().add(BigDecimal.ONE));
+					upc.setAmountHeader(upc.getAmountHeader().add(copReceiptTemp.getCash()));
+				}else {
+					dc.setCount(dc.getCount().add(BigDecimal.ONE));
+					dc.setAmountHeader(dc.getAmountHeader().add(copReceiptTemp.getCash()));
+				}
+			}
+		}
+		
+		ratings.add(bsd);
+		ratings.add(dc);
+		ratings.add(fc);
+		ratings.add(upc);
+		
+//		ratings = erpService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 		
 		if(ERPUtils.collectionIsEmpty(ratings)) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", "Data not available."));
@@ -554,5 +646,13 @@ public class COPDashboardController {
 
 	public void setResult(boolean result) {
 		this.result = result;
+	}
+
+	public InfCopReceiptTemp getEditCOPReceipt() {
+		return editCOPReceipt;
+	}
+
+	public void setEditCOPReceipt(InfCopReceiptTemp editCOPReceipt) {
+		this.editCOPReceipt = editCOPReceipt;
 	}
 }

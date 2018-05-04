@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.erp.dashboard.model.api.AgentServiceFee;
 
-@Transactional
 @Repository
 public class PRCommissionDao implements IPRCommissionTempDao{
 	private static Logger logger = LogManager.getLogger(PRCommissionDao.class);

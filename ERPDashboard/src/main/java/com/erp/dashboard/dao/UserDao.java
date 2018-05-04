@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.erp.dashboard.entity.User;
 import com.erp.dashboard.utils.ERPUtils;
 
-@Transactional
 @Repository
 public class UserDao implements IUserDao {
 	private static Logger logger = LogManager.getLogger(UserDao.class);
