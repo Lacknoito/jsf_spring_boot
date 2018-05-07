@@ -279,111 +279,27 @@
 															</td>
 															<td>#{receipt.arReceiptDateStr}</td>
 															<td>#{receipt.arGlDateStr}</td>
-															<td>
-																<h:outputLabel value="#{receipt.cash}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.freight}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.cod}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.packageSalePackage}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.linePay}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.creditBBL}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.creditSCB}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.rabit}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.topup}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.discount}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.insurance}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.bonus}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.adjOther}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.adjReturnCharge}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.suspense}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.withholdingTax}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.promotion}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.bankCharge}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.creditCard}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.adjLinePay}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
-															<td>
-																<h:outputLabel value="#{receipt.vat}" styleClass="text-modal-jsf">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputLabel>
-															</td>
+															<td>#{receipt.cash}</td>
+															<td>#{receipt.freight}</td>
+															<td>#{receipt.cod}</td>
+															<td>#{receipt.packageSalePackage}</td>
+															<td>#{receipt.linePay}</td>
+															<td>#{receipt.creditBBL}</td>
+															<td>#{receipt.creditSCB}</td>
+															<td>#{receipt.rabit}</td>
+															<td>#{receipt.topup}</td>
+															<td>#{receipt.discount}</td>
+															<td>#{receipt.insurance}</td>
+															<td>#{receipt.bonus}</td>
+															<td>#{receipt.adjOther}</td>
+															<td>#{receipt.adjReturnCharge}</td>
+															<td>#{receipt.suspense}</td>
+															<td>#{receipt.withholdingTax}</td>
+															<td>#{receipt.promotion}</td>
+															<td>#{receipt.bankCharge}</td>
+															<td>#{receipt.creditCard}</td>
+															<td>#{receipt.adjLinePay}</td>
+															<td>#{receipt.vat}</td>
 															<td>#{receipt.status == 'N' ? 'Inactive' : 'Active'}</td>
 														</tr>
 													</c:forEach>

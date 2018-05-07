@@ -16,15 +16,16 @@ body {
 
 .body {
 	position: absolute;
-	top: -20px;
-	left: -20px;
-	right: -40px;
-	bottom: -40px;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
 	width: auto;
 	height: auto;
 	background-image: url('../images/business-charts-commerce.jpg');
 	background-size: cover;
 	z-index: 0;
+	opacity:0.8;
 }
 
 .grad {
@@ -63,8 +64,8 @@ body {
 
 .login {
 	position: absolute !important;
-	top: 50% !important;
-	left: 50% !important;
+	top: 35% !important;
+	left: 48% !important;
 	height: 160px;
 	width: 360px;
 	z-index: 2;
@@ -78,36 +79,38 @@ body {
 
 .userLogin {
 	width: 250px;
-	height: 30px;
+	height: 40px;
 	background: transparent;
-	border: 1px solid rgba(255, 255, 255, 0.6);
+	border:none;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.6);
 	border-radius: 2px;
 	color: #fff;
 	font-family: 'Exo', sans-serif;
 	font-size: 16px;
 	font-weight: 400;
-	padding: 4px;
+	padding: 10px;
 }
 
 .passwordLogin {
 	width: 250px;
-	height: 30px;
+	height: 40px;
 	background: transparent;
-	border: 1px solid rgba(255, 255, 255, 0.6);
+	border:none;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.6);
 	border-radius: 2px;
 	color: #fff;
 	font-family: 'Exo', sans-serif;
 	font-size: 16px;
 	font-weight: 400;
-	padding: 4px;
-	margin-top: 10px;
+	padding: 10px;
+	margin-top: 15px;
 }
 
 .buttonLogin {
 	width: 260px;
 	height: 35px;
 	background-color: #ff851b;
-	border: 1px solid #fff;
+	border: none;
 	cursor: pointer;
 	border-radius: 2px;
 	color: #FFF;
@@ -115,7 +118,7 @@ body {
 	font-size: 16px;
 	font-weight: 400;
 	padding: 6px;
-	margin-top: 15px;
+	margin-top: 25px;
 }
 
 .buttonLogin:hover {

@@ -231,56 +231,64 @@ public class COPDashboardController {
 		}
 	}
 	
-	public void updateChart() throws JsonProcessingException {
-		if(StringUtils.isBlank(dateStr)) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
+	public void updateChart() {
+		try{
+			if(StringUtils.isBlank(dateStr)) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
+				
+				datas = "[]";
+				
+				return;
+			}
 			
-			datas = "[]";
+			copReceiptTemps = erpService.getReceiptTempDetail("ALL", ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
 			
-			return;
-		}
-		
-		copReceiptTemps = erpService.getReceiptTempDetail("ALL", ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
-		
-		ratings = new ArrayList<>();
-		InfCopReceiptTempChart bsd = new InfCopReceiptTempChart("BSD", BigDecimal.ZERO, BigDecimal.ZERO); 
-		InfCopReceiptTempChart dc = new InfCopReceiptTempChart("DCSP", BigDecimal.ZERO, BigDecimal.ZERO);
-		InfCopReceiptTempChart fc = new InfCopReceiptTempChart("FC/KE", BigDecimal.ZERO, BigDecimal.ZERO);
-		InfCopReceiptTempChart upc = new InfCopReceiptTempChart("UPC", BigDecimal.ZERO, BigDecimal.ZERO);
-		
-		if(!ERPUtils.collectionIsEmpty(copReceiptTemps)) {
-			for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
-				if(ERPUtils.BANGKOK_SAME_DAY_CODE.equals(copReceiptTemp.getShopCode())) {
-					bsd.setCount(bsd.getCount().add(BigDecimal.ONE));
-					bsd.setAmountHeader(bsd.getAmountHeader().add(copReceiptTemp.getCash()));
-				}else if(copReceiptTemp.getShopCode().startsWith("19")) {
-					fc.setCount(fc.getCount().add(BigDecimal.ONE));
-					fc.setAmountHeader(fc.getAmountHeader().add(copReceiptTemp.getCash()));
-				}else if(copReceiptTemp.getShopCode().startsWith("182")) {
-					upc.setCount(upc.getCount().add(BigDecimal.ONE));
-					upc.setAmountHeader(upc.getAmountHeader().add(copReceiptTemp.getCash()));
-				}else {
-					dc.setCount(dc.getCount().add(BigDecimal.ONE));
-					dc.setAmountHeader(dc.getAmountHeader().add(copReceiptTemp.getCash()));
+			ratings = new ArrayList<>();
+			InfCopReceiptTempChart bsd = new InfCopReceiptTempChart("BSD", BigDecimal.ZERO, BigDecimal.ZERO); 
+			InfCopReceiptTempChart dc = new InfCopReceiptTempChart("DCSP", BigDecimal.ZERO, BigDecimal.ZERO);
+			InfCopReceiptTempChart fc = new InfCopReceiptTempChart("FC/KE", BigDecimal.ZERO, BigDecimal.ZERO);
+			InfCopReceiptTempChart upc = new InfCopReceiptTempChart("UPC", BigDecimal.ZERO, BigDecimal.ZERO);
+			
+			if(!ERPUtils.collectionIsEmpty(copReceiptTemps)) {
+				for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
+					if(ERPUtils.BANGKOK_SAME_DAY_CODE.equals(copReceiptTemp.getShopCode())) {
+						bsd.setCount(bsd.getCount().add(BigDecimal.ONE));
+						bsd.setAmountHeader(bsd.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("19")) {
+						fc.setCount(fc.getCount().add(BigDecimal.ONE));
+						fc.setAmountHeader(fc.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else if(copReceiptTemp.getShopCode().startsWith("182")) {
+						upc.setCount(upc.getCount().add(BigDecimal.ONE));
+						upc.setAmountHeader(upc.getAmountHeader().add(copReceiptTemp.getCash()));
+					}else {
+						dc.setCount(dc.getCount().add(BigDecimal.ONE));
+						dc.setAmountHeader(dc.getAmountHeader().add(copReceiptTemp.getCash()));
+					}
 				}
 			}
+			
+			ratings.add(bsd);
+			ratings.add(dc);
+			ratings.add(fc);
+			ratings.add(upc);
+			
+	//		ratings = erpService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
+			
+			if(ERPUtils.collectionIsEmpty(copReceiptTemps)) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", "Data not available."));
+			}
+			
+			ObjectMapper mapper = new ObjectMapper();
+	        datas = mapper.writeValueAsString(ratings);
+	        
+	        chartPS = "[]";
+	        
+	        
+	        logger.info("datas :: " + datas);
+	        logger.info("updateChart end");
+		}catch (Exception e) {
+			logger.info("updateChart Exception");
 		}
-		
-		ratings.add(bsd);
-		ratings.add(dc);
-		ratings.add(fc);
-		ratings.add(upc);
-		
-//		ratings = erpService.getReceiptTempByType(ERPUtils.convertStringToDateFormat(dateStr, ERPUtils.SIMPLE_DATE_FORMAT));
-		
-		if(ERPUtils.collectionIsEmpty(copReceiptTemps)) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", "Data not available."));
-		}
-		
-		ObjectMapper mapper = new ObjectMapper();
-        datas = mapper.writeValueAsString(ratings);
-        
-        chartPS = "[]";
 	}
 	
 	
