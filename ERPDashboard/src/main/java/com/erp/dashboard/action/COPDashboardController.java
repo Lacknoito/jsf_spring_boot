@@ -233,6 +233,8 @@ public class COPDashboardController {
 	
 	public void updateChart() {
 		try{
+			logger.info("dateStr :: " + dateStr);
+			
 			if(StringUtils.isBlank(dateStr)) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please input receipt date."));
 				

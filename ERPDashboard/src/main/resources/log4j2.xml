@@ -2,7 +2,7 @@
 <Configuration status="WARN" monitorInterval="30">
     <Properties>
         <Property name="LOG_PATTERN">
-            %d{yyyy-MM-dd HH:mm:ss} %5p -- %-40.40c  : %m%n%ex
+             %d{dd-MM-yyyy HH:mm:ss:SSS} %-4r %-5p %c %x - %M%L - %m%n
         </Property>
     </Properties>
     <Appenders>
@@ -10,14 +10,20 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
         
-        <File name="file" fileName="C:\Users\NNoito\Desktop\Backup\app.log">
+        <File name="file" fileName="/opt/glassfish5/glassfish/domains/domain1/logs/app.log">
 	      <PatternLayout pattern="${LOG_PATTERN}"/>
 	    </File>
     </Appenders>
     <Loggers>
-        <Logger name="com.example.log4j2demo" level="debug" additivity="false">
+        <Logger name="com.erp.dashboard.action" level="info" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
-        </Logger>
+            <AppenderRef ref="file"/>
+         </Logger>
+         
+        <Logger name="com.erp.dashboard.api" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="file"/>
+         </Logger>
 
         <Root level="info">
             <AppenderRef ref="ConsoleAppender" />
