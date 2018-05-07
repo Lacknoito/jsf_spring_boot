@@ -1,221 +1,140 @@
-<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
-<h:head>
-	<meta charset="utf-8" />
-	<title>ERP Dashboard</title>
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<meta content="kvthemes" name="author" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<f:metadata>
-		<f:viewAction action="#{copDashboardController.onload}" />
-	</f:metadata>
-	<link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="../assets/css/responsive.css" rel="stylesheet"
-		type="text/css" />
-	<link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
-	<script src="../assets/js/modernizr.min.js"></script>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link
-		href="https://vitalets.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css"
-		rel="stylesheet" />
-	<link href="../css/datepicker.css" rel="stylesheet" />
-	<link rel="stylesheet" href="../css/erp.css" />
-	<link href="../css/jquery.dataTables.min.css" rel="stylesheet" />
-	<link href="../css/bootstrap-toggle.min.css" rel="stylesheet" />
-</h:head>
-<h:body class="fixed-left">
-	<div id="wrapper" class="collapse-menu forced">
-		<header class="topbar">
-			<div class="topbar-left">
-				<div class="left-content text-center">
-					<a href="cop_dashboard.jsf" class="logo">ERP</a>
-				</div>
-			</div>
-
-			<div class="navbar navbar-default" role="navigation">
-				<div class="container">
-					<div class="mobile-button pull-left">
-						<button type="button" class="button-menu-mobile open-left">
-							<i class="icon-menu"></i>
-						</button>
-						<span class="clearfix"></span>
+      
+<ui:composition template="template.xhtml">
+    <ui:define name="content">
+    	<f:metadata>
+			<f:viewAction action="#{copDashboardController.onload}" />
+		</f:metadata>
+	
+		<div class="content">
+			<div class="container">
+				<h:form id="formId">
+					<div class="row">
+						<p:messages id="messages" showDetail="true" autoUpdate="true"
+							closable="true">
+						</p:messages>
 					</div>
 
-					<div class="zoom-out-button pull-left">
-						<a href="javascript:void();" id="btn-fullscreen"
-							class="waves-effect fullscreen-button"><i class="icon-frame"></i></a>
-						<span class="clearfix"></span>
-					</div>
-					<div class="pull-right">
-						<h:form>
-							<h:commandLink action="#{dashboardController.onLogout}"
-								class="logout-button" title="Log out">
-								<i class="glyphicon glyphicon-log-out"></i>
-							</h:commandLink>
-							<span class="clearfix"></span>
-						</h:form>
-					</div>
-					<div class="lbl-username pull-right">
-						#{erpSession.user.userName}</div>
-				</div>
-			</div>
-		</header>
-		<h:form>
-			<div class="left side-menu">
-				<div class="sidebar-inner slimscrollleft">
-					<!--- Divider -->
-					<div id="sidebar-menu">
-						<ul>
-							<li class="child-menu"><a href="cop_dashboard.jsf"
-								class="waves-effect"><i class="icon-home"></i><span>Dashboard
-								</span> <span class="pull-right"><i class="icon-arrow-right"></i></span>
-							</a>
-
-								<ul class="list-unstyled">
-									<li><h:commandLink
-											action="#{dashboardController.onPageCopDashboard}">
-											<i class="fa fa-circle circlr-ic" style="font-size: 8px"></i>
-											<h:outputLabel value="COP Dashboard"
-												style="padding-left: 5px;"></h:outputLabel>
-										</h:commandLink></li>
-								</ul></li>
-						</ul>
-						<div class="clearfix"></div>
-					</div>
-					<div class="clearfix"></div>
-				</div>
-			</div>
-		</h:form>
-		<div class="content-page">
-			<div class="content">
-				<div class="container">
-					<h:form id="formId">
-						<div class="row">
-							<p:messages id="messages" showDetail="true" autoUpdate="true"
-								closable="true">
-							</p:messages>
-						</div>
-
-						<div class="panel panel-default"
-							style="border-top: 3px solid #FAA945">
-							<div class="panel-title">
-								<div class="row">
-									<div class="col-md-12 col-sm-12" style="padding-left: 20px">
-										<h4 style="font-size: 20px;">COP Dashboard</h4>
-									</div>
-								</div>
-
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-md-4 col-sm-12">
-										<div class="col-sm-5" style="text-align: center;">
-											<h5>Receipt Date</h5>
-										</div>
-										<div class="col-sm-7">
-											<div class="input-group date">
-												<div class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</div>
-												<h:inputText id="dateStrId"
-													value="#{copDashboardController.dateStr}"
-													styleClass="form-control datepicker"></h:inputText>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-8 col-sm-12">
-										<a class="btn btn-success" onclick="ViewGraphFN()"> <i
-											class="fa fa-pie-chart"></i> View Graph
-										</a> <a class="btn btn-info" onclick="ViewAccountingTempFN()">
-											<i class="fa fa-area-chart"></i> View Accounting Temp
-										</a>
-
-										<p:commandLink ajax="false" styleClass="btn btn-default"
-											style="margin-left: 5px;"
-											onclick="PrimeFaces.monitorDownload(start, stop);"
-											icon="fa fa-bar-chart">
-											<i class="fa fa-bar-chart"></i> View Accounting GL
-									        <p:fileDownload
-												value="#{copDashboardController.showExcelGL}" />
-										</p:commandLink>
-									</div>
-
-									<p:remoteCommand name="ViewGraphFN"
-										update="canvasGroup, canvasGroupJs, canvasGroupPSJs, showAllDCSPExcelId"
-										actionListener="#{copDashboardController.updateReceiptTempChart}"
-										oncomplete="clearDivChart()" />
-
-									<p:remoteCommand name="ViewAccountingTempFN" update="pdfId"
-										actionListener="#{copDashboardController.showPDF}"
-										oncomplete="showModalPDF()" />
+					<div class="panel panel-default"
+						style="border-top: 3px solid #FAA945">
+						<div class="panel-title">
+							<div class="row">
+								<div class="col-md-12 col-sm-12" style="padding-left: 20px">
+									<h4 style="font-size: 20px;">COP Dashboard</h4>
 								</div>
 							</div>
-						</div>
-						<br />
-						<div class="row">
-							<div class="col-lg-12" id="divGraph" style="display: none;">
-								<div class="panel panel-default"
-									style="border-top: 3px solid #FAA945;">
-									<div class="panel-title">
 
-										<div class="row">
-											<div class="col-md-6 col-sm-12" style="padding-left: 20px">
-												<h4 style="font-size: 20px;">
-													<i class="fa fa-bar-chart-o fa-fw"></i>Graph
-												</h4>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-4 col-sm-12">
+									<div class="col-sm-5" style="text-align: center;">
+										<h5>Receipt Date</h5>
+									</div>
+									<div class="col-sm-7">
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
 											</div>
-											<div class="col-md-6 col-sm-12" style="text-align: right">
-												<p:commandLink ajax="false" styleClass="btn btn-warning"
-													style="margin-left: 5px;"
-													onclick="PrimeFaces.monitorDownload(start, stop);"
-													icon="fa fa-download">
-													<i class="fa fa-download"></i> Export All
-											        <p:fileDownload
-														value="#{copDashboardController.showAllTransactionExcel}" />
-												</p:commandLink>
-												<h:panelGroup id="showAllDCSPExcelId">
-													<h:panelGroup
-														rendered="#{copDashboardController.chartPS != '[]'}">
-														<p:commandLink ajax="false" styleClass="btn btn-info"
-															style="margin-left: 5px;"
-															onclick="PrimeFaces.monitorDownload(start, stop);"
-															icon="fa fa-download">
-															<i class="fa fa-download"></i> Export DCSP
-													        <p:fileDownload
-																value="#{copDashboardController.showAllDCSPExcel}" />
-														</p:commandLink>
-													</h:panelGroup>
+											<h:inputText id="dateStrId"
+												value="#{copDashboardController.dateStr}"
+												styleClass="form-control datepicker"></h:inputText>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-8 col-sm-12">
+									<a class="btn btn-success" onclick="ViewGraphFN()"> <i
+										class="fa fa-pie-chart"></i> View Graph
+									</a> <a class="btn btn-info" onclick="ViewAccountingTempFN()">
+										<i class="fa fa-area-chart"></i> View Accounting Temp
+									</a>
+
+									<p:commandLink ajax="false" styleClass="btn btn-default"
+										style="margin-left: 5px;"
+										onclick="PrimeFaces.monitorDownload(start, stop);"
+										icon="fa fa-bar-chart">
+										<i class="fa fa-bar-chart"></i> View Accounting GL
+								        <p:fileDownload
+											value="#{copDashboardController.showExcelGL}" />
+									</p:commandLink>
+								</div>
+
+								<p:remoteCommand name="ViewGraphFN"
+									update="canvasGroup, canvasGroupJs, canvasGroupPSJs, showAllDCSPExcelId"
+									actionListener="#{copDashboardController.updateReceiptTempChart}"
+									oncomplete="clearDivChart()" />
+
+								<p:remoteCommand name="ViewAccountingTempFN" update="pdfId"
+									actionListener="#{copDashboardController.showPDF}"
+									oncomplete="showModalPDF()" />
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-lg-12" id="divGraph" style="display: none;">
+							<div class="panel panel-default"
+								style="border-top: 3px solid #FAA945;">
+								<div class="panel-title">
+
+									<div class="row">
+										<div class="col-md-6 col-sm-12" style="padding-left: 20px">
+											<h4 style="font-size: 20px;">
+												<i class="fa fa-bar-chart-o fa-fw"></i>Graph
+											</h4>
+										</div>
+										<div class="col-md-6 col-sm-12" style="text-align: right">
+											<p:commandLink ajax="false" styleClass="btn btn-warning"
+												style="margin-left: 5px;"
+												onclick="PrimeFaces.monitorDownload(start, stop);"
+												icon="fa fa-download">
+												<i class="fa fa-download"></i> Export All
+										        <p:fileDownload
+													value="#{copDashboardController.showAllTransactionExcel}" />
+											</p:commandLink>
+											<h:panelGroup id="showAllDCSPExcelId">
+												<h:panelGroup
+													rendered="#{copDashboardController.chartPS != '[]'}">
+													<p:commandLink ajax="false" styleClass="btn btn-info"
+														style="margin-left: 5px;"
+														onclick="PrimeFaces.monitorDownload(start, stop);"
+														icon="fa fa-download">
+														<i class="fa fa-download"></i> Export DCSP
+												        <p:fileDownload
+															value="#{copDashboardController.showAllDCSPExcel}" />
+													</p:commandLink>
 												</h:panelGroup>
-											</div>
+											</h:panelGroup>
 										</div>
-
 									</div>
-									<div class="panel-body">
-										<div class="panel panel-default">
-											<div class="panel-body">
 
-												<div class="row">
-													<div class="col-sm-11 text-center" id="divChart1">
-														<h:panelGroup id="canvasGroup">
-															<div id="chartdiv1" onclick="divChartClick()"
+								</div>
+								<div class="panel-body">
+									<div class="panel panel-default">
+										<div class="panel-body">
+
+											<div class="row">
+												<div class="col-sm-11 text-center" id="divChart1">
+													<h:panelGroup id="canvasGroup">
+														<div id="chartdiv1" onclick="divChartClick()"
+															class="chartdiv"></div>
+													</h:panelGroup>
+												</div>
+												<div class="col-sm-1 text-center" id="divChart2">
+													<div class="row">
+														<h:panelGroup id="canvasGroupPS">
+															<div id="chartdiv2" onclick="divChartClick()"
 																class="chartdiv"></div>
 														</h:panelGroup>
 													</div>
-													<div class="col-sm-1 text-center" id="divChart2">
-														<div class="row">
-															<h:panelGroup id="canvasGroupPS">
-																<div id="chartdiv2" onclick="divChartClick()"
-																	class="chartdiv"></div>
-															</h:panelGroup>
-														</div>
-													</div>
 												</div>
 											</div>
 										</div>
@@ -223,530 +142,337 @@
 								</div>
 							</div>
 						</div>
+					</div>
 
-						<div class="modal fade modal1" id="myModal" role="dialog">
-							<div class="modal-dialog modal-lg "
-								style="width: 100%; max-width: 1170px;">
+					<div class="modal fade modal1" id="myModal" role="dialog">
+						<div class="modal-dialog modal-lg "
+							style="width: 100%; max-width: 1170px;">
+							<div class="modal-content">
+								<div class="modal-body">
+									<h:panelGroup id="tb_revenue">
+										<table id="example" class="display" style="width: 100%;">
+											<thead>
+												<tr>
+													<th>ERP ID</th>
+													<th>Branch</th>
+													<th>Commands</th>
+													<th>Receipt Date</th>
+													<th>GL Date</th>
+													<th>Transfer</th>
+													<th>Freight</th>
+													<th>COD</th>
+													<th>Package+Sale Package</th>
+													<th>Line Pay</th>
+													<th>Card (BBL)</th>
+													<th>Card (SCB)</th>
+													<th>Rabbit</th>
+													<th>Topup</th>
+													<th>Discount</th>
+													<th>Insurance</th>
+													<th>Bonus Commission</th>
+													<th>AdjOther</th>
+													<th>Return Charge</th>
+													<th>Suspense</th>
+													<th>Withholding Tax</th>
+													<th>Promotion</th>
+													<th>Bank Charge</th>
+													<th>Credit Card</th>
+													<th>Adj Line Pay</th>
+													<th>VAT</th>
+													<th>Status</th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="receipt"
+													items="#{copDashboardController.copReceiptTemps}">
+													<tr>
+														<td>#{receipt.shopCode}</td>
+														<td>#{receipt.shopName}</td>
+														<td>
+															<p:commandLink disabled="#{receipt.status == 'N' ? true : false}"
+																styleClass="btn btn-xs btn-default"
+																update="editGroupId, datepickerJs" oncomplete="openEdit()">
+																<i class="fa fa-edit"></i> Edit
+																<f:setPropertyActionListener value="#{receipt}"
+																	target="#{copDashboardController.editCOPReceipt}" />
+															</p:commandLink>
+														</td>
+														<td>#{receipt.arReceiptDateStr}</td>
+														<td>#{receipt.arGlDateStr}</td>
+														<td>#{receipt.cash}</td>
+														<td>#{receipt.freight}</td>
+														<td>#{receipt.cod}</td>
+														<td>#{receipt.packageSalePackage}</td>
+														<td>#{receipt.linePay}</td>
+														<td>#{receipt.creditBBL}</td>
+														<td>#{receipt.creditSCB}</td>
+														<td>#{receipt.rabit}</td>
+														<td>#{receipt.topup}</td>
+														<td>#{receipt.discount}</td>
+														<td>#{receipt.insurance}</td>
+														<td>#{receipt.bonus}</td>
+														<td>#{receipt.adjOther}</td>
+														<td>#{receipt.adjReturnCharge}</td>
+														<td>#{receipt.suspense}</td>
+														<td>#{receipt.withholdingTax}</td>
+														<td>#{receipt.promotion}</td>
+														<td>#{receipt.bankCharge}</td>
+														<td>#{receipt.creditCard}</td>
+														<td>#{receipt.adjLinePay}</td>
+														<td>#{receipt.vat}</td>
+														<td>#{receipt.status == 'N' ? 'Inactive' : 'Active'}</td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</h:panelGroup>
+								</div>
+								<div class="modal-footer">
+									<h:commandButton value="export excel"
+										styleClass="btn btn-info"
+										action="#{copDashboardController.exportTransactionExcel}" />
+
+									<button type="button" class="btn btn-danger"
+										data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal fade" id="myModalPDF" role="dialog">
+						<div class="modal-dialog modal-lg "
+							style="width: 100%; max-width: 1170px;">
+
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-body modal-body-pdf">
+									<h:panelGroup id="pdfId">
+										<p:media value="#{copDashboardController.streamedContent}"
+											player="pdf" width="100%" height="550px">
+										</p:media>
+									</h:panelGroup>
+								</div>
+								<div class="modal-footer modal-footer-pdf">
+									<h:commandButton value="export excel"
+										styleClass="btn btn-info"
+										action="#{copDashboardController.exportExcel}" />
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="modal fade modal2" id="editPopup" role="dialog">
+						<div class="modal-dialog modal-lg " style="width: 760px;">
+							<h:panelGroup id="editGroupId">
+								<!-- Modal content-->
+								<div class="modal-header">
+									<h3>Edit Adjustment</h3> 
+									<div class="row">
+										<div class="col-md-4" >
+											<h5>Branch : #{copDashboardController.editCOPReceipt.shopCode} - #{copDashboardController.editCOPReceipt.shopName}  </h5>
+										</div>
+										<div class="col-md-6" style="text-align: left;"> 
+											<h5>Receipt Date #{copDashboardController.editCOPReceipt.arReceiptDateStr} </h5>
+										</div>
+									</div> 
+								</div>
 								<div class="modal-content">
 									<div class="modal-body">
-										<h:panelGroup id="tb_revenue">
-											<table id="example" class="display" style="width: 100%;">
-												<thead>
-													<tr>
-														<th>ERP ID</th>
-														<th>Branch</th>
-														<th>Commands</th>
-														<th>Receipt Date</th>
-														<th>GL Date</th>
-														<th>Transfer</th>
-														<th>Freight</th>
-														<th>COD</th>
-														<th>Package+Sale Package</th>
-														<th>Line Pay</th>
-														<th>Card (BBL)</th>
-														<th>Card (SCB)</th>
-														<th>Rabbit</th>
-														<th>Topup</th>
-														<th>Discount</th>
-														<th>Insurance</th>
-														<th>Bonus Commission</th>
-														<th>AdjOther</th>
-														<th>Return Charge</th>
-														<th>Suspense</th>
-														<th>Withholding Tax</th>
-														<th>Promotion</th>
-														<th>Bank Charge</th>
-														<th>Credit Card</th>
-														<th>Adj Line Pay</th>
-														<th>VAT</th>
-														<th>Status</th>
-													</tr>
-												</thead>
-												<tbody>
-													<c:forEach var="receipt"
-														items="#{copDashboardController.copReceiptTemps}">
-														<tr>
-															<td>#{receipt.shopCode}</td>
-															<td>#{receipt.shopName}</td>
-															<td>
-																<p:commandLink disabled="#{receipt.status == 'N' ? true : false}"
-																	styleClass="btn btn-xs btn-default"
-																	update="editGroupId, datepickerJs" oncomplete="openEdit()">
-																	<i class="fa fa-edit"></i> Edit
-																	<f:setPropertyActionListener value="#{receipt}"
-																		target="#{copDashboardController.editCOPReceipt}" />
-																</p:commandLink>
-															</td>
-															<td>#{receipt.arReceiptDateStr}</td>
-															<td>#{receipt.arGlDateStr}</td>
-															<td>#{receipt.cash}</td>
-															<td>#{receipt.freight}</td>
-															<td>#{receipt.cod}</td>
-															<td>#{receipt.packageSalePackage}</td>
-															<td>#{receipt.linePay}</td>
-															<td>#{receipt.creditBBL}</td>
-															<td>#{receipt.creditSCB}</td>
-															<td>#{receipt.rabit}</td>
-															<td>#{receipt.topup}</td>
-															<td>#{receipt.discount}</td>
-															<td>#{receipt.insurance}</td>
-															<td>#{receipt.bonus}</td>
-															<td>#{receipt.adjOther}</td>
-															<td>#{receipt.adjReturnCharge}</td>
-															<td>#{receipt.suspense}</td>
-															<td>#{receipt.withholdingTax}</td>
-															<td>#{receipt.promotion}</td>
-															<td>#{receipt.bankCharge}</td>
-															<td>#{receipt.creditCard}</td>
-															<td>#{receipt.adjLinePay}</td>
-															<td>#{receipt.vat}</td>
-															<td>#{receipt.status == 'N' ? 'Inactive' : 'Active'}</td>
-														</tr>
-													</c:forEach>
-												</tbody>
-											</table>
-										</h:panelGroup>
+										<div class="row" style="margin-bottom: 10px">
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Receipt Date</LABEL>
+												</div>
+												<div class="col-md-6">
+													<div class="input-group date">
+														<div class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</div>
+														<h:inputText value="#{copDashboardController.editCOPReceipt.arReceiptDateStr}" 
+															styleClass="form-control datepicker"></h:inputText>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Status</LABEL>
+												</div>
+												<div class="col-md-6">
+													<input class="toggle-demo toggle-w" type="checkbox"
+															checked="checked"
+															data-toggle="toggle"
+															data-width="80px"
+															onchange="statusChange(this, #{copDashboardController.editCOPReceipt.rownum})"  />
+												</div>
+											</div>
+										</div>
+										<div class="row" style="margin-bottom: 10px">
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Bonus Commission</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="bonusId" onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.bonus}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="bonusId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>AdjOther</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="adjOtherId" onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.adjOther}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="adjOtherId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+										</div>
+										<div class="row" style="margin-bottom: 10px">
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Return Charge</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="adjReturnCharge" onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.adjReturnCharge}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="adjReturnCharge"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Suspense</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="suspenseId" onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.suspense}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="suspenseId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+										</div>
+										<div class="row" style="margin-bottom: 10px">
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>With Holding Tax</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="withholdingTaxId" onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.withholdingTax}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="withholdingTaxId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Promotion</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="promotionId" onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.promotion}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="promotionId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+										</div>
+										<div class="row" style="margin-bottom: 10px">
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Bank Charge</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="bankChargeId" onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.bankCharge}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="bankChargeId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Credit Card</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="creditCardId"  onkeypress="return keyPressDecimalOnly(this, event);"
+														value="#{copDashboardController.editCOPReceipt.creditCard}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="creditCardId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+										</div>
+										<div class="row" style="margin-bottom: 10px">
+											<div class="col-md-6">
+												<div class="col-md-6">
+													<LABEL>Adj Line Pay</LABEL>
+												</div>
+												<div class="col-md-6">
+													<h:inputText styleClass="form-control" id="adjLinePayId"  onkeypress="return keyPressDecimalOnly(this, event);" 
+														value="#{copDashboardController.editCOPReceipt.adjLinePay}">
+														<f:convertNumber pattern="#,##0.00" />
+														<p:ajax update="adjLinePayId"></p:ajax>
+													</h:inputText>
+												</div>
+											</div>
+										</div>
 									</div>
 									<div class="modal-footer">
-										<h:commandButton value="export excel"
-											styleClass="btn btn-info"
-											action="#{copDashboardController.exportTransactionExcel}" />
-
-										<button type="button" class="btn btn-danger"
-											data-dismiss="modal">Close</button>
+										<a class="btn btn-success" onclick="saveReceiptTempJs()">
+											Save </a> 
+										<a class="btn btn-danger" onclick="cloadEdit()">
+											Cancel </a>
 									</div>
 								</div>
+							</h:panelGroup>
+						</div>
+					</div>
+
+					<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+						closable="false" resizable="false" showHeader="false"
+						styleClass="loadingerp">
+						<div class="row"
+							style="width: 100%; height: 100%; margin-top: 20px; padding-left: 50px;">
+							<div class="col-sm-4" style="text-align: right;">
+								<img src="../images/45.gif" style="width: 40px;" />
+							</div>
+							<div class="col-sm-8"
+								style="text-align: left; vertical-align: middle;">
+								<h4>Loading...</h4>
 							</div>
 						</div>
+					</p:dialog>
 
-						<div class="modal fade" id="myModalPDF" role="dialog">
-							<div class="modal-dialog modal-lg "
-								style="width: 100%; max-width: 1170px;">
+					<h:inputHidden id="x" value="#{copDashboardController.param}" />
+					<h:inputHidden id="y" value="#{copDashboardController.param2}" />
+					<p:remoteCommand name="saveReceiptTempJs"
+						update="canvasGroup , canvasGroupJs , canvasGroupPSJs, showAllDCSPExcelId"
+						action="#{copDashboardController.saveReceiptTemp}"
+						oncomplete="saveComplate()"></p:remoteCommand>
+					<p:remoteCommand name="selectItemFromChart"
+						update="tb_revenue , tb_revenueJS"
+						action="#{copDashboardController.updateReceiptTemp}"
+						oncomplete="showModal()"></p:remoteCommand>
+					<p:remoteCommand name="selectItemFromChartPS"
+						update="canvasGroupPS , canvasGroupPSJs, showAllDCSPExcelId"
+						action="#{copDashboardController.updateChartPS}"></p:remoteCommand>
+					<p:remoteCommand name="updateStatus"
+						action="#{copDashboardController.updateStatus}"></p:remoteCommand>
 
-								<!-- Modal content-->
-								<div class="modal-content">
-									<div class="modal-body modal-body-pdf">
-										<h:panelGroup id="pdfId">
-											<p:media value="#{copDashboardController.streamedContent}"
-												player="pdf" width="100%" height="550px">
-											</p:media>
-										</h:panelGroup>
-									</div>
-									<div class="modal-footer modal-footer-pdf">
-										<h:commandButton value="export excel"
-											styleClass="btn btn-info"
-											action="#{copDashboardController.exportExcel}" />
-									</div>
-								</div>
-
-							</div>
-						</div>
-
-						<div class="modal fade modal2" id="editPopup" role="dialog">
-							<div class="modal-dialog modal-lg " style="width: 760px;">
-								<h:panelGroup id="editGroupId">
-									<!-- Modal content-->
-									<div class="modal-header">
-										<h3>Edit Adjustment</h3> 
-										<div class="row">
-											<div class="col-md-4" >
-												<h5>Branch : #{copDashboardController.editCOPReceipt.shopCode} - #{copDashboardController.editCOPReceipt.shopName}  </h5>
-											</div>
-											<div class="col-md-6" style="text-align: left;"> 
-												<h5>Receipt Date #{copDashboardController.editCOPReceipt.arReceiptDateStr} </h5>
-											</div>
-										</div> 
-									</div>
-									<div class="modal-content">
-										<div class="modal-body">
-											<div class="row" style="margin-bottom: 10px">
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Receipt Date</LABEL>
-													</div>
-													<div class="col-md-6">
-														<div class="input-group date">
-															<div class="input-group-addon">
-																<i class="fa fa-calendar"></i>
-															</div>
-															<h:inputText value="#{copDashboardController.editCOPReceipt.arReceiptDateStr}" 
-																styleClass="form-control datepicker"></h:inputText>
-														</div>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Status</LABEL>
-													</div>
-													<div class="col-md-6">
-														<input class="toggle-demo toggle-w" type="checkbox"
-																checked="checked"
-																data-toggle="toggle"
-																data-width="80px"
-																onchange="statusChange(this, #{copDashboardController.editCOPReceipt.rownum})"  />
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin-bottom: 10px">
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Bonus Commission</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="bonusId" onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.bonus}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="bonusId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>AdjOther</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="adjOtherId" onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.adjOther}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="adjOtherId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin-bottom: 10px">
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Return Charge</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="adjReturnCharge" onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.adjReturnCharge}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="adjReturnCharge"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Suspense</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="suspenseId" onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.suspense}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="suspenseId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin-bottom: 10px">
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>With Holding Tax</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="withholdingTaxId" onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.withholdingTax}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="withholdingTaxId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Promotion</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="promotionId" onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.promotion}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="promotionId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin-bottom: 10px">
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Bank Charge</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="bankChargeId" onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.bankCharge}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="bankChargeId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Credit Card</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="creditCardId"  onkeypress="return keyPressDecimalOnly(this, event);"
-															value="#{copDashboardController.editCOPReceipt.creditCard}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="creditCardId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin-bottom: 10px">
-												<div class="col-md-6">
-													<div class="col-md-6">
-														<LABEL>Adj Line Pay</LABEL>
-													</div>
-													<div class="col-md-6">
-														<h:inputText styleClass="form-control" id="adjLinePayId"  onkeypress="return keyPressDecimalOnly(this, event);" 
-															value="#{copDashboardController.editCOPReceipt.adjLinePay}">
-															<f:convertNumber pattern="#,##0.00" />
-															<p:ajax update="adjLinePayId"></p:ajax>
-														</h:inputText>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<a class="btn btn-success" onclick="saveReceiptTempJs()">
-												Save </a> 
-											<a class="btn btn-danger" onclick="cloadEdit()">
-												Cancel </a>
-										</div>
-									</div>
-								</h:panelGroup>
-							</div>
-						</div>
-
-						<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
-							closable="false" resizable="false" showHeader="false"
-							styleClass="loadingerp">
-							<div class="row"
-								style="width: 100%; height: 100%; margin-top: 20px; padding-left: 50px;">
-								<div class="col-sm-4" style="text-align: right;">
-									<img src="../images/45.gif" style="width: 40px;" />
-								</div>
-								<div class="col-sm-8"
-									style="text-align: left; vertical-align: middle;">
-									<h4>Loading...</h4>
-								</div>
-							</div>
-						</p:dialog>
-
-						<h:inputHidden id="x" value="#{copDashboardController.param}" />
-						<h:inputHidden id="y" value="#{copDashboardController.param2}" />
-						<p:remoteCommand name="saveReceiptTempJs"
-							update="canvasGroup , canvasGroupJs , canvasGroupPSJs, showAllDCSPExcelId"
-							action="#{copDashboardController.saveReceiptTemp}"
-							oncomplete="saveComplate()"></p:remoteCommand>
-						<p:remoteCommand name="selectItemFromChart"
-							update="tb_revenue , tb_revenueJS"
-							action="#{copDashboardController.updateReceiptTemp}"
-							oncomplete="showModal()"></p:remoteCommand>
-						<p:remoteCommand name="selectItemFromChartPS"
-							update="canvasGroupPS , canvasGroupPSJs, showAllDCSPExcelId"
-							action="#{copDashboardController.updateChartPS}"></p:remoteCommand>
-						<p:remoteCommand name="updateStatus"
-							action="#{copDashboardController.updateStatus}"></p:remoteCommand>
-
-						<p:ajaxStatus onstart="PF('statusDialog').show()"
-							onsuccess="PF('statusDialog').hide()" />
-					</h:form>
-				</div>
+					<p:ajaxStatus onstart="PF('statusDialog').show()"
+						onsuccess="PF('statusDialog').hide()" />
+				</h:form>
 			</div>
-
-			<footer class="footer text-right"> </footer>
 		</div>
-	</div>
-	<script>
-		var resizefunc = [];
-	</script>
-
-	<script src="../assets/js/jquery.min.js"></script>
-	<script src="../assets/js/bootstrap.min.js"></script>
-	<script src="../assets/js/detect.js"></script>
-	<script src="../assets/js/fastclick.js"></script>
-	<script src="../assets/js/jquery.slimscroll.js"></script>
-	<script src="../assets/js/jquery.blockUI.js"></script>
-	<script src="../assets/js/waves.js"></script>
-	<script src="../assets/js/jquery.nicescroll.js"></script>
-	<script src="../assets/js/jquery.scrollTo.min.js"></script>
-	<script src="../assets/js/jquery.app.js"></script>
-	<script src="../js/jquery.cookie.js"></script>
-	<script src="../js/bootstrap-datepicker.js"></script>
-	<script src="../js/amcharts.js"></script>
-	<script src="../js/pie.js"></script>
-	<script src="../js/light.js"></script>
-	<script src="../js/bootstrap-toggle.min.js"></script>
-	<script src="../js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" src="../js/erp.js"></script>
-
-	<h:panelGroup id="canvasGroupJs">
-		<h:outputScript>
-				$("#showAllDCSPExcelId").hide();
-				
-	    		AmCharts.makeChart("chartdiv1", {
-	    		  "type": "pie",
-				  "theme": "light",
-				  "dataProvider": #{copDashboardController.datas},
-				  "labelText": "[[branchType]]",
-				  "valueField": "count",
-				  "titleField": "branchType",
-				  "pullOutDuration": 0,
-  				   "pullOutRadius": 0,
-				   "balloon":{
-				   "fixedPosition":true
-				  },
-				  "legend":{
-				  	"markerType": "circle",
-				   	"position": "bottom",
-				    "marginRight":100,
-				    "autoMargins":false,
-				    "valueText":"[[value]] Shop",
-				    "clickMarker": handleLegend1Click,
-    				"clickLabel": handleLegend1Click
-				  },
-				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeaderStr]]",
-				  "export": {
-				    "enabled": false
-				  },
-				  "listeners": [{
-					    "event": "clickSlice",
-					    "method": function(e) {
-					    		document.getElementById("formId:x").value = e.dataItem.title;
-					    		
-						    	if(e.dataItem.title == 'BSD'
-						          		|| e.dataItem.title == 'FC/KE'
-						          		|| e.dataItem.title == 'UPC'){
-							      		selectItemFromChart();
-						          	}else{
-						          		selectItemFromChartPS();
-						          		
-						          		$("#divChart1").removeClass("col-sm-11");
-						          		$("#divChart1").addClass("col-sm-6");
-						          		
-						          		$("#divChart2").removeClass("col-sm-1");
-						          		$("#divChart2").addClass("col-sm-6");
-						          	}
-					    }}]
-				} );
-				
-				console.log("canvasGroupJs");
-			</h:outputScript>
-	</h:panelGroup>
-	<h:panelGroup id="canvasGroupPSJs">
-		<h:outputScript>
-				var chart = AmCharts.makeChart("chartdiv2", {
-	    		  "type": "pie",
-				  "theme": "light",
-				  "dataProvider": #{copDashboardController.chartPS},
-				  "labelText": "[[branchType]]",
-				  "valueField": "count",
-				  "titleField": "branchType",
-				  "pullOutDuration": 0,
-				  "labelRadius": 5,
-				  "legend":{
-				  	"markerType": "circle",
-				   	"position": "bottom",
-				    "marginRight":100,
-				    "autoMargins":false,
-				    "valueText":"[[value]] Shop",
-				    "clickMarker": handleLegend2Click,
-    				"clickLabel": handleLegend2Click
-				  },
-				   "balloon":{
-				   "fixedPosition":true
-				  },
-				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeaderStr]]",
-				  "export": {
-				    "enabled": false
-				  },
-				  "listeners": [{
-					    "event": "clickSlice",
-					    "method": function(e) {
-						    	document.getElementById("formId:x").value = e.dataItem.title;
-							    
-							    var dp = e.dataItem.dataContext
-						      	if ( dp[chart.colorField] === undefined ){
-						        	dp[chart.colorField] = "#cc0000";
-						        	selectItemFromChart();
-						        }
-						      	else
-						        	dp[chart.colorField] = undefined;
-					    }}]
-				} );
-			</h:outputScript>
-	</h:panelGroup>
-	<h:panelGroup id="tb_revenueJS">
-		<h:outputScript>
-				var table = $('#example').DataTable({
-				    	  scrollY:        '50vh',
-        				  "scrollX": true
-				    });
-				    
-				$('#example').on( 'draw.dt', function () {
-						tableNextPage();
-					} );
-			</h:outputScript>
-
-		<h:panelGroup id="datepickerJs">
-			<h:outputScript>	
-					$('.toggle-demo').bootstrapToggle({
-						on: 'Active',
-				      	off: 'Inactive'
-				    });
-				
-					var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-					$( ".datepicker" ).datepicker({
-						format: 'dd/mm/yyyy',
-						container: container,
-						todayHighlight: true,
-						autoclose: true,
-					})
-				</h:outputScript>
-		</h:panelGroup>
-	</h:panelGroup>
-
-
-	<script type="text/javascript">
-		$(function() {
-			$(document).on(
-					'show.bs.modal',
-					'.modal',
-					function(event) {
-						console.log("event ", event)
-						var zIndex = 1040 + (10 * $('.modal:visible').length);
-						$(this).css('z-index', zIndex);
-						setTimeout(function() {
-							$('.modal-backdrop').not('.modal-stack').css(
-									'z-index', zIndex - 1).addClass(
-									'modal-stack');
-						}, 0);
-					});
-		});
-
-		function start() {
-			PF('statusDialog').show();
-		}
-
-		function stop() {
-			PF('statusDialog').hide();
-		}
-
-		function divChartClick() {
-			document.getElementById("formId:dateStrId").blur();
-		}
-		function openEdit() {
-			$('#editPopup').modal({
-				show : true
-			});
-		}
-		function cloadEdit() {
-			$('#editPopup').modal('hide');
-		}
-		function saveComplate(){
-			closeModal();
-			cloadEdit();
-		}
-	</script>
-</h:body>
+    </ui:define>
+</ui:composition>
 </html>

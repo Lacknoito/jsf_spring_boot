@@ -98,3 +98,27 @@ function converDecimalFormat(obj) {
     	obj.value = input.toFixed(2);
 	}
 }
+
+function start() {
+	PF('statusDialog').show();
+}
+
+function stop() {
+	PF('statusDialog').hide();
+}
+
+function divChartClick() {
+	document.getElementById("formId:dateStrId").blur();
+}
+function openEdit() {
+	$('#editPopup').modal({
+		show : true
+	});
+}
+function cloadEdit() {
+	$('#editPopup').modal('hide');
+}
+function saveComplate(){
+	closeModal();
+	cloadEdit();
+}

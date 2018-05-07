@@ -252,17 +252,25 @@ public class COPDashboardController {
 			if(!ERPUtils.collectionIsEmpty(copReceiptTemps)) {
 				for(InfCopReceiptTemp copReceiptTemp : copReceiptTemps) {
 					if(ERPUtils.BANGKOK_SAME_DAY_CODE.equals(copReceiptTemp.getShopCode())) {
-						bsd.setCount(bsd.getCount().add(BigDecimal.ONE));
-						bsd.setAmountHeader(bsd.getAmountHeader().add(copReceiptTemp.getCash()));
+						if(!"N".equalsIgnoreCase(copReceiptTemp.getStatus())) {
+							bsd.setCount(bsd.getCount().add(BigDecimal.ONE));
+							bsd.setAmountHeader(bsd.getAmountHeader().add(copReceiptTemp.getCash()));
+						}
 					}else if(copReceiptTemp.getShopCode().startsWith("19")) {
-						fc.setCount(fc.getCount().add(BigDecimal.ONE));
-						fc.setAmountHeader(fc.getAmountHeader().add(copReceiptTemp.getCash()));
+						if(!"N".equalsIgnoreCase(copReceiptTemp.getStatus())) {
+							fc.setCount(fc.getCount().add(BigDecimal.ONE));
+							fc.setAmountHeader(fc.getAmountHeader().add(copReceiptTemp.getCash()));
+						}
 					}else if(copReceiptTemp.getShopCode().startsWith("182")) {
-						upc.setCount(upc.getCount().add(BigDecimal.ONE));
-						upc.setAmountHeader(upc.getAmountHeader().add(copReceiptTemp.getCash()));
+						if(!"N".equalsIgnoreCase(copReceiptTemp.getStatus())) {
+							upc.setCount(upc.getCount().add(BigDecimal.ONE));
+							upc.setAmountHeader(upc.getAmountHeader().add(copReceiptTemp.getCash()));
+						}
 					}else {
-						dc.setCount(dc.getCount().add(BigDecimal.ONE));
-						dc.setAmountHeader(dc.getAmountHeader().add(copReceiptTemp.getCash()));
+						if(!"N".equalsIgnoreCase(copReceiptTemp.getStatus())) {
+							dc.setCount(dc.getCount().add(BigDecimal.ONE));
+							dc.setAmountHeader(dc.getAmountHeader().add(copReceiptTemp.getCash()));
+						}
 					}
 				}
 			}
@@ -282,10 +290,6 @@ public class COPDashboardController {
 	        datas = mapper.writeValueAsString(ratings);
 	        
 	        chartPS = "[]";
-	        
-	        
-	        logger.info("datas :: " + datas);
-	        logger.info("updateChart end");
 		}catch (Exception e) {
 			logger.info("updateChart Exception");
 		}

@@ -8,30 +8,31 @@
 <h:head>
 	<meta charset="utf-8" />
 	<title>ERP Dashboard</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta content="kvthemes" name="author" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<f:metadata>
-		<f:viewAction action="#{dashboardController.onload}" />
-	</f:metadata>
 	<link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link href="../assets/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="../assets/css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/css/responsive.css" rel="stylesheet"
+		type="text/css" />
 	<link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
 	<script src="../assets/js/modernizr.min.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="https://vitalets.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+	<link
+		href="https://vitalets.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css"
+		rel="stylesheet" />
 	<link href="../css/datepicker.css" rel="stylesheet" />
 	<link rel="stylesheet" href="../css/erp.css" />
 	<link href="../css/jquery.dataTables.min.css" rel="stylesheet" />
-	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" />
+	<link href="../css/bootstrap-toggle.min.css" rel="stylesheet" />
 </h:head>
 <h:body class="fixed-left">
 	<div id="wrapper" class="collapse-menu forced">
 		<header class="topbar">
 			<div class="topbar-left">
 				<div class="left-content text-center">
-					<a href="../index.html" class="logo">ERP</a>
+					<a href="cop_dashboard.jsf" class="logo">ERP</a>
 				</div>
 			</div>
 
@@ -49,53 +50,50 @@
 							class="waves-effect fullscreen-button"><i class="icon-frame"></i></a>
 						<span class="clearfix"></span>
 					</div>
-
-					<ul class="nav navbar-nav navbar-right pull-right">
-						<li class="dropdown"><a href="javascript:void();"
-							class="dropdown-toggle profile" data-toggle="dropdown"
-							aria-expanded="true"><img
-								src="../images/gear-settings.png" alt="user-img"
-								class="img-circle" /> </a>
-							<ul class="dropdown-menu">
-								<h:form>
-									<li class="divider"></li>
-									<li>
-							            <h:commandLink styleClass="nav-link" value="Logout"
-							       			action="#{dashboardController.onLogout}">
-							       			<i class="fa fa-fw fa-sign-out"></i>
-							       		</h:commandLink>
-							          </li>
-								</h:form>
-							</ul></li>
-					</ul>
+					<div class="pull-right">
+						<h:form>
+							<h:commandLink action="#{dashboardController.onLogout}"
+								class="logout-button" title="Log out">
+								<i class="glyphicon glyphicon-log-out"></i>
+							</h:commandLink>
+							<span class="clearfix"></span>
+						</h:form>
+					</div>
+					<div class="lbl-username pull-right">
+						#{erpSession.user.userName}</div>
 				</div>
 			</div>
 		</header>
-		<div class="left side-menu">
-			<div class="sidebar-inner slimscrollleft">
-				<!--- Divider -->
-				<div id="sidebar-menu">
-					<ul>
-						<li class="child-menu"><a href="../index.html"
-							class="waves-effect"><i class="icon-home"></i><span>Dashboard
-							</span> <span class="pull-right"><i class="icon-arrow-right"></i></span></a>
-							<ul class="list-unstyled">
-								<li><a href="../dashboard-1.html"><i
-										class="fa fa-hand-o-right"></i>Dashboard 1</a></li>
-							</ul></li>
-					</ul>
+		<h:form>
+			<div class="left side-menu">
+				<div class="sidebar-inner slimscrollleft">
+					<!--- Divider -->
+					<div id="sidebar-menu">
+						<ul>
+							<li class="child-menu"><a href="cop_dashboard.jsf"
+								class="waves-effect"><i class="icon-home"></i><span>Dashboard
+								</span> <span class="pull-right"><i class="icon-arrow-right"></i></span>
+							</a>
+
+								<ul class="list-unstyled">
+									<li><h:commandLink
+											action="#{dashboardController.onPageCopDashboard}">
+											<i class="fa fa-circle circlr-ic" style="font-size: 8px"></i>
+											<h:outputLabel value="COP Dashboard"
+												style="padding-left: 5px;"></h:outputLabel>
+										</h:commandLink></li>
+								</ul></li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
 					<div class="clearfix"></div>
 				</div>
-				<div class="clearfix"></div>
 			</div>
-		</div>
+		</h:form>
 		<div class="content-page">
-			<ui:insert name="description"/>
+			<ui:insert name="content" />
 
-			<footer class="footer text-right">
-				Copyright © 2018 <span class="text-warning">Rocks Admin </span>| All
-				rights reserved.
-			</footer>
+			<footer class="footer text-right"> </footer>
 		</div>
 	</div>
 	<script>
@@ -112,13 +110,158 @@
 	<script src="../assets/js/jquery.nicescroll.js"></script>
 	<script src="../assets/js/jquery.scrollTo.min.js"></script>
 	<script src="../assets/js/jquery.app.js"></script>
-
+	<script src="../js/jquery.cookie.js"></script>
 	<script src="../js/bootstrap-datepicker.js"></script>
 	<script src="../js/amcharts.js"></script>
 	<script src="../js/pie.js"></script>
 	<script src="../js/light.js"></script>
+	<script src="../js/bootstrap-toggle.min.js"></script>
 	<script src="../js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="../js/erp.js"></script>
-	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+	<h:panelGroup id="canvasGroupJs">
+		<h:outputScript>
+				$("#showAllDCSPExcelId").hide();
+				
+	    		AmCharts.makeChart("chartdiv1", {
+	    		  "type": "pie",
+				  "theme": "light",
+				  "dataProvider": #{copDashboardController.datas},
+				  "labelText": "[[branchType]]",
+				  "valueField": "count",
+				  "titleField": "branchType",
+				  "pullOutDuration": 0,
+  				   "pullOutRadius": 0,
+				   "balloon":{
+				   "fixedPosition":true
+				  },
+				  "legend":{
+				  	"markerType": "circle",
+				   	"position": "bottom",
+				    "marginRight":100,
+				    "autoMargins":false,
+				    "valueText":"[[value]] Shop",
+				    "clickMarker": handleLegend1Click,
+    				"clickLabel": handleLegend1Click
+				  },
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeaderStr]]",
+				  "export": {
+				    "enabled": false
+				  },
+				  "listeners": [{
+					    "event": "clickSlice",
+					    "method": function(e) {
+					    		document.getElementById("formId:x").value = e.dataItem.title;
+					    		
+						    	if(e.dataItem.title == 'BSD'
+						          		|| e.dataItem.title == 'FC/KE'
+						          		|| e.dataItem.title == 'UPC'){
+							      		selectItemFromChart();
+						          	}else{
+						          		selectItemFromChartPS();
+						          		
+						          		$("#divChart1").removeClass("col-sm-11");
+						          		$("#divChart1").addClass("col-sm-6");
+						          		
+						          		$("#divChart2").removeClass("col-sm-1");
+						          		$("#divChart2").addClass("col-sm-6");
+						          	}
+					    }}]
+				} );
+				
+				console.log("canvasGroupJs");
+			</h:outputScript>
+	</h:panelGroup>
+	<h:panelGroup id="canvasGroupPSJs">
+		<h:outputScript>
+				var chart = AmCharts.makeChart("chartdiv2", {
+	    		  "type": "pie",
+				  "theme": "light",
+				  "dataProvider": #{copDashboardController.chartPS},
+				  "labelText": "[[branchType]]",
+				  "valueField": "count",
+				  "titleField": "branchType",
+				  "pullOutDuration": 0,
+				  "labelRadius": 5,
+				  "legend":{
+				  	"markerType": "circle",
+				   	"position": "bottom",
+				    "marginRight":100,
+				    "autoMargins":false,
+				    "valueText":"[[value]] Shop",
+				    "clickMarker": handleLegend2Click,
+    				"clickLabel": handleLegend2Click
+				  },
+				   "balloon":{
+				   "fixedPosition":true
+				  },
+				  "balloonText": "[[branchType]] <br /> Total Shop : [[count]] <br /> Total Amount : [[amountHeaderStr]]",
+				  "export": {
+				    "enabled": false
+				  },
+				  "listeners": [{
+					    "event": "clickSlice",
+					    "method": function(e) {
+						    	document.getElementById("formId:x").value = e.dataItem.title;
+							    
+							    var dp = e.dataItem.dataContext
+						      	if ( dp[chart.colorField] === undefined ){
+						        	dp[chart.colorField] = "#cc0000";
+						        	selectItemFromChart();
+						        }
+						      	else
+						        	dp[chart.colorField] = undefined;
+					    }}]
+				} );
+			</h:outputScript>
+	</h:panelGroup>
+	<h:panelGroup id="tb_revenueJS">
+		<h:outputScript>
+				var table = $('#example').DataTable({
+				    	  scrollY:        '50vh',
+        				  "scrollX": true
+				    });
+				    
+				$('#example').on( 'draw.dt', function () {
+						tableNextPage();
+					} );
+			</h:outputScript>
+
+		<h:panelGroup id="datepickerJs">
+			<h:outputScript>	
+					$('.toggle-demo').bootstrapToggle({
+						on: 'Active',
+				      	off: 'Inactive'
+				    });
+				
+					var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+					$( ".datepicker" ).datepicker({
+						format: 'dd/mm/yyyy',
+						container: container,
+						todayHighlight: true,
+						autoclose: true,
+					})
+				</h:outputScript>
+		</h:panelGroup>
+	</h:panelGroup>
+
+
+	<script type="text/javascript">
+		$(function() {
+			$(document).on(
+					'show.bs.modal',
+					'.modal',
+					function(event) {
+						console.log("event ", event)
+						var zIndex = 1040 + (10 * $('.modal:visible').length);
+						$(this).css('z-index', zIndex);
+						setTimeout(function() {
+							$('.modal-backdrop').not('.modal-stack').css(
+									'z-index', zIndex - 1).addClass(
+									'modal-stack');
+						}, 0);
+					});
+		});
+	</script>
 </h:body>
 </html>
