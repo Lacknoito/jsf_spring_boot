@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="left-sidebar">
+						<h2>Category</h2>
+						<div class="panel-group category-products" id="accordian">
+							<!--category-productsr-->
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordian"
+											href="#expense"> <span class="badge pull-right"><i
+												class="fa fa-plus"></i></span> Expense
+										</a>
+									</h4>
+								</div>
+								<div id="expense" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
+											<li><a href="#">Petty Cash</a></li>
+											<li><a href="#">Payment</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordian" href="#po">
+											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+											PO Normal
+										</a>
+									</h4>
+								</div>
+								<div id="po" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
+											<li><a href="#">Direct Supply</a></li>
+											<li><a href="#">Indirect Supply</a></li>
+											<li><a href="#">Stationary</a></li>
+											<li><a href="#">Fixed Asset</a></li>
+											<li><a href="#">Human Resource</a></li>
+											<li><a href="#">Service By Amount</a></li>
+											<li><a href="#">Category</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordian"
+											href="#poItem"> <span class="badge pull-right"><i
+												class="fa fa-plus"></i></span> PO by Item number
+										</a>
+									</h4>
+								</div>
+								<div id="poItem" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
+											<li><a href="#">Office mate</a></li>
+											<li><a href="#">Office Supply</a></li>
+											<li><a href="#">Retail Supply</a></li>
+											<li><a href="#">IT Equipment</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordian"
+											href="#requestSupply"> <span class="badge pull-right"><i
+												class="fa fa-plus"></i></span> Request Supply (DC)
+										</a>
+									</h4>
+								</div>
+								<div id="requestSupply" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
+											<li><a href="#">Office mate</a></li>
+											<li><a href="#">Office Supply</a></li>
+											<li><a href="#">Retail Supply</a></li>
+											<li><a href="#">IT Equipment</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordian"
+											href="#inventory"> <span class="badge pull-right"><i
+												class="fa fa-plus"></i></span> Inventory
+										</a>
+									</h4>
+								</div>
+								<div id="inventory" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
+											<li><a href="#">Office mate</a></li>
+											<li><a href="#">Office Supply</a></li>
+											<li><a href="#">Retail Supply</a></li>
+											<li><a href="#">IT Equipment</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--/category-products-->
+					</div>
+				</div>
+
+				<div class="col-sm-9 padding-right">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-warning card-outline">
+								<div class="card-header">
+									<h3 class="card-title">News</h3>
+								</div>
+								<div class="card-body">Information Text
+									..........................................................................................................................
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-warning card-outline">
+								<div class="card-header">
+									<h3 class="card-title">Expense</h3>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-4 col-sm-6 col-xs-12">
+								          <div class="info-box bg-aqua">
+								            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+								
+								            <div class="info-box-content">
+								              <span class="info-box-text">In process</span>
+								              <span class="info-box-number">41</span>
+								            </div>
+								          </div>
+								        </div>
+								        
+								        <div class="col-md-4 col-sm-6 col-xs-12">
+								          <div class="info-box bg-aqua">
+								            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+								
+								            <div class="info-box-content">
+								              <span class="info-box-text">Outstanding</span>
+								              <span class="info-box-number">30</span>
+								            </div>
+								          </div>
+								        </div>
+								        
+								        <div class="col-md-4 col-sm-6 col-xs-12">
+								          <div class="info-box bg-aqua">
+								            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+								
+								            <div class="info-box-content">
+								              <span class="info-box-text">Paid</span>
+								              <span class="info-box-number">50</span>
+								            </div>
+								          </div>
+								        </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-warning card-outline">
+								<div class="card-header">
+									<h3 class="card-title">Receiving</h3>
+								</div>
+								<div class="card-body">Information Text
+									..........................................................................................................................
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+	</ui:define>
+</ui:composition>
+</html>

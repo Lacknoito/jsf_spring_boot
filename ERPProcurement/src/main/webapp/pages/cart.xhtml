@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+      
+	<ui:composition template="template.xhtml">
+	    <ui:define name="content">
+	    	<f:metadata>
+				<f:viewAction action="#{cartController.onload}" />
+			</f:metadata>
+			
+	    	<h:form>
+		    	<section id="cart_items">
+					<div class="container">
+						<div class="table-responsive cart_info">
+							<table class="table table-condensed">
+								<thead>
+									<tr class="cart_menu">
+										<td class="description" style="padding-left: 20px">Product</td>
+										<td class="price">Price</td>
+										<td class="quantity">Quantity</td>
+										<td class="total">Total</td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="product" items="#{cartModel.products}">
+										<tr>
+											<td class="cart_description" style="padding-left: 20px">
+												<h4><a href="">Colorblock Scuba</a></h4>
+												<p>Web ID: 1089772</p>
+											</td>
+											<td class="cart_price">
+												<h:outputLabel value="#{product.productPrice}" styleClass="cart-price">
+													<f:convertNumber locale="en" pattern="#,##0.00"></f:convertNumber>
+												</h:outputLabel>
+											</td>
+											<td class="cart_quantity">
+												<div class="cart_quantity_button">
+													<p:commandLink styleClass="cart_quantity_up" 
+															action="#{cartController.onCartQuantityUp}" value="+">
+														<f:setPropertyActionListener value="#{product}" target="#{cartController.productEdit}"></f:setPropertyActionListener>
+													</p:commandLink>
+													<h:inputText styleClass="cart_quantity_input quantityProduct" 
+														onkeypress="return keyPressIntegerOnly(this, event);"
+														size="4"
+														value="#{product.quantity}">
+															<f:convertNumber pattern="#,##0" />
+															<p:ajax update="@(.quantityProduct)"></p:ajax>
+													</h:inputText>													
+													<p:commandLink styleClass="cart_quantity_down" value="-">
+														
+													</p:commandLink>
+												</div>
+											</td>
+											<td class="cart_total">
+												<p class="cart_total_price">
+													<h:outputLabel value="#{product.totalPrice}" styleClass="cart-price">
+														<f:convertNumber locale="en" pattern="#,##0.00"></f:convertNumber>
+													</h:outputLabel>
+												</p>
+											</td>
+											<td class="cart_delete">
+												<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section> <!--/#cart_items-->
+			</h:form>
+	   	</ui:define>
+	</ui:composition>
+</html>

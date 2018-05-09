@@ -21,6 +21,9 @@ function statusChange(obj, param){
 function showModalPDF() {
 	$('#myModalPDF').modal();
 }
+function closeModalPDF() {
+	$('#myModalPDF').modal('hide');
+}
 function clearDivChart(){
 	$("#divChart1").removeClass("col-sm-6");
 	$("#divChart1").addClass("col-sm-11");

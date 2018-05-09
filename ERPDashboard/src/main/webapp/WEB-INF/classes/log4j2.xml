@@ -10,9 +10,15 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
         
-        <File name="file" fileName="/opt/glassfish5/glassfish/domains/domain1/logs/app.log">
-	      <PatternLayout pattern="${LOG_PATTERN}"/>
-	    </File>
+	    <RollingFile name="file" fileName="/opt/glassfish5/glassfish/domains/domain1/logs/app.log"
+	                 filePattern="/opt/glassfish5/glassfish/domains/domain1/logs/app-%d{dd-MM-yyyy}-%i.log">
+		      <PatternLayout pattern="${LOG_PATTERN}"/>
+		      <Policies>
+		        <TimeBasedTriggeringPolicy />
+		        <SizeBasedTriggeringPolicy size="500 MB"/>
+		      </Policies>
+		      <DefaultRolloverStrategy max="20"/>
+	    </RollingFile>
     </Appenders>
     <Loggers>
         <Logger name="com.erp.dashboard.action" level="info" additivity="false">

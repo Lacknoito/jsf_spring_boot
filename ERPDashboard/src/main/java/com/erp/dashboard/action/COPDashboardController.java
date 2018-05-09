@@ -293,7 +293,7 @@ public class COPDashboardController {
 	        
 	        chartPS = "[]";
 		}catch (Exception e) {
-			logger.info("updateChart Exception");
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
